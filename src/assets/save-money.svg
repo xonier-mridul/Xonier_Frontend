@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" id="SaveMoney">
+  <path fill="none" stroke="#ffffff" stroke-linejoin="round" stroke-width="2" d="M10,54V50.554a2,2,0,0,0-.285-1.029L4.57,40.95A4,4,0,0,1,4,38.892V24.166A2.166,2.166,0,0,1,6.166,22h0A2.166,2.166,0,0,1,8.3,23.81L10,34l8.058,4.835A4,4,0,0,1,20,42.265v4.907a2,2,0,0,1-.586,1.414l-.828.828A2,2,0,0,0,18,50.828V54" class="colorStroke000000 svgStroke"></path>
+  <path fill="none" stroke="#ffffff" stroke-linejoin="round" stroke-width="2" d="M10,34v3.859a4,4,0,0,0,1.781,3.328L16,44" class="colorStroke000000 svgStroke"></path>
+  <rect width="12" height="6" x="8" y="54" fill="none" stroke="#ffffff" stroke-linejoin="round" stroke-width="2" class="colorStroke000000 svgStroke"></rect>
+  <path fill="none" stroke="#ffffff" stroke-linejoin="round" stroke-width="2" d="M54,54V50.554a2,2,0,0,1,.285-1.029L59.43,40.95A4,4,0,0,0,60,38.892V24.166A2.166,2.166,0,0,0,57.834,22h0A2.166,2.166,0,0,0,55.7,23.81L54,34l-8.058,4.835A4,4,0,0,0,44,42.265v4.907a2,2,0,0,0,.586,1.414l.828.828A2,2,0,0,1,46,50.828V54" class="colorStroke000000 svgStroke"></path>
+  <path fill="none" stroke="#ffffff" stroke-linejoin="round" stroke-width="2" d="M54,34v3.859a4,4,0,0,1-1.781,3.328L48,44" class="colorStroke000000 svgStroke"></path>
+  <rect width="12" height="6" x="44" y="54" fill="none" stroke="#ffffff" stroke-linejoin="round" stroke-width="2" transform="rotate(-180 50 57)" class="colorStroke000000 svgStroke"></rect>
+  <circle cx="32" cy="20" r="16" fill="none" stroke="#ffffff" stroke-linejoin="round" stroke-width="2" class="colorStroke000000 svgStroke"></circle>
+  <path fill="none" stroke="#ffffff" stroke-linejoin="round" stroke-width="2" d="M36,16V14H30a2,2,0,0,0-2,2v2a2,2,0,0,0,2,2h4a2,2,0,0,1,2,2v2a2,2,0,0,1-2,2H28V24" class="colorStroke000000 svgStroke"></path>
+  <line x1="32" x2="32" y1="12" y2="28" fill="none" stroke="#ffffff" stroke-linecap="square" stroke-linejoin="round" stroke-width="2" class="colorStroke000000 svgStroke"></line>
+</svg>

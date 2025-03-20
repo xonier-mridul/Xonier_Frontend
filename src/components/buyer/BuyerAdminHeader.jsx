@@ -1,0 +1,62 @@
+import React, {useState} from 'react'
+import { IoIosNotifications } from "react-icons/io";
+import AdminImg from '../../assets/admin-img.jpg'
+import { Link, useLocation } from 'react-router-dom';
+import { motion, useScroll, useTransform } from "framer-motion";
+
+const BuyerAdminHeader = () => {
+  const [showProfileTab, setShowProfileTab] = useState(false);
+  const [showNotification,  setShowNotification] = useState(false)
+  const { scrollYProgress } = useScroll();
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "-100%"]);
+
+  const Route = useLocation().pathname
+  const Pathname = Route.split("/").pop().split("-").join(" ")
+
+  return (
+    <div className=' backdrop-blur-xl bg-transparent w-full  flex justify-between items-center p-3 px-6 '>
+         <div className=''>
+            <h2 className='text-2xl font-bold capitalize'> {Pathname} </h2>
+         </div>
+         <div className='flex justify-end items-center gap-6'>
+             <div className='relative' onMouseEnter={()=>setShowNotification(true)} onMouseLeave={()=>setShowNotification(false)}>
+              <div className='h-10 w-10 rounded-lg border-2 border-orange-500 flex items-center justify-center relative cursor-pointer'>
+
+             <IoIosNotifications className='text-2xl bell text-teal-950'/>
+             <span className='w-5 h-5 bg-red-500 rounded-full absolute -top-1 -right-1 text-white text-[12px] flex items-center justify-center'>5</span>
+              </div>
+
+              <motion.div
+                 animate={showNotification ? {opacity: 1, y: 0, display: "block"} : {opacity: 0, y: 10, display: "none" }}
+                 transition={{ duration: .3}}
+                 viewport={{ once: true }}
+              className='absolute -bottom-[150%] w-60 -left-[220%] rounded-lg bg-white shadow-[0_0_15px_#00000020] overflow-hidden'>
+                 <div className='bg-[#019297] p-3 flex justify-center'>
+                      <h5 className='capitalize text-xl font-bold text-white'>Notifications</h5>
+                 </div>
+                 <ul>
+                  <li></li>
+                 </ul>
+              </motion.div>
+             </div>
+             <div className='flex items-center gap-4 relative cursor-pointer' onMouseEnter={()=>setShowProfileTab(true)} onMouseLeave={()=>setShowProfileTab(false)}>
+                <span className='h-10 w-10 rounded-lg overflow-hidden'>
+                  <img className='w-full object-cover' src={AdminImg} alt="" />
+                </span>
+                 <h3 className='text-lg font-bold '> Vikrant Sharma </h3>
+                 <motion.ul
+                 animate={showProfileTab ? {opacity: 1, y: 0, display: "block"} : {opacity: 0, y: 10, display: "none" }}
+                 transition={{ duration: .3}}
+                 viewport={{ once: true }}
+                 className='w-full bg-white absolute top-[130%] p-8 py-6 rounded-lg shadow-[0_0_15px_#00000020] flex flex-col gap-4 z-40' >
+                  <li><Link to={""} className='text-lg hover:text-green-400 transition-all duration-300'> My Profile </Link></li>
+                  <li><Link to={""} className='text-lg hover:text-green-400 transition-all duration-300'> Log Out </Link></li>
+                 </motion.ul>
+             </div>
+         </div>
+    </div>
+  )
+}
+
+export default BuyerAdminHeader
+
