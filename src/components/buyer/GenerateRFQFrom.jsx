@@ -4,21 +4,23 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Media Start
-import { FaDownload } from "react-icons/fa";
+import { FaDownload, FaStarOfLife } from "react-icons/fa";
+import { FaXmark } from "react-icons/fa6";
 // Media End
 
 const GenerateRFQFrom = () => {
   const [active, setActive] = useState(1);
   const [categoryData, setCategoryData] = useState([]);
-  const [subCategoryData, setSubCategoryData] = useState([]);
   const [brandData, setBrandData] = useState([]);
+  const [agreement, setAgreement] = useState(false);
+  const [downloadConditionPopup, setDownloadConditionPopup] = useState(false);
   const [formData, setFromData] = useState({
     category: "",
-    subCategory: "",
     brand: "",
     quantity: "",
     deliveryDate: "",
     DeliveryLocation: "",
+    pinCode: "",
     comments: "",
   });
 
@@ -46,17 +48,7 @@ const GenerateRFQFrom = () => {
     }
   };
 
-  // Get Sub Category
-  const getSubCategory = async () => {
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}sub-category`
-      );
-      if (response.status === 200) return setSubCategoryData(response.data);
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
+
 
   // Get Brands
 
@@ -73,23 +65,25 @@ const GenerateRFQFrom = () => {
 
   useEffect(() => {
     getCategory();
-    getSubCategory();
+   
     getBrands();
   }, []);
+
+// Handle Submit
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formDatas = new FormData();
     formDatas.append("category", formData.category);
-    formDatas.append("subCategory", formData.subCategory);
     formDatas.append("brand", formData.brand);
     formDatas.append("quantity", formData.quantity);
     formDatas.append("deliveryDate", formData.deliveryDate);
     formDatas.append("DeliveryLocation", formData.DeliveryLocation);
+    formDatas.append("pinCode", formData.pinCode)
     formDatas.append("comments", formData.comments);
 
-    // Ensure file is appended correctly
+    
     if (file) {
         formDatas.append("document", file); 
     }
@@ -109,11 +103,11 @@ const GenerateRFQFrom = () => {
             toast.success("RFQ generated successfully");
             setFromData({
                 category: "",
-                subCategory: "",
                 brand: "",
                 quantity: "",
                 deliveryDate: "",
                 DeliveryLocation: "",
+                pinCode: "",
                 comments: "",
             });
         }
@@ -121,6 +115,7 @@ const GenerateRFQFrom = () => {
     } catch (error) {
         console.error("Error:", error);
         toast.error("RFQ not generated");
+        console.log(formDatas)
     }
 };
 
@@ -169,8 +164,38 @@ const GenerateRFQFrom = () => {
     }
   };
 
+  const toggle = ()=>{
+    setAgreement(prev=>!prev);
+  }
+
   return (
     <>
+        {downloadConditionPopup && <div
+          className="fixed z-42 top-0 left-0 w-full h-full bg-[#00000024] backdrop-blur-xs"
+          onClick={() => setDownloadConditionPopup(false)}>
+
+        </div>}
+
+        {downloadConditionPopup &&<div className="fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-2xl w-[790px]">
+        <div className="mb-5">
+           <h2 className="text-xl font-bold">Excel File data fill condition</h2>
+           <span className="absolute top-3 right-3 cursor-pointer" onClick={()=>setDownloadConditionPopup(false)} ><FaXmark className="text-2xl"/></span>
+        </div>
+           <ul className="flex flex-col gap-3">
+            <li className="flex items-center gap-3"><FaStarOfLife className="text-[12px] text-orange-500"/> Make sure filled field as per Specified Parameters.</li>
+            <li className="flex items-center gap-3"><FaStarOfLife className="text-[12px] text-orange-500"/> Please make sure do not escape any empty assigned row & column, if you don't have data fill. <span className="font-semibold">"N/A"</span> </li>
+           </ul>
+           <div className="flex gap-3 py-3">
+
+           <input type="checkbox" id="condition" name="condition" checked={agreement} onChange={toggle}  />
+           <label htmlFor="condition">Are you agree with conditions</label>
+           </div>
+           <div>
+
+           <button disabled={!agreement} className="bg-orange-500 disabled:bg-orange-300 px-5 py-2 rounded-lg text-white flex items-center gap-2 cursor-pointer" onClick={downloadSpecSheet}>Download <FaDownload /></button>
+           </div>
+        </div>}
+
       <ToastContainer />
       <div className="bg-white w-full border-2 border-orange-500 rounded-4xl">
         <div className="p-3 px-4 flex flex-col gap-3 border-b-1 pb-6 border-[#E4E6EF]">
@@ -253,6 +278,7 @@ const GenerateRFQFrom = () => {
                     id="category"
                     value={formData.category}
                     onChange={handleChange}
+                    required
                   >
                     <option value="" hidden>
                       Choose Category
@@ -265,27 +291,6 @@ const GenerateRFQFrom = () => {
                   </select>
                 </div>
                 <div className="w-1/2 flex flex-col gap-2">
-                  <label htmlFor="subCategory">Select Sub Category</label>
-                  <select
-                    className="w-full p-3 border-1 border-[#E4E6EF] bg-white outline-none rounded-lg"
-                    name="subCategory"
-                    id="subCategory"
-                    value={formData.subCategory}
-                    onChange={handleChange}
-                  >
-                    <option value="" hidden>
-                      Choose Sub Category
-                    </option>
-                    {subCategoryData.map((item, index) => (
-                      <option value={item._id} key={index}>
-                        {item.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div className="w-full flex items-center gap-5">
-                <div className="w-1/2 flex flex-col gap-2">
                   <label htmlFor="brand">Select Brand</label>
                   <select
                     className="w-full p-3 border-1 bg-white border-[#E4E6EF] outline-none rounded-lg"
@@ -293,6 +298,7 @@ const GenerateRFQFrom = () => {
                     id="brand"
                     value={formData.brand}
                     onChange={handleChange}
+                    required
                   >
                     <option value="" hidden>
                       Choose Brand
@@ -304,6 +310,9 @@ const GenerateRFQFrom = () => {
                     ))}
                   </select>
                 </div>
+              </div>
+              <div className="w-full flex items-center gap-5">
+                
                 <div className="w-1/2 flex flex-col gap-2">
                   <label htmlFor="quantity">Quantity</label>
                   <input
@@ -314,10 +323,9 @@ const GenerateRFQFrom = () => {
                     placeholder="Quantity"
                     value={formData.quantity}
                     onChange={handleChange}
+                    required
                   />
                 </div>
-              </div>
-              <div className="w-full flex items-center gap-5">
                 <div className="w-1/2 flex flex-col gap-2">
                   <label htmlFor="deliveryDate">Delivery Date</label>
                   <input
@@ -327,8 +335,12 @@ const GenerateRFQFrom = () => {
                     id="deliveryDate"
                     value={formData.deliveryDate}
                     onChange={handleChange}
+                    required
                   />
                 </div>
+              </div>
+              <div className="w-full flex items-center gap-5">
+                
                 <div className="w-1/2 flex flex-col gap-2">
                   <label htmlFor="DeliveryLocation">Delivery Location</label>
                   <input
@@ -339,7 +351,12 @@ const GenerateRFQFrom = () => {
                     placeholder="Delivery location"
                     value={formData.DeliveryLocation}
                     onChange={handleChange}
+                    required
                   />
+                </div>
+                <div className="w-1/2 flex flex-col gap-2">
+                 <label htmlFor="pinCode">Pin Code</label>
+                 <input type="number" className="w-full p-3 bg-white border-1 border-[#E4E6EF] outline-none rounded-lg" name="pinCode" id="pinCode" placeholder="Enter your pin code" value={formData.pinCode} onChange={handleChange} min='100000' max='999999' step='1' required/>
                 </div>
               </div>
               <div className="w-full flex flex-col  gap-2">
@@ -352,6 +369,7 @@ const GenerateRFQFrom = () => {
                   placeholder="Add your additional comments"
                   onChange={handleChange}
                   value={formData.comments}
+                  required
                 >
                   {" "}
                 </textarea>
@@ -359,9 +377,9 @@ const GenerateRFQFrom = () => {
               <div className="w-full flex items-center gap-5">
                 <div className="w-1/2 flex flex-col gap-2">
                   <span>Download Specification sheet</span>
-                  <button
+                  <button type="button"
                     className="bg-green-500 p-1 px-4 flex gap-2 items-center justify-center rounded-lg cursor-pointer w-fit text-white"
-                    onClick={downloadSpecSheet}
+                    onClick={()=>setDownloadConditionPopup(true)}
                   >
                     Download <FaDownload />
                   </button>
@@ -375,6 +393,7 @@ const GenerateRFQFrom = () => {
                     accept=".xlsx, .xls"
                     className="w-full p-3 bg-white border-1 border-[#E4E6EF] outline-none rounded-lg"
                     onChange={handleFileChange}
+                    required
                   />
                 </div>
               </div>

@@ -237,7 +237,7 @@ const SubCategoryTable = () => {
     <>
       {updatedFormId  && (
         <div
-          className="fixed z-42 top-0 left-0 w-full h-full bg-[#00000024] backdrop-blur-md"
+          className="fixed z-42 top-0 left-0 w-full h-full bg-[#00000024] backdrop-blur-xs"
           onClick={() => setUpdatedFormId(null)}
         ></div>
       )}

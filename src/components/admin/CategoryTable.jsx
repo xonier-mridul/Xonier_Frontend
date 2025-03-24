@@ -9,43 +9,21 @@ import { FaArrowRight, FaXmark } from "react-icons/fa6";
 import { FaEye, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 // Media End
 
-const CategoryTable = () => {
-  const [categoryData, setCategoryData] = useState([]);
+const CategoryTable = ({
+  categoryData,
+  setCategoryData,
+  totalPages,
+  setTotalPages,
+  currentPage,
+  setCurrentPage
+}) => {
   const [Form, setForm] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [formData, setFormData] = useState({
     category: "",
   });
   const [updatedId, setupdatedId] = useState("");
 
   // Handle Change
-
-  useEffect(() => {
-    let isMounted = true;
-
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_SERVER_URL}category/paginate?page=${currentPage}`
-        );
-
-        if (isMounted) {
-
-          setCategoryData(response?.data?.category);
-          setTotalPages(response?.data?.totalPages);
-        }
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-
-    fetchCategories();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [currentPage]);
 
   // Delete Category
   const handleDelete = async (e) => {
@@ -54,7 +32,9 @@ const CategoryTable = () => {
         "Are you sure you want to delete this category?"
       );
       if (checking) {
-        await axios.delete(`${import.meta.env.VITE_SERVER_URL}category/${e}`);
+        const response =  await axios.delete(`${import.meta.env.VITE_SERVER_URL}category/${e}`);
+
+        if(response.status === 200){
         setCategoryData(categoryData.filter((item) => item._id !== e));
 
         toast.success("Category Deleted successfully", {
@@ -67,7 +47,8 @@ const CategoryTable = () => {
           progress: undefined,
           theme: "colored",
           style: { backgroundColor: "#009689", color: "#fff" },
-        });
+        });}
+
       }
     } catch (error) {
       console.log(error.message);
@@ -134,23 +115,22 @@ const CategoryTable = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  // Handle Page Change
 
-  // Handle Page Change 
-
-  const handlePageChange = (page)=>{
-     if(page >= 1 && page <= totalPages){
-      setCurrentPage(page)
-     }
-  }
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
 
   const length = categoryData.length;
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer limit={1}/>
       {Form && (
         <div
-          className="backdrop-blur-xl fixed top-0 left-0 z-42 w-full h-full bg-[#00000024] "
+          className="backdrop-blur-xs fixed top-0 left-0 z-42 w-full h-full bg-[#00000024] "
           onClick={() => setForm(!Form)}
         ></div>
       )}
@@ -203,54 +183,65 @@ const CategoryTable = () => {
             </tr>
           </thead>
           <tbody>
-            {length > 0 ? categoryData.map((e) => (
-              <tr className="border-b-1 border-zinc-200" key={e._id}>
-                <td className="p-4 px-6">
-                  {" "}
-                  <span className="text-lg">{e.category} </span>
-                </td>
-                <td className="p-4 px-6 border-l-1 border-zinc-200">
-                  <div className="flex items-center gap-4">
-                    <span
-                      style={{ borderRadius: "6px" }}
-                      className="rounded-lg bg-teal-600 px-2 py-2 text-white p-2 cursor-pointer"
-                      onClick={() => handleFormShow(e)}
-                    >
-                      <MdEdit className="text-xl " />
-                    </span>
-                    <span
-                      style={{ borderRadius: "6px" }}
-                      className="rounded-lg bg-red-500 px-2 py-2 text-white p-2 cursor-pointer"
-                      onClick={() => handleDelete(e._id)}
-                    >
-                      <MdDelete className="text-xl " />
-                    </span>
-                  </div>
+            {length > 0 ? (
+              categoryData?.map((e) => (
+                <tr className="border-b-1 border-zinc-200" key={e._id}>
+                  <td className="p-4 px-6">
+                    {" "}
+                    <span className="text-lg">{e.category} </span>
+                  </td>
+                  <td className="p-4 px-6 border-l-1 border-zinc-200">
+                    <div className="flex items-center gap-4">
+                      <span
+                        style={{ borderRadius: "6px" }}
+                        className="rounded-lg bg-teal-600 px-2 py-2 text-white p-2 cursor-pointer"
+                        onClick={() => handleFormShow(e)}
+                      >
+                        <MdEdit className="text-xl " />
+                      </span>
+                      <span
+                        style={{ borderRadius: "6px" }}
+                        className="rounded-lg bg-red-500 px-2 py-2 text-white p-2 cursor-pointer"
+                        onClick={() => handleDelete(e._id)}
+                      >
+                        <MdDelete className="text-xl " />
+                      </span>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr className="border-b-1 border-zinc-200">
+                <td className="p-4 px-6 text-center" colSpan={2}>
+                  No data
                 </td>
               </tr>
-            )) :
-            <tr className="border-b-1 border-zinc-200"><td className="p-4 px-6 text-center" colSpan={2}>No data</td></tr>
-            }
+            )}
           </tbody>
         </table>
         <div className="flex justify-end items-center p-6 pb-0">
-                  <div className="flex items-center gap-4 ">
-                    <span className="cursor-pointer"> <FaChevronLeft /> </span>
-                    {[...Array(totalPages)].map((_, index) => (
-                          <button
-                              key={index + 1}
-                              onClick={() => handlePageChange(index + 1)}
-                              className={` ${currentPage === index + 1 ? "bg-orange-500 text-white" : ""} h-9 w-9 rounded-lg flex items-center justify-center cursor-pointer `}>
-      
-                              {index + 1}
-      
-                          </button>
-                      ))}
-                    <span className="cursor-pointer"><FaChevronRight /></span>
-                  </div>
-              </div>
+          <div className="flex items-center gap-4 ">
+            <span className="cursor-pointer">
+              {" "}
+              <FaChevronLeft />{" "}
+            </span>
+            {[...Array(totalPages)].map((_, index) => (
+              <button
+                key={index + 1}
+                onClick={() => handlePageChange(index + 1)}
+                className={` ${
+                  currentPage === index + 1 ? "bg-orange-500 text-white" : ""
+                } h-9 w-9 rounded-lg flex items-center justify-center cursor-pointer `}
+              >
+                {index + 1}
+              </button>
+            ))}
+            <span className="cursor-pointer">
+              <FaChevronRight />
+            </span>
+          </div>
+        </div>
       </div>
-      
     </>
   );
 };

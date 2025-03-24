@@ -16,8 +16,8 @@ const SpecificationTable = () => {
   const [showEditModel, setShowEditModel] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [updatedId, setUpdatedId] = useState(null);
-   const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [formData, setFormData] = useState({
     name: "",
     category: "",
@@ -67,12 +67,14 @@ const SpecificationTable = () => {
     const getSpecification = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_SERVER_URL}specification/paginate?page=${currentPage}`
+          `${
+            import.meta.env.VITE_SERVER_URL
+          }specification/paginate?page=${currentPage}`
         );
-        if (response.status === 200 && isMounted.current){
-               setTotalPages(response.data.totalPages);
-               setSpecificationData(response.data.response);
-               console.log(response.data)
+        if (response.status === 200 && isMounted.current) {
+          setTotalPages(response.data.totalPages);
+          setSpecificationData(response.data.response);
+          console.log(response.data);
         }
       } catch (error) {
         console.error(error);
@@ -168,41 +170,45 @@ const SpecificationTable = () => {
     try {
       setUpdatedId(item._id);
       setFormData({
-        name:item.name,
-        category:item.category._id
-      })
+        name: item.name,
+        category: item.category._id,
+      });
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   };
 
-  // Handle Close 
+  // Handle Close
 
-  const handleClose = ()=>{
-    setUpdatedId(null)
+  const handleClose = () => {
+    setUpdatedId(null);
     setFormData({
-      name:"",
-      category:''
-    })
-  }
+      name: "",
+      category: "",
+    });
+  };
 
-  // Handle Update 
+  // Handle Update
 
-  const handleUpdate = async(e)=>{
+  const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.patch(`${import.meta.env.VITE_SERVER_URL}specification/${updatedId}`,formData, {
-        headers: {
-          "Content-Type": "application/json"
+      const response = await axios.patch(
+        `${import.meta.env.VITE_SERVER_URL}specification/${updatedId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      });
+      );
 
-      if(response.status === 200){
+      if (response.status === 200) {
         setUpdatedId(null);
         setFormData({
-          name:"",
-          category:''
-        })
+          name: "",
+          category: "",
+        });
         toast.success("Specification updated successfully", {
           position: "top-right",
           autoClose: 3200,
@@ -215,7 +221,6 @@ const SpecificationTable = () => {
           style: { backgroundColor: "#009689", color: "#fff" },
         });
       }
-    
     } catch (error) {
       console.error(error.message);
       toast.error("Specification not updated", {
@@ -227,18 +232,17 @@ const SpecificationTable = () => {
         draggable: true,
         progress: undefined,
         theme: "colored",
-   
       });
     }
-  }
+  };
 
   // Handle Page Change
 
-  const handlePageChange = (no) =>{
-    if(no>=1 && no<= totalPages){
-return setCurrentPage(no)
+  const handlePageChange = (no) => {
+    if (no >= 1 && no <= totalPages) {
+      return setCurrentPage(no);
     }
-  }
+  };
 
   return (
     <>
@@ -247,7 +251,7 @@ return setCurrentPage(no)
 
       {updatedId && (
         <div
-          className="fixed z-42 top-0 left-0 w-full h-full bg-[#00000024] backdrop-blur-md"
+          className="fixed z-42 top-0 left-0 w-full h-full bg-[#00000024] backdrop-blur-xs"
           onClick={handleClose}
         ></div>
       )}
@@ -276,7 +280,8 @@ return setCurrentPage(no)
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
-                  id="category">
+                  id="category"
+                >
                   <option value="" hidden>
                     Choose Category
                   </option>
@@ -318,7 +323,7 @@ return setCurrentPage(no)
 
       {showModal && (
         <div
-          className="fixed z-42 top-0 left-0 w-full h-full bg-[#00000024] backdrop-blur-md"
+          className="fixed z-42 top-0 left-0 w-full h-full bg-[#00000024] backdrop-blur-xs"
           onClick={() => setShowModal(false)}
         ></div>
       )}
@@ -461,21 +466,27 @@ return setCurrentPage(no)
           </tbody>
         </table>
         <div className="flex justify-end items-center p-6 pb-0">
-                                  <div className="flex items-center gap-4 ">
-                                    <span className="cursor-pointer"> <FaChevronLeft /> </span>
-                                    {[...Array(totalPages)].map((_, index) => (
-                                          <button
-                                              key={index + 1}
-                                              onClick={() => handlePageChange(index + 1)}
-                                              className={` ${currentPage === index + 1 ? "bg-orange-500 text-white" : ""} h-9 w-9 rounded-lg flex items-center justify-center cursor-pointer `}>
-                      
-                                              {index + 1}
-                      
-                                          </button>
-                                      ))}
-                                    <span className="cursor-pointer"><FaChevronRight /></span>
-                                  </div>
-                              </div>
+          <div className="flex items-center gap-4 ">
+            <span className="cursor-pointer">
+              {" "}
+              <FaChevronLeft />{" "}
+            </span>
+            {[...Array(totalPages)].map((_, index) => (
+              <button
+                key={index + 1}
+                onClick={() => handlePageChange(index + 1)}
+                className={` ${
+                  currentPage === index + 1 ? "bg-orange-500 text-white" : ""
+                } h-9 w-9 rounded-lg flex items-center justify-center cursor-pointer `}
+              >
+                {index + 1}
+              </button>
+            ))}
+            <span className="cursor-pointer">
+              <FaChevronRight />
+            </span>
+          </div>
+        </div>
       </div>
     </>
   );
