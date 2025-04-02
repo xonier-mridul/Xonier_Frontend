@@ -1,35 +1,39 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const BuyerTable = () => {
-    const data = [
-        {
-            _id: 1,
-            company: "Havells",
-            form: "Private Limited",
-            registerNo: 9816280198,
-            email:"example@email.com",
-            phone: 1234567890,
-            website:"havells.co.in "
-        },
-        {
-            _id: 2,
-            company: "Anchor",
-            form: "Private Limited",
-            registerNo: 9982126726,
-            email:"meghsingh@email.com",
-            phone: 1234567890,
-            website:"anchor.in "
-        },
-    ]
+    
 
-    const [supplierData, setSupplierData] = useState(data);
+    const [supplierData, setSupplierData] = useState([]);
     const [searchTerm, setSearchTerm] = useState("")
     
 
    
     const filteredData = supplierData.filter((item=>
-            `${item._id} ${item.company} ${item.form} ${item.registerNo} ${item.email} ${item.phone} ${item.website}`.toLowerCase().includes(searchTerm.toLowerCase())
+            `${item._id} ${item.company} ${item.email} ${item.number} ${item.website} ${item.category}`.toLowerCase().includes(searchTerm.toLowerCase())
         ))
+
+
+        const getBuyer = async () => {
+          try {
+            const supplier = await axios.get(
+              `${import.meta.env.VITE_SERVER_URL}user/buyer`
+      
+            );
+            if (supplier.status === 200) {
+              setSupplierData(supplier.data);
+              
+             
+            }
+          } catch (error) {
+            console.error(error.response?.data?.message);
+          }
+        };
+      
+        useEffect(() => {
+          getBuyer();
+        }, []);
     
 
     const length = filteredData.length
@@ -49,8 +53,8 @@ const BuyerTable = () => {
                   <thead>
                     <tr className="bg-slate-100">
                       <th className="p-4 text-start">Company</th>
-                      <th className="p-4 text-start border-l-1 border-[#f1f1f1]">Legal Form</th>
-                      <th className="p-4 text-start border-l-1 border-[#f1f1f1]">Register Number</th>
+                      <th className="p-4 text-start border-l-1 border-[#f1f1f1]">Category</th>
+                      <th className="p-4 text-start border-l-1 border-[#f1f1f1]">Trade Number</th>
                       <th className="p-4 text-start border-l-1 border-[#f1f1f1]">Email</th>
                       <th className="p-4 text-start border-l-1 border-[#f1f1f1]">Number</th>
                       <th className="p-4 text-start border-l-1 border-[#f1f1f1]">Website</th>
@@ -61,12 +65,12 @@ const BuyerTable = () => {
                    <tr key={item._id}>
                         <td className="p-4 border-b-[1px] border-[#f1f1f1]">{item.company}</td>
                         <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1]">
-                          {item.form}
+                          <span className='capitalize'>{item.category} </span>
                         </td>
-                        <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1]">{item.registerNo}</td>
+                        <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1]">{item.tradeNumber}</td>
                         <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1]">  <span className='text-orange-400 p-1 px-4 rounded-lg bg-orange-50'>{item.email}</span></td>
-                        <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1]">{item.phone}</td>
-                        <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1]">{item.website}
+                        <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1]">{item.number}</td>
+                        <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1]"> <Link className='text-blue-500 underline' to={item.website} target='_blank'>{item.website}</Link>
                         </td>
                       </tr> 
                       

@@ -43,7 +43,7 @@ const ProductViewTable = () => {
                 <tbody>
                     <tr className='border-b-1 border-zinc-200'>
                         <th  className='bg-slate-100 border-b-1 border-zinc-200 w-1/3 p-4 px-6 font-semibold text-lg text-start'>Supplier</th>
-                        <td className='w-2/3 p-4 px-6 text-lg'>{catalogData?.seller?.company_name}</td>
+                        <td className='w-2/3 p-4 px-6 text-lg'> <span className='capitalize'>{catalogData?.seller?.company} </span></td>
 
                     </tr>
                     <tr className='border-b-1 border-zinc-200'>

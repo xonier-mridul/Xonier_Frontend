@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { NavLink, Link } from 'react-router-dom'
+import { NavLink, Link, useNavigate } from 'react-router-dom'
 import Logo from '../assets/BildKart-Logo.png'
 import { FaArrowRight, FaXmark } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
+
+
 const Navbar = () => {
 
   const [showPass, setshowPass] = useState(false);
   const [ShowLogin, setShowLogin] = useState(false);
+
+  const navigate = useNavigate()
 
   // Scroll Effect Start
   const [isScrolled, setIsScrolled] = useState(false);
@@ -32,6 +36,14 @@ const Navbar = () => {
 
    }
 
+   const handleSignup = (e)=>{
+    e.preventDefault()
+    setShowLogin(false)
+    navigate('/signup');
+
+
+   }
+
   return (
     <> 
        {ShowLogin && <div className="fixed top-0 left-0 w-full h-full bg-[#00000024] backdrop-blur-md z-50" onClick={()=>setShowLogin(false)}></div>}
@@ -52,7 +64,7 @@ const Navbar = () => {
        <button style={{borderRadius: "10px"}} className="capitalize font-bold flex items-center gap-3 rounded-md w-full justify-center text-lg btn-bg text-white  mb-2" type="submit" > Submit <FaArrowRight className="text-lg btn-arrow" /> </button>
        </form>
        <div className='flex items-center justify-center'>
-       <p>Not a member? <Link className='text-green-500 underline ' to={"/"}> Sign Up </Link></p>
+       <p>Not a member? <button className='text-green-500 underline ' onClick={handleSignup}> Sign Up </button></p>
 
        </div>
           

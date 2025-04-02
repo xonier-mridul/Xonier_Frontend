@@ -152,7 +152,7 @@ const ProductEditPage = () => {
                 <label className="text-lg">Select Seller</label>
                 <select className="w-full border p-3 rounded-lg" name="seller" value={formData.seller} onChange={handleChange}>
                   {sellerData.map((item) => (
-                    <option key={item._id} value={item._id}>{item.company_name}</option>
+                    <option key={item._id} value={item._id}><span className="capitalize">{item.company} </span></option>
                   ))}
                 </select>
               </div>

@@ -282,7 +282,7 @@ const CatalogForm = () => {
                 </option>
                 {userData.map((item) => (
                   <option key={item._id} value={item._id}>
-                    {item.company_name}
+                    {item.company}
                   </option>
                 ))}
               </select>
@@ -357,7 +357,6 @@ const CatalogForm = () => {
                 <span className="bg-rose-500 p-2 rounded-lg text-white cursor-pointer" onClick={()=>removeAdditionalSpec(index)}> <FaMinus /> </span>
             </div>
             </div>
-            
 
             </>
            ))}

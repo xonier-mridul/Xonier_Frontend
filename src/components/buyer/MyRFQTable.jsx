@@ -127,13 +127,13 @@ const MyRFQTable = () => {
                 <tr key={rfq._id} className="border-b-1 border-zinc-200">
                   <td className="p-4 text-start">{rfq._id}</td>
                   <td className="p-4 text-start border-l-1 border-zinc-200">
-                    {rfq.process}
+                    <span className={`${rfq.process === "updated by admin" && "bg-orange-500 text-white"} ${rfq.process === "denied by buyer" && "bg-red-500 text-white"} ${rfq.process === "approved by buyer" && "bg-green-500 text-white"} bg-blue-400 text-white px-3 py-1 rounded-md capitalize text-sm text-nowrap`}> {rfq.process} </span>
                   </td>
                   <td className="p-4 text-start border-l-1 border-zinc-200">
-                    <span className="text-lime-500 bg-emerald-50 capitalize  py-2 px-4 rounded-lg  font-medium"> {Create} </span>
+                    <span className="text-lime-500 bg-emerald-50 capitalize text-sm  py-2 px-4 rounded-lg text-nowrap font-medium"> {Create} </span>
                   </td>
                   <td className="p-4 text-start border-l-1 border-zinc-200">
-                   <span className=" text-red-500 bg-red-50 capitalize  py-2 px-4 rounded-lg  font-medium"> {Update} </span>
+                   <span className=" text-red-500 bg-red-50 capitalize text-sm  py-2 px-4 rounded-lg text-nowrap font-medium"> {Update} </span>
                   </td>
                   <td className="p-4 text-start border-l-1 border-zinc-200">
                     {rfq.status}
@@ -143,6 +143,7 @@ const MyRFQTable = () => {
                       <button
                         type="button"
                         className="rounded-lg bg-blue-400 px-2 py-2 text-white cursor-pointer"
+                        onClick={()=>navigate(`rfq-history/${rfq._id}`)}
                       >
                         <FaHistory className="text-xl" />
                       </button>

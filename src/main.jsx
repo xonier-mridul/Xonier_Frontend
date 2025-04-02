@@ -7,6 +7,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
+  Router,
   RouterProvider,
 } from "react-router-dom";
 import Home from "./pages/Home.jsx";
@@ -37,6 +38,13 @@ import CreateRFQ from "./pages/Buyer-admin/CreateRFQ.jsx";
 import NewOrder from "./pages/admin/NewOrder.jsx";
 import OrderHistory from "./pages/admin/OrderHistory.jsx";
 import MyRFQ from "./pages/Buyer-admin/MyRFQ.jsx";
+import RFQList from "./pages/admin/RFQList.jsx";
+import RFQListOutlet from "./pages/admin/RFQListOutlet.jsx";
+import RFQDetailTable from "./components/admin/RFQDetailTable.jsx";
+import UpdateRFQ from "./pages/admin/UpdateRFQ.jsx";
+import MyRFQOutlet from "./pages/Buyer-admin/MyRFQOutlet.jsx";
+import RFQHistory from "./pages/Buyer-admin/RFQHistory.jsx";
+import SignUp from "./pages/SignUp.jsx";
 
 
 
@@ -52,6 +60,7 @@ const router = createBrowserRouter(
         <Route path="/supplier-register" element={<SupplierRegister/>} />
         <Route path="/contact" element={<Contact/>} />
         <Route path="/quote" element={<GetAQuote/>}/>
+        <Route path="/signup" element={<SignUp/>} />
       </Route>
 
       {/* Admin Panel with Nested Routes */}
@@ -65,6 +74,11 @@ const router = createBrowserRouter(
         <Route path="inquiries" element={<Inquiry/>}/>
         <Route path="specification" element={<Specification/>} />
         <Route path="contact" element={<ContactUs/>}/>
+        <Route path="rfq-list" element={<RFQListOutlet/>}>
+          <Route index element={<RFQList/>}/>
+          <Route path="rfq-detail/:id" element={<RFQDetailTable/>}/>
+          <Route path="update-rfq/:id" element={<UpdateRFQ/>}/>
+        </Route>
         <Route path="product-list" element={<ProductListOutlet/>} >
            <Route index element={<ProductList/>} />
            <Route path="product-view/:id" element={<ProductView/>} />
@@ -79,7 +93,10 @@ const router = createBrowserRouter(
       <Route path="/buyer-admin" element={<BuyerAdmin/>}>
          <Route index element={<BuyerDashboard/>}/>
          <Route path="create-rfq" element={<CreateRFQ/>}/>
-         <Route path="my-rfq" element={<MyRFQ/>}/>
+         <Route path="my-rfq" element={<MyRFQOutlet/>}>
+              <Route index element={<MyRFQ/>}/>
+              <Route path="rfq-history/:id" element={<RFQHistory/>}/>
+         </Route>
 
       </Route>
     </>

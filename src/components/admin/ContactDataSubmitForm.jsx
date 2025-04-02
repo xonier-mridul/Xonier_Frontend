@@ -3,7 +3,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ContactDataSubmitForm = () => {
+const ContactDataSubmitForm = ({getContactData}) => {
   const [formData, setFormData] = useState({
     email: "",
     number: "",
@@ -20,6 +20,7 @@ const ContactDataSubmitForm = () => {
       );
   
       if (response.status === 201) {
+        getContactData()
         toast.success("Contact data submitted successfully", {
           position: "top-right",
           autoClose: 3000,

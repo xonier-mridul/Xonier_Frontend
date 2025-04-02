@@ -10,26 +10,9 @@ import { FaEye, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 // Media End
 
-const ContactDataTable = () => {
-  const [contactData, setContactData] = useState([]);
-
+const ContactDataTable = ({ contactData, setContactData, getContactData }) => {
+  const [isActive, setIsActive] = useState(false);
   // GET CONTACT DATA
-
-  useEffect(() => {
-    const getContactData = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_SERVER_URL}admin-contact`
-        );
-        if (response.status === 200) {
-          setContactData(response.data);
-        };
-      } catch (error) {
-        console.error(error.message);
-      }
-    };
-    getContactData();
-  }, []);
 
   // Handle Delete
 
@@ -66,6 +49,38 @@ const ContactDataTable = () => {
       });
     }
   };
+
+  const handleActive =async(id)=>{
+   try {
+       const response = await axios.patch(`${import.meta.env.VITE_SERVER_URL}admin-contact/${id}`);
+       if(response.status === 200){
+        getContactData()
+        toast.success("Active status updated successfully", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          style: { backgroundColor: "#009689", color: "#fff" },
+        });
+       }
+   } catch (error) {
+    console.error(error);
+    toast.error("Contact data deleted successfully", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+   }
+  }
 
   return (
     <>
@@ -115,6 +130,18 @@ const ContactDataTable = () => {
                 </td>
                 <td className="p-4 border-zinc-200 border-l-1">
                   <div className="flex items-center gap-4">
+                    <button
+                      className={`relative w-12 h-6 rounded-full transition-colors duration-300 ease-in-out ${
+                        item.isActive === true ? "bg-green-500" : "bg-gray-300"
+                      }`}
+                      onClick={() => handleActive(item._id)}
+                    >
+                      <span
+                        className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow-md transition-transform duration-300 ease-in-out transform ${
+                          item.isActive === true ? "translate-x-6" : "translate-x-0"
+                        }`}
+                      />
+                    </button>
                     <button
                       type="button"
                       className="rounded-lg bg-lime-500 px-2 py-2 text-white cursor-pointer"

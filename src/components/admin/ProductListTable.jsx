@@ -185,7 +185,7 @@ const ProductListTable = () => {
               <option value="all"> View All</option>
               {sellerData.map((item) => (
                 <option key={item._id} value={item?._id}>
-                  {item?.company_name}
+                  {item?.company}
                 </option>
               ))}
             </select>
@@ -228,7 +228,7 @@ const ProductListTable = () => {
                   >
                     <td className="p-4 border-zinc-200 border-l-1">
                       {" "}
-                      {item.seller.company_name}{" "}
+                      {item.seller.company}{" "}
                     </td>
                     <td className="p-4 border-zinc-200 border-l-1">
                       {" "}
