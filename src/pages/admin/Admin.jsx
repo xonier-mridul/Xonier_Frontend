@@ -1,5 +1,5 @@
 import { Outlet, Link } from "react-router-dom";
-import Logo from "../../assets/BildKart-Logo.png";
+import Logo from "../../assets/bildkart-admin-logo.png";
 import fav from "../../assets/b-fav.png";
 import DashboardHeader from "../../components/admin/DashboardHeader";
 import { useState } from "react";
@@ -60,7 +60,7 @@ const Admin = () => {
             </span>
             {showSidebar ? (
               <img
-                className="w-40 pb-6 invert"
+                className="w-40 pb-6 "
                 src={Logo}
                 alt="bildkart logo"
               />

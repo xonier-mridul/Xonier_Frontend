@@ -42,7 +42,15 @@ html{
   scroll-behavior: smooth !important;
 }
 
+.form-check-input{
+  background-color: #19a992 !important;
+  border-color: #19a992 !important;
+}
 
+input[type="radio"] {
+  accent-color: #019297;
+  height: 20px;
+}
 
 input:-webkit-autofill {
   background-color: white !important;

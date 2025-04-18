@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash, FaArrowRight } from "react-icons/fa";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -21,6 +23,11 @@ const BuyerRegistrationForm = () => {
     password: "",
     cpassword: "",
   });
+
+
+  //navigate 
+
+  const navigate = useNavigate();
 
   // Handle input change
   const handleChange = (e) => {
@@ -58,7 +65,10 @@ const BuyerRegistrationForm = () => {
           website: "",
           password: "",
           cpassword: "",
+          
         });
+        navigate("/login");
+
       }
     } catch (error) {
       console.error(error);

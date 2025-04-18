@@ -54,7 +54,7 @@ const SupplierAdminHeader = () => {
          </div>
          <div className='flex justify-end items-center gap-6'>
              <div className='relative' onMouseEnter={()=>setShowNotification(true)} onMouseLeave={()=>setShowNotification(false)}>
-              <div className='h-10 w-10 rounded-lg border-2 border-orange-500 flex items-center justify-center relative cursor-pointer'>
+              <div className='h-10 w-10 rounded-lg border-2 border-emerald-500 flex items-center justify-center relative cursor-pointer'>
 
              <IoIosNotifications className='text-2xl bell text-teal-950'/>
              <span className='w-5 h-5 bg-red-500 rounded-full absolute -top-1 -right-1 text-white text-[12px] flex items-center justify-center'>5</span>
@@ -83,7 +83,7 @@ const SupplierAdminHeader = () => {
                  transition={{ duration: .3}}
                  viewport={{ once: true }}
                  className='w-full bg-white absolute top-[130%] p-8 py-6 rounded-lg shadow-[0_0_15px_#00000020] flex flex-col gap-4 z-40' >
-                  <li><Link to={""} className='text-lg hover:text-green-400 transition-all duration-300'> My Profile </Link></li>
+                  <li><Link to={"profile"} className='text-lg hover:text-green-400 transition-all duration-300'> My Profile </Link></li>
                   <li><button className='text-lg hover:text-green-400 transition-all duration-300' onClick={handleLogout}> Log Out </button></li>
                  </motion.ul>
              </div>

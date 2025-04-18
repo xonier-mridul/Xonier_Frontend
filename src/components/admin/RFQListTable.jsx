@@ -86,27 +86,22 @@ const RFQListTable = ({ rfqData, setRfqData, totalPages }) => {
         </thead>
         <tbody>
           {rfqFilterData?.map((item) => {
-            const deliveryDate = new Date(
-              item?.orderQuantity[0]?.deliveryDate
-            ).toLocaleDateString();
+            const deliveryDate = new Date(item?.toDate).toLocaleDateString();
 
-            const quantity = item.orderQuantity?.reduce(
-              (acc, cur) => acc + cur.quantity,
-              0
-            );
+            
 
             return (
               <tr
                 key={item._id}
                 className="border-b-[1px] border-l-1 border-zinc-200"
               >
-                <td className="p-4 border-l border-neutral-200">{item?._id}</td>
-                <td className="p-4 border-l border-neutral-200 capitalize">{item.createdBy?.name}</td>
-                <td className="p-4 border-l border-neutral-200 capitalize">{item?.product}</td>
-                <td className="p-4 border-l border-neutral-200">{quantity}</td>
-                <td className="p-4 border-l border-neutral-200">{item?.DeliveryLocation}</td>
-                <td className="p-4 border-l border-neutral-200">{deliveryDate}</td>
-                <td className="p-4 border-l border-neutral-200">
+                <td className="p-4 border-l-1 border-neutral-200">{item?._id}</td>
+                <td className="p-4 border-l-1 border-neutral-200 capitalize">{item.createdBy?.name}</td>
+                <td className="p-4 border-l-1 border-neutral-200 capitalize">{item?.product}</td>
+                <td className="p-4 border-l-1 border-neutral-200">{item?.quantity}</td>
+                <td className="p-4 border-l-1 border-neutral-200">{item?.DeliveryLocation}</td>
+                <td className="p-4 border-l-1 border-neutral-200">{deliveryDate}</td>
+                <td className="p-4 border-l-1 border-neutral-200">
                   <span
                     className={`${
                       item?.status === true

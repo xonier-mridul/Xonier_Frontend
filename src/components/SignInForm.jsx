@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { FaEye, FaEyeSlash, FaArrowRight } from "react-icons/fa";
 
@@ -14,6 +14,12 @@ const SignInForm = () => {
     email: "",
     password: "",
   });
+
+  // Navigate
+ 
+  const navigate = useNavigate()
+
+  // Navigate End
 
   const handleChange = (e)=>{
     const {name, value}  = e.target;
@@ -32,6 +38,17 @@ const SignInForm = () => {
       if (response.status === 200) {
        
         toast.success("Login Successfully");
+
+        if(response.data?.user.role === "admin") {
+          navigate("/admin")
+        }
+        if(response.data?.user.role === "buyer") {
+          navigate("/buyer-admin")
+        }
+        if(response.data?.user.role === "supplier") {
+          navigate("/supplier-admin")
+        }
+
         setFormData({
           email: "",
           password: "",

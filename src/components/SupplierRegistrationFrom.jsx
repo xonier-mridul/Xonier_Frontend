@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash, FaArrowRight } from "react-icons/fa";
 import axios from "axios";
+import { Navigate, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -8,6 +9,10 @@ const SupplierRegistrationFrom = () => {
   const [passwordShow, setPasswordShow] = useState(false);
   const [confirmPasswordShow, setConfirmPasswordShow] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  // Navigate
+
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -50,6 +55,7 @@ const SupplierRegistrationFrom = () => {
           password: "",
           cpassword: "",
         });
+        navigate("/verify-otp")
       }
     } catch (error) {
       console.error(error);

@@ -4,8 +4,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Media Start
-import { FaDownload, FaStarOfLife, FaPlus, FaMinus } from "react-icons/fa";
-import { FaXmark } from "react-icons/fa6";
+import { FaDownload, FaStarOfLife } from "react-icons/fa";
+import { FaXmark, FaPlus, FaMinus } from "react-icons/fa6";
 // Media End
 
 const GenerateRFQFrom = () => {
@@ -15,54 +15,139 @@ const GenerateRFQFrom = () => {
   const [agreement, setAgreement] = useState(false);
   const [downloadConditionPopup, setDownloadConditionPopup] = useState(false);
   const [loggedUser, setLoggedUser] = useState({});
+  const [quantitySpread, setQuantitySpread] = useState("yes");
+  const [deliveryLocationSame, setDeliveryLocationSame] = useState("yes")
+  const [file, setFile] = useState(null);
+
   const [formData, setFromData] = useState({
-    product:"",
+    product: "",
     category: "",
     brand: "",
-    DeliveryLocation: "",
-    measurement:"",
-    pinCode: "",
+    measurement: "",
+    DeliveryLocation:"",
+    pinCode:"",
+    quantity: "",
+    fromDate: "",
+    toDate: "",
+    deliverySchedule: "",
     comments: "",
   });
-  const [orderQuantity, setOrderQuantity] = useState([
+
+  const [spreadQuantity, setSpreadQuantity] = useState([
     {
       quantity: "",
-      deliveryDate: "",
+      fromDate: "",
+      toDate: "",
+      location: "",
     },
   ]);
 
-  const [file, setFile] = useState(null);
+  const [quantitySpreadData, setQuantitySpreadData] = useState([]);
+
+const quantitySeparation = () => {
+  const {
+    quantity,
+    fromDate,
+    toDate,
+    deliverySchedule,
+    DeliveryLocation,
+  } = formData;
+
+  const spread = [];
+  let currentDate = new Date(fromDate);
+  const endDate = new Date(toDate);
+  const intervals = [];
+
+  const addInterval = (date, qty) => {
+    const dateStr = date.toISOString().split("T")[0]; 
+    spread.push({
+      quantity: qty,
+      fromDate: dateStr,
+      toDate: dateStr,
+      location: DeliveryLocation,
+    });
+  };
+
+  // Generate intervals
+  if (deliverySchedule === "weekly") {
+    while (currentDate <= endDate) {
+      intervals.push(new Date(currentDate));
+      currentDate.setDate(currentDate.getDate() + 7);
+    }
+  } else if (deliverySchedule === "monthly") {
+    while (currentDate <= endDate) {
+      intervals.push(new Date(currentDate));
+      currentDate.setMonth(currentDate.getMonth() + 1);
+    }
+  } else if (deliverySchedule === "quarterly") {
+    while (currentDate <= endDate) {
+      intervals.push(new Date(currentDate));
+      currentDate.setMonth(currentDate.getMonth() + 3);
+    }
+  } else if (deliverySchedule === "annually") {
+    while (currentDate <= endDate) {
+      intervals.push(new Date(currentDate));
+      currentDate.setFullYear(currentDate.getFullYear() + 1);
+    }
+  }
+
+  // Distribute quantity
+  const totalQuantity = Number(quantity);
+  const quantityPerInterval = Math.floor(totalQuantity / intervals.length);
+  const remainder = totalQuantity % intervals.length;
+
+  intervals.forEach((date, index) => {
+    const thisQty =
+      quantityPerInterval + (index === intervals.length - 1 ? remainder : 0);
+    addInterval(date, thisQty);
+  });
+
+  setQuantitySpreadData(spread);
+  console.log("Spread Quantity Data:", spread);
+
+};
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFromData({ ...formData, [name]: value });
   };
 
-  const handleQuantityChange = (index, field, value) => {
-    const updatedData = [...orderQuantity];
+  const handleSpreadQuantityChange = (index, field, value) => {
+    const updatedData = [...spreadQuantity];
     updatedData[index][field] = value;
-    setOrderQuantity(updatedData);
+    setSpreadQuantity(updatedData);
+    console.log(spreadQuantity);
   };
 
-  const addQuantityFields = ()=>{
-    if(orderQuantity.length <= 4){
-      setOrderQuantity([...orderQuantity, {quantity:"",deliveryDate:""}]);
+  const addSpreadQuantityFields = () => {
+    if (spreadQuantity.length <= 4) {
+      setSpreadQuantity([
+        ...spreadQuantity,
+        { quantity: "", fromDate: "", toDate: "", location: "" },
+      ]);
+    } else {
+      toast.info("Only 5 fields are created", {});
     }
-    else{
-      toast.info("Only 5 fields are created",{
-        
-      })
-    }
-  }
+  };
 
-  const removeQuantityFields = (index)=>{
-    if(orderQuantity.length === 1) return
-    setOrderQuantity(orderQuantity.filter((_, i)=> i !== index ))
-  }
+  const removeSpreadQuantityFields = (index) => {
+    if (spreadQuantity.length === 1) return;
+    setSpreadQuantity(spreadQuantity.filter((_, i) => i !== index));
+  };
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
+
+  const handleQuantitySpreadShow = (e) => {
+    setQuantitySpread(e.target.value);
+  };
+
+  const handleDeliveryLocationField = (e)=>{
+    setDeliveryLocationSame(e.target.value);
+   
+  }
 
   // Get Category
   const getCategory = async () => {
@@ -89,18 +174,21 @@ const GenerateRFQFrom = () => {
     }
   };
 
-  // Get Login User 
+  // Get Login User
 
-  const getLoggedInUser = async()=>{
+  const getLoggedInUser = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}user/profile`,{withCredentials: true});
-      if(response.status === 200){
-       setLoggedUser(response.data?.user);
+      const response = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}user/profile`,
+        { withCredentials: true }
+      );
+      if (response.status === 200) {
+        setLoggedUser(response.data?.user);
       }
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   useEffect(() => {
     getCategory();
@@ -108,24 +196,25 @@ const GenerateRFQFrom = () => {
     getLoggedInUser();
   }, []);
 
-
-
-
   // Handle Submit
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formDatas = new FormData();
-    formDatas.append("product", formData.product)
+    formDatas.append("product", formData.product);
     formDatas.append("category", formData.category);
     formDatas.append("brand", formData.brand);
     formDatas.append("measurement", formData.measurement);
+    formDatas.append("quantity", formData.quantity);
+    formDatas.append("fromDate", formData.fromDate);
+    formDatas.append("toDate", formData.toDate);
+    formDatas.append("deliverySchedule", formData.deliverySchedule);
     formDatas.append("DeliveryLocation", formData.DeliveryLocation);
     formDatas.append("pinCode", formData.pinCode);
     formDatas.append("comments", formData.comments);
-    formDatas.append("createdBy", loggedUser?._id)
-    formDatas.append("orderQuantity", JSON.stringify(orderQuantity));
+    formDatas.append("createdBy", loggedUser?._id);
+    formDatas.append("spreadQuantity", quantitySpread === "yes" ? JSON.stringify(quantitySpreadData) : JSON.stringify(spreadQuantity));
     if (file) {
       formDatas.append("document", file);
     }
@@ -144,23 +233,31 @@ const GenerateRFQFrom = () => {
       if (response.status === 201) {
         toast.success("RFQ generated successfully");
         setFromData({
-          product:"",
+          product: "",
           category: "",
           brand: "",
-          measurement,
+          measurement: "",
+          quantity: "",
+          fromDate: "",
+          toDate: "",
+          deliverySchedule: "",
           DeliveryLocation: "",
           pinCode: "",
           comments: "",
         });
-        setOrderQuantity([{
+        setSpreadQuantity([
+          {
             quantity: "",
-            deliveryDate: "",
-        },])
+            fromDate: "",
+            toDate: "",
+            location: "",
+          },
+        ]);
+        setQuantitySpreadData([]);
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error("RFQ not generated");
-      console.log(orderQuantity);
+      toast.error("RFQ not generated");``
     }
   };
 
@@ -267,7 +364,7 @@ const GenerateRFQFrom = () => {
       )}
 
       <ToastContainer />
-      <div className="bg-white w-full border-2 border-orange-500 rounded-4xl">
+      <div className="bg-white w-full border-2 border-emerald-500 rounded-4xl">
         <div className="p-3 px-4 flex flex-col gap-3 border-b-1 pb-6 border-[#E4E6EF]">
           <h2 className="text-lg font-semibold">
             You can create an RFQ by uploading a file or manually filling out
@@ -336,12 +433,45 @@ const GenerateRFQFrom = () => {
 
           {active === 2 && (
             <form
-              className="p-6 flex flex-col gap-5 bg-sky-50 rounded-xl"
+              className="p-6 flex flex-col gap-6 bg-sky-50 rounded-xl"
               onSubmit={handleSubmit}
             >
-              <div className="w-full flex flex-col gap-2">
-                 <label htmlFor="product">Product Name</label>
-                 <input className="w-full p-3  border-1 bg-white border-[#E4E6EF] outline-none rounded-lg" type="text" name="product" value={formData.product} onChange={handleChange} required placeholder="Product name"/>
+              <div className="w-full flex items-center gap-5">
+                <div className="w-1/2 flex flex-col gap-2">
+                  <label htmlFor="product">Product Name</label>
+                  <input
+                    className="w-full p-3  border-1 bg-white border-[#E4E6EF] outline-none rounded-lg"
+                    type="text"
+                    name="product"
+                    value={formData.product}
+                    onChange={handleChange}
+                    required
+                    placeholder="Product name"
+                  />
+                </div>
+                <div className="w-1/2 flex flex-col gap-2">
+                  <label htmlFor="measurement">Product in unit</label>
+
+                  <select name="measurement" id="measurement" className="w-full p-3  border-1 bg-white border-[#E4E6EF] outline-none rounded-lg" onChange={handleChange}>
+                    <option value="" hidden>Product in Unit</option>
+                    <option value="mm">mm</option>
+                    <option value="cm">cm</option>
+                    <option value="m">meter</option>
+                    <option value="inch">inch</option>
+                    <option value="feet">feet</option>
+                    <option value="m²">m²</option>
+                    <option value="ft²">ft²</option>
+                    <option value="m³">m³</option>
+                    <option value="ft³">ft³</option>
+                    <option value="kg">kg</option>
+                    <option value="ton">ton</option>
+                    <option value="per piece">per piece</option>
+                    <option value="per bag">per bag</option>
+                    <option value="per bundle">per bundle</option>
+                    <option value="per roll">per roll</option>
+                    <option value="per sheet">per sheet</option>
+                  </select>
+                </div>
               </div>
               <div className="w-full flex items-center gap-5">
                 <div className="w-1/2 flex flex-col gap-2">
@@ -417,7 +547,7 @@ const GenerateRFQFrom = () => {
                   />
                 </div>
               </div>
-              
+
               <div className="w-full flex items-center gap-5">
                 <div className="w-1/2 flex flex-col gap-2">
                   <span>Download Specification sheet</span>
@@ -458,67 +588,275 @@ const GenerateRFQFrom = () => {
                 </textarea>
               </div>
               <div className="p-6 flex flex-col gap-5 rounded-lg border-green-300 border-1 bg-green-50">
-               <div className="flex flex-col gap-5">
-               <h3 className="text-lg font-semibold tracking-wide"><span className="text-red-600 text-2xl">*</span> You can create maximum <span className="text-red-600 "
-                >5</span> fields</h3>
-                <select name="measurement" id="measurement" className="w-68 px-3 py-2 border-1 bg-white border-[#E4E6EF] outline-none rounded-lg" onChange={handleChange} value={formData.measurement}>
-                  <option value=" " hidden>Select measurement</option>
-                  <option value="cm">centimeter</option>
-                  <option value="m">meter</option>
-                  <option value="inch">inch</option>
-                  <option value="feet">feet</option>
-                  <option value="per piece">per piece</option>
-                  <option value="per bag">per bag</option>
-                </select>
-                
+                <div className="w-full ">
+                  <h2 className="text-2xl font-semibold">Delivery Schedule</h2>
                 </div>
-              {orderQuantity?.map((item, index) => (
-                <div className="w-full flex justify-center items-center gap-5 " key={index}>
-                  <div className=" w-4/5 flex items-center gap-5">
-                    <div className="w-1/2 flex flex-col gap-2">
-                      <label htmlFor="quantity">Quantity</label>
-                      <input
-                        type="text"
-                        className="w-full p-3 bg-white border-1 border-[#E4E6EF] outline-none rounded-lg"
-                        name="quantity"
-                        id="quantity"
-                        placeholder="Quantity"
-                        value={orderQuantity[index].quantity}
-                        onChange={(e)=>handleQuantityChange(index, "quantity", e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className="w-1/2 flex flex-col gap-2">
-                      <label htmlFor="deliveryDate">Delivery Date</label>
-                      <input
-                        type="date"
-                        className="w-full p-3 bg-white border-1 border-[#E4E6EF] outline-none rounded-lg"
-                        name="deliveryDate"
-                        id="deliveryDate"
-                        value={orderQuantity[index].deliveryDate}
-                        onChange={(e)=>handleQuantityChange(index, "deliveryDate", e.target.value)}
-                        required
-                      />
-                    </div>
+
+                <div className="grid grid-cols-4 gap-4">
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="quantity">Quantity ({formData.measurement === ""? "Enter units above" : formData.measurement}) </label>
+                    <input
+                      type="text"
+                      name="quantity"
+                      value={formData.quantity}
+                      onChange={handleChange}
+                      className="w-full p-3 bg-white border-1 border-[#E4E6EF] outline-none rounded-lg"
+                      placeholder="Quantity"
+                    />
                   </div>
-                  <div className="w-1/5 flex items-center justify-center gap-4">
-                    <span
-                      className="bg-teal-600 p-2 rounded-lg text-white cursor-pointer"
-                      onClick={addQuantityFields}
+
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="fromDate">From Date</label>
+                    <input
+                      type="date"
+                      name="fromDate"
+                      value={formData.fromDate}
+                      onChange={handleChange}
+                      className="w-full p-3 bg-white border-1 border-[#E4E6EF] outline-none rounded-lg"
+                      placeholder="From date"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="toDate"> To Date</label>
+                    <input
+                      type="date"
+                      name="toDate"
+                      value={formData.toDate}
+                      onChange={handleChange}
+                      className="w-full p-3 bg-white border-1 border-[#E4E6EF] outline-none rounded-lg"
+                      placeholder="To date"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="deliverySchedule"> Delivery Schedule</label>
+                    <select
+                      name="deliverySchedule"
+                      id="deliverySchedule"
+                      className="w-full p-3 bg-white border-1 border-[#E4E6EF] outline-none rounded-lg"
+                      onChange={handleChange}
                     >
-                      
-                      <FaPlus />
-                    </span>
-                    <span
-                      className="bg-rose-500 p-2 rounded-lg text-white cursor-pointer"
-                      onClick={()=>removeQuantityFields(index)}
-                    >
-                    
-                      <FaMinus />
-                    </span>
+                      <option value="" hidden>
+                        {" "}
+                        Select delivery schedule
+                      </option>
+                      <option value="weekly"> Weekly</option>
+                      <option value="monthly"> Monthly</option>
+                      <option value="quarterly">Quarterly</option>
+                      <option value="annually">Annually</option>
+                    </select>
                   </div>
                 </div>
-              ))}
+              </div>
+
+              {/* Quantity Spread */}
+              <div className="w-full flex flex-col gap-4">
+                <h2 className="text-xl font-semibold">
+                  <span className="text-red-500 text-2xl">*</span> Is your
+                  quantity spread over the delivery date range?
+                </h2>
+                <div className=" flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <label className="flex gap-2 items-center" >
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="quantitySpread"
+                        value="yes"
+                        checked={quantitySpread === "yes"}
+                        onChange={handleQuantitySpreadShow}
+                      />
+                      Yes
+                    </label>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <label className="flex gap-2 items-center" >
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="quantitySpread"
+                        value="no"
+                        checked={quantitySpread === "no"}
+                        onChange={handleQuantitySpreadShow}
+                      />
+                      No
+                    </label>
+                  </div>
+                </div>
+
+                {/* Quantity Spread Table */}
+
+                {quantitySpread === "yes" ? (
+                  <div className="border-2 border-emerald-500 bg-white p-5 rounded-lg flex flex-col gap-5">
+                    <div className="flex justify-between items-center">
+                    <h2 className="text-xl font-semibold">Quantity Spread</h2>
+                    <button type="button" className="py-2 px-4 bg-black text-white rounded-lg" onClick={quantitySeparation}>Generate</button>
+                    </div>
+                    <table className="w-full border-[1px] border-zinc-200 ">
+                      <thead>
+                        <tr className="bg-slate-100 border-b-1 border-zinc-200">
+                          <th className="px-4 py-3 text-start"> Quantity ({formData.measurement === ""? "Enter units above" : formData.measurement})</th>
+                          <th className="px-4 py-3 text-start border-l-1 border-zinc-200">
+                            {" "}
+                            Date
+                          </th>
+                          <th className="px-4 py-3 text-start border-l-1 border-zinc-200">
+                            {" "}
+                            Location
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                          {quantitySpreadData.length > 1 ? quantitySpreadData.map((item, index)=> (
+                            <tr  key={index} className="border-b-1 border-zinc-200">
+                                <td className="px-4 py-3">{item?.quantity}</td>
+                                <td className="px-4 py-3 border-zinc-200 border-l-1">{item?.fromDate} to {item?.toDate}</td>
+                                <td className="px-4 py-3 border-zinc-200 border-l-1">{item?.location}</td>
+                            </tr>
+                          )) : (
+                            <tr className="border-b-1 border-zinc-200 ">
+                              <td colSpan={3} className="p-4 text-center"> Please fill delivery schedule form above and generate spread quantity</td>
+                            </tr>
+                          )}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <div className="p-6 flex flex-col gap-5 rounded-lg border-green-300 border-1 bg-green-50">
+                    <div className="w-full ">
+                      <h2 className="text-xl font-semibold">
+                        <span className="text-red-500 text-2xl">*</span> Will
+                        all delivery locations would be the same?
+                      </h2>
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2">
+                          
+                          <label className="flex gap-2 items-center" >
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            name="deliveryLocationSame"
+                            checked={deliveryLocationSame==="yes"}
+                            onChange={handleDeliveryLocationField}
+                            value="yes"
+                          />
+                            Yes
+                          </label>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          
+                          <label className="flex gap-2 items-center" >
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            name="deliveryLocationSame"
+                            checked={deliveryLocationSame==="no"}
+                            onChange={handleDeliveryLocationField}
+                            value="no"
+                          />
+                            No
+                            </label>
+                        </div>
+                      </div>
+                    </div>
+
+                    {spreadQuantity.map((item, index) => (
+                      <div key={index} className="flex flex-col gap-3">
+                        <div className={` grid ${deliveryLocationSame === "yes" ? "grid-cols-3" : "grid-cols-4" }  gap-4`}>
+                          <div className="flex flex-col gap-2">
+                            <label htmlFor="quantity">Quantity ({formData.measurement === ""? "Enter units above" : formData.measurement})</label>
+                            <input
+                              type="text"
+                              className="w-full p-3 bg-white border-1 border-[#E4E6EF] outline-none rounded-lg"
+                              required
+                              placeholder="Quantity"
+                              name="quantity"
+                              value={spreadQuantity[index].quantity}
+                              onChange={(e) =>
+                                handleSpreadQuantityChange(
+                                  index,
+                                  "quantity",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <label htmlFor="fromDate">From Date</label>
+                            <input
+                              type="date"
+                              className="w-full p-3 bg-white border-1 border-[#E4E6EF] outline-none rounded-lg"
+                              name="fromDate"
+                              value={spreadQuantity[index].fromDate}
+                              required
+                              onChange={(e) =>
+                                handleSpreadQuantityChange(
+                                  index,
+                                  "fromDate",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <label htmlFor="toDate"> To Date</label>
+                            <input
+                              type="date"
+                              name="toDate"
+                              value={spreadQuantity[index].toDate}
+                              className="w-full p-3 bg-white border-1 border-[#E4E6EF] outline-none rounded-lg"
+                              onChange={(e) =>
+                                handleSpreadQuantityChange(
+                                  index,
+                                  "toDate",
+                                  e.target.value
+                                )
+                              }
+                              required
+                            />
+                          </div>
+                          <div className={`${deliveryLocationSame === "yes" ? "hidden" : "block"} flex flex-col gap-2`}>
+                            <label htmlFor="location"> Location</label>
+                            <input
+                              type="text"
+                              name="location"
+                              value={spreadQuantity[index].location}
+                              className="w-full p-3 bg-white border-1 border-[#E4E6EF] outline-none rounded-lg"
+                              onChange={(e) =>
+                                handleSpreadQuantityChange(
+                                  index,
+                                  "location",
+                                  e.target.value
+                                )
+                              }
+                              required
+                              placeholder="Location"
+                            />
+                          </div>
+                        </div>
+                        <div className="flex justify-end gap-2">
+                          <button
+                            type="button"
+                            className="bg-green-500 text-white h-9 w-9 flex justify-center items-center rounded-xl"
+                            onClick={addSpreadQuantityFields}
+                          >
+                            <FaPlus className="text-xl" />
+                          </button>
+                          <button
+                            type="button"
+                            className="bg-red-500 text-white h-9 w-9 flex justify-center items-center rounded-xl"
+                            onClick={() => removeSpreadQuantityFields(index)}
+                          >
+                            <FaMinus className="text-xl" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="flex justify-end ">

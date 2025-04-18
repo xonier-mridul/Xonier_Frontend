@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -150,12 +150,14 @@ const MyRFQTable = () => {
                       <button
                         type="button"
                         className="rounded-lg bg-teal-600 px-2 py-2 text-white cursor-pointer"
+                        onClick={()=>navigate(`rfq-detail/${rfq._id}`)}
                       >
                         <FaEye className="text-xl" />
                       </button>
                       <button
                         type="button"
                         className="rounded-lg bg-lime-500 px-2 py-2 text-white cursor-pointer"
+                        onClick={()=>navigate()}
                       >
                         <MdEdit className="text-xl" />
                       </button>

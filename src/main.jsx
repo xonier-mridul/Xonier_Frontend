@@ -50,12 +50,23 @@ import MyRFQOutlet from "./pages/Buyer-admin/MyRFQOutlet.jsx";
 import RFQHistory from "./pages/Buyer-admin/RFQHistory.jsx";
 import SignUp from "./pages/SignUp.jsx";
 import LogIn from "./pages/LogIn.jsx";
-import BRFQOutlet from "./components/buyer/BRFQOutlet.jsx";
-import BRFQ from "./pages/Buyer-admin/BRFQ.jsx";
+import BRFQOutlet from "./components/admin/BRFQOutlet.jsx";
+import BRFQ from "./pages/admin/BRFQ.jsx";
 
 import Profile from "./pages/Common/Profile.jsx";
 import SupplierAdmin from "./pages/Supplier-admin/SupplierAdmin.jsx";
 import SupplierDashboard from "./pages/Supplier-admin/SupplierDashboard.jsx";
+import NewBRFQ from "./pages/Supplier-admin/NewBRFQ.jsx";
+import RFQDetail from "./components/buyer/RFQDetail.jsx";
+import Assign from "./pages/admin/Assign.jsx";
+import NewBRFQOutlet from "./components/supplier/NewBRFQOutlet.jsx";
+import AssignBRFQDetail from "./components/supplier/AssignBRFQDetail.jsx";
+import AssignedBRFQ from "./pages/Supplier-admin/AssignedBRFQ.jsx";
+import CreateQuotation from "./pages/Supplier-admin/CreateQuotation.jsx";
+import VerifyOTP from "./components/VerifyOTP.jsx";
+import SupplierProfile from "./pages/Supplier-admin/SupplierProfile.jsx";
+import SupplierProfileOutlet from "./pages/Supplier-admin/SupplierProfileOutlet.jsx";
+import SupplierProfileUpdate from "./pages/Supplier-admin/SupplierProfileUpdate.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -71,6 +82,7 @@ const router = createBrowserRouter(
         <Route path="/quote" element={<GetAQuote />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<LogIn />} />
+        <Route path="verify-otp" element={<VerifyOTP/>} />
       </Route>
 
       {/* Admin Panel with Nested Routes */}
@@ -100,6 +112,7 @@ const router = createBrowserRouter(
         </Route>
         <Route path="brfq" element={<BRFQOutlet/>}>
           <Route index element={<BRFQ/>} />
+          <Route path="assign/:id" element={<Assign/>} />
 
         </Route>
         <Route path="product-list" element={<ProductListOutlet />}>
@@ -126,6 +139,7 @@ const router = createBrowserRouter(
         <Route path="my-rfq" element={<MyRFQOutlet />}>
           <Route index element={<MyRFQ />} />
           <Route path="rfq-history/:id" element={<RFQHistory />} />
+          <Route path="rfq-detail/:id" element={<RFQDetail/>}/>
         </Route>
       </Route>
 
@@ -138,6 +152,16 @@ const router = createBrowserRouter(
         </ProtectedRoute>
       }>
         <Route index element={<SupplierDashboard/>} />
+        <Route path="brfq" element={<NewBRFQOutlet/>}>
+           <Route index element={<NewBRFQ/>}/>
+           <Route path="detail/:id" element={<AssignedBRFQ/>}/>
+           <Route path="add-quotation/:id" element={<CreateQuotation/>}/>
+          
+        </Route>
+         <Route path="profile" element={<SupplierProfileOutlet/>}>
+           <Route index element={<SupplierProfile/>}/>
+           <Route path="update" element={<SupplierProfileUpdate/>}/>
+          </Route>
       </Route>
     </>
   )

@@ -70,7 +70,7 @@ const ProductEditPage = () => {
     const getSeller = async () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}user/supplier`);
-        if (response.status === 200) setSellerData(response.data);
+        if (response.status === 200) setSellerData(response.data.user);
       } catch (error) {
         console.error(error.message);
       }

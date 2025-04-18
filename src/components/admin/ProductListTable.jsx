@@ -33,6 +33,7 @@ const ProductListTable = () => {
         setCatalogData(response?.data?.response);
         setTotalPages(response?.data?.totalPages);
         setFilteredData(response?.data?.response);
+        
       }
     } catch (error) {
       console.log(error.message);
@@ -58,7 +59,7 @@ const ProductListTable = () => {
         `${import.meta.env.VITE_SERVER_URL}user/supplier`
       );
       if (response.status === 200) {
-        setSellerData(response.data);
+        setSellerData(response.data.user);
       }
     } catch (error) {
       console.error(error.message);
@@ -227,8 +228,8 @@ const ProductListTable = () => {
                     className="border-b-[1px] border-l-1 border-zinc-200"
                   >
                     <td className="p-4 border-zinc-200 border-l-1">
-                      {" "}
-                      {item.seller.company}{" "}
+                      
+                     <span className="capitalize"> {item.seller?.company} </span>
                     </td>
                     <td className="p-4 border-zinc-200 border-l-1">
                       {" "}

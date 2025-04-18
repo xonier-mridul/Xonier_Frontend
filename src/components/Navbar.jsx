@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { NavLink, Link, useNavigate } from 'react-router-dom'
-import Logo from '../assets/BildKart-Logo.png'
+import Logo from '../assets/bildkart-white-logo.png'
 import { FaArrowRight, FaXmark } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
 import { FaEye, FaEyeSlash } from "react-icons/fa";

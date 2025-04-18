@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import img from "../../assets/admin-img.jpg"
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -69,10 +70,10 @@ const SupplierTable = () => {
         <table className="w-full border-[1px] border-[#eff2f5]">
           <thead>
             <tr className="bg-slate-100">
-              <th className="p-4 text-start">Company</th>
               <th className="p-4 text-start border-l-1 border-[#f1f1f1]">
                 Contact Person
               </th>
+              <th className="p-4 text-start">Company</th>
               <th className="p-4 text-start border-l-1 border-[#f1f1f1]">
                 Number
               </th>
@@ -90,12 +91,12 @@ const SupplierTable = () => {
             {length > 0 ? (
               filteredData.map((item, index) => (
                 <tr key={item._id}>
-                  <td className="p-4 border-b-[1px] border-[#f1f1f1]">
-                    {" "}
-                    <span className="capitalize"> {item.company} </span>
+                  <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1]">
+                    <span className="capitalize"><div className='capitalize flex items-center flex-nowrap gap-3'>  <div className='relative h-10 w-10'><img className='h-10 w-10 rounded-lg' src={img} alt="" /> {item.isActive === true && <span className='absolute h-2.5 w-2.5 rounded-full bg-green-500 z-50 bottom-0 right-0'></span>} </div> {item.name}</div></span>
                   </td>
                   <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1]">
-                    <span className="capitalize">{item.name}</span>
+                    {" "}
+                    <span className="capitalize"> {item.company} </span>
                   </td>
                   <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1]">
                     {item.number}
@@ -104,7 +105,7 @@ const SupplierTable = () => {
                   <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1] text-orange-500">
                     {item.email}
                   </td>
-                  <td className="p-4 border-zinc-200 border-l-1">
+                  <td className="p-4 border-zinc-200 border-b-[1px] border-l-1">
                     <div className="flex items-center gap-4">
                       <button
                         type="button"

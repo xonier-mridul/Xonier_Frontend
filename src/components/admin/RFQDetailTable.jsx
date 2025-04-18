@@ -17,7 +17,8 @@ const RFQDetailTable = () => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}new-rfq/single/${id}`)
             if(response.status === 200){
-               setRFQData(response.data)
+               setRFQData(response.data);
+              
             }
         } catch (error) {
             console.error(error);
@@ -30,17 +31,22 @@ const RFQDetailTable = () => {
 
     
      
-    const total = RFQData?.orderQuantity?.reduce((sum,item)=> sum + item.quantity, 0);
+    const total = RFQData?.spreadQuantityData?.reduce((sum,item)=> sum + item.quantity, 0);
     
 
   return (
     <>
-      <div className='bg-white rounded-4xl flex flex-col gap-6 border-orange-500 border-2 p-8'>
+      <div className='bg-white rounded-4xl flex flex-col gap-6 border-emerald-500 border-2 p-8'>
         <div className="">
           <h2 className='font-semibold text-2xl'> RFQ id: <span className='text-orange-500'>{RFQData?._id} </span></h2>
         </div>
-        <table className='w-full border-[1px] border-[#eff2f5] '>
+        <table className='w-full border-[1px] border-[#eff2f5]'>
         <tbody>
+        <tr className='border-b-1 border-zinc-200'>
+        <th  className='bg-slate-100 border-b-1 border-zinc-200 w-1/3 p-4 px-6 font-semibold text-lg text-start'>Product Name </th>
+        <td className='w-2/3 p-4 px-6 text-lg'> <span className='capitalize'>{RFQData?.product}</span></td>
+         
+        </tr>
         <tr className='border-b-1 border-zinc-200'>
         <th  className='bg-slate-100 border-b-1 border-zinc-200 w-1/3 p-4 px-6 font-semibold text-lg text-start'>Category</th>
         <td className='w-2/3 p-4 px-6 text-lg'> <span className='capitalize'>{RFQData?.category?.category}</span></td>
@@ -86,18 +92,19 @@ const RFQDetailTable = () => {
                     <tr className='bg-slate-100 border-b-1 border-zinc-200'>
                         <th className='p-4 text-start'> S.No.</th>
                         <th className='p-4 text-start border-l-1 border-zinc-200'>Quantity ({RFQData?.measurement})</th>
-                        <th className='p-4 text-start border-l-1 border-zinc-200'>Delivery Date</th>
-
+                        <th className='p-4 text-start border-l-1 border-zinc-200'>Delivery Date ({RFQData?.deliverySchedule})</th>
+                        <th className='p-4 text-start border-l-1 border-zinc-200'> Delivery Location </th>
                     </tr>
                     
 
                 </thead>
                 <tbody>
-                {RFQData?.orderQuantity?.length > 0 ? RFQData?.orderQuantity?.map((item,index)=>(
+                {RFQData?.spreadQuantityData?.length > 0 ? RFQData?.spreadQuantityData?.map((item,index)=>(
                     <tr className='border-b-[1px] border-l-1 border-zinc-200' key={item._id}>
                         <td className='p-4 border-zinc-200 border-l-1'> {index + 1} </td>
                         <td className='p-4 border-zinc-200 border-l-1'> {item.quantity} </td>
-                        <td className='p-4 border-zinc-200 border-l-1'> <span className='py-1 px-4 rounded-lg bg-green-500 text-white text-sm tracking-wide'> {new Date(item.deliveryDate).toLocaleDateString()} </span> </td>
+                        <td className='p-4 border-zinc-200 border-l-1 flex items-center gap-2'> <span className='py-1 px-4 rounded-lg bg-green-500 text-white text-sm tracking-wide'> {new Date(item?.fromDate).toLocaleDateString()} </span> - <span className='py-1 px-4 rounded-lg bg-green-500 text-white text-sm tracking-wide'> {new Date(item.toDate).toLocaleDateString()}</span> </td>
+                        <td className='p-4 border-zinc-200 border-l-1'> {item?.location} </td>
                     </tr>
                 )) : <tr className='border-b-[1px] border-l-1 border-zinc-200'>
                     <td className='p-4 border-zinc-200 border-l-1 text-center' colSpan={3}>Not Found</td>

@@ -7,10 +7,9 @@ import "react-toastify/dist/ReactToastify.css";
 const UpdateRFQForm = () => {
   const [RFQData, setRFQData] = useState({});
   const [formData, setFormData] = useState({
-    DeliveryLocation: "",
-    pinCode: "",
+  
     additionalComment: "",
-    orderQuantity: [],
+    spreadQuantityData: [],
    
   });
 
@@ -20,6 +19,8 @@ const UpdateRFQForm = () => {
   // Params
   const { id } = useParams();
 
+
+  // Get RFQ with ID
   const getRFQWithId = async () => {
     try {
       if (!id) return;
@@ -29,15 +30,18 @@ const UpdateRFQForm = () => {
       if (response.status === 200) {
         const data = response.data;
         setRFQData(data);
+        console.log(data);
         setFormData({
-          DeliveryLocation: data.DeliveryLocation || "",
-          pinCode: data.pinCode || "",
+          // DeliveryLocation: data.DeliveryLocation || "",
+          // pinCode: data.pinCode || "",
           additionalComment: "",
           process: "updated by admin",
-          orderQuantity: data.orderQuantity
-            ? data.orderQuantity.map((item) => ({
+          spreadQuantityData: data.spreadQuantityData
+            ? data.spreadQuantityData.map((item) => ({
                 quantity: item.quantity || "",
-                deliveryDate: item.deliveryDate || "",
+                fromDate: item.fromDate|| "",
+                toDate: item.toDate || "",
+                location: item.location || ""
               }))
             : [],
         });
@@ -93,28 +97,28 @@ const UpdateRFQForm = () => {
   };
 
   const handleOrderQuantityChange = (index, value, type) => {
-    const updatedOrderQuantity = [...formData.orderQuantity];
+    const updatedOrderQuantity = [...formData.spreadQuantityData];
     updatedOrderQuantity[index][type] = value;
-    setFormData((prev) => ({ ...prev, orderQuantity: updatedOrderQuantity }));
+    setFormData((prev) => ({ ...prev, spreadQuantityData: updatedOrderQuantity }));
   };
 
   return (
     <>
       <ToastContainer />
       <div className="flex items-center gap-5">
-        <div className="w-1/2 border-orange-500 border-2 bg-white p-4 rounded-full">
+        <div className="w-1/2 border-emerald-500 border-2 bg-white p-4 rounded-full">
           <h2>
             <span className="font-bold">RFQ ID:</span> {RFQData?._id}
           </h2>
         </div>
-        <div className="w-1/2 border-orange-500 border-2 bg-white p-4 rounded-full">
-          <h2>
+        <div className="w-1/2 border-emerald-500 border-2 bg-white p-4 rounded-full">
+          <h2 className="capitalize">
             <span className="font-bold">Buyer Name:</span>{" "}
-            {RFQData?.buyerName || "N/A"}
+            {RFQData?.createdBy?.name || "N/A"}
           </h2>
         </div>
       </div>
-      <div className="bg-white rounded-4xl border-orange-500 border-2 p-8">
+      <div className="bg-white rounded-4xl border-emerald-500 border-2 p-8">
         <div className="mb-5 flex items-center justify-between gap-6">
           <h3 className="text-xl font-bold">Update Form</h3>
           <button
@@ -132,84 +136,49 @@ const UpdateRFQForm = () => {
               <span className="capitalize">{RFQData.product || "N/A"}</span>
             </h2>
           </div>
-          <form onSubmit={handleSubmit} className="p-4 flex flex-col gap-5">
-            <div className="w-full flex items-center gap-5">
-              <div className="w-1/2 flex flex-col gap-2">
-                <label htmlFor="DeliveryLocation">Delivery Location</label>
-                <input
-                  type="text"
-                  name="DeliveryLocation"
-                  className="w-full p-3 border-1 bg-white border-[#E4E6EF] outline-none rounded-lg"
-                  value={formData.DeliveryLocation}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="w-1/2 flex flex-col gap-2">
-                <label htmlFor="pinCode">Pin Code</label>
-                <input
-                  type="number"
-                  name="pinCode"
-                  className="w-full p-3 border-1 bg-white border-[#E4E6EF] outline-none rounded-lg"
-                  value={formData.pinCode}
-                  onChange={handleChange}
-                />
-              </div>
+          
+          <div className="flex flex-col gap-5 w-full p-5">
+            <div className=" flex items-center justify-between gap-6">
+
+            <h2 className="text-xl font-semibold"> Delivery Schedule: <span className=" capitalize text-emerald-500 ">({RFQData.deliverySchedule || "N/A"})</span> </h2>
+            <h2 className="text-xl font-semibold"> Quantity: <span className=" capitalize text-emerald-500 ">{RFQData?.quantity}</span> </h2>
             </div>
-            <div className="w-full flex flex-col gap-2">
-              <label htmlFor="additionalComment">Additional Comment</label>
-              <textarea
-                name="additionalComment"
-                rows={5}
-                className="w-full p-3 border-1 bg-white border-[#E4E6EF] outline-none rounded-lg"
-                value={formData.additionalComment}
-                onChange={handleChange}
-              />
+
+          <form className="flex flex-col gap-4 w-full" onSubmit={handleSubmit}>
+          {formData.spreadQuantityData.map((item,index)=>(
+            <div key={item?._id} className="p-3 rounded-lg bg-sky-200 grid grid-cols-4 gap-3">
+                <div className="flex flex-col gap-2">
+                <label htmlFor="quantity">Quantity</label>
+                <input type="number" name="quantity" value={item.quantity} className="w-full p-3 border-1 bg-white border-[#E4E6EF] outline-none rounded-lg" onChange={(e)=>handleOrderQuantityChange(index,e.target.value,"quantity")} />
+                </div>
+                <div className="flex flex-col gap-2">
+                <label htmlFor="fromDate">From Date</label>
+                <input type="date" name="fromDate" value={item.fromDate? item.fromDate.split("T")[0]: ""} className="w-full p-3 border-1 bg-white border-[#E4E6EF] outline-none rounded-lg" onChange={(e)=>handleOrderQuantityChange(index,e.target.value,"fromDate")} />
+                </div>
+                <div className="flex flex-col gap-2">
+                <label htmlFor="toDate">From Date</label>
+                <input type="date" name="toDate" value={item.toDate? item.toDate.split("T")[0]: ""} className="w-full p-3 border-1 bg-white border-[#E4E6EF] outline-none rounded-lg" onChange={(e)=>handleOrderQuantityChange(index,e.target.value,"toDate")} />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="location">Location</label>
+                  <input type="text" name="location" value={item.location} className="w-full p-3 border-1 bg-white border-[#E4E6EF] outline-none rounded-lg" onChange={(e)=>handleOrderQuantityChange(index,e.target.value,"location")} />
+                </div>
             </div>
-            {formData.orderQuantity.map((item, index) => (
-              <div key={index} className="w-full flex items-center gap-5">
-                <div className="w-1/2 flex flex-col gap-2">
-                  <label htmlFor={`quantity-${index}`}>Quantity</label>
-                  <input
-                    type="number"
-                    className="w-full p-3 border-1 bg-white border-[#E4E6EF] outline-none rounded-lg"
-                    value={item.quantity}
-                    onChange={(e) =>
-                      handleOrderQuantityChange(
-                        index,
-                        e.target.value,
-                        "quantity"
-                      )
-                    }
-                  />
-                </div>
-                <div className="w-1/2 flex flex-col gap-2">
-                  <label htmlFor={`deliveryDate-${index}`}>Delivery Date</label>
-                  <input
-                    type="date"
-                    className="w-full p-3 border-1 bg-white border-[#E4E6EF] outline-none rounded-lg"
-                    value={
-                      item.deliveryDate ? item.deliveryDate.split("T")[0] : ""
-                    }
-                    onChange={(e) =>
-                      handleOrderQuantityChange(
-                        index,
-                        e.target.value,
-                        "deliveryDate"
-                      )
-                    }
-                  />
-                </div>
-              </div>
-            ))}
-            <div className="flex justify-end">
+          ))}
+          <div className="flex flex-col gap-2 w-full">
+           <label htmlFor="additionalComment"> Additional Comment </label>
+           <textarea name="additionalComment" id="additionalComment" className="w-full p-3 border-1 bg-white border-[#E4E6EF] outline-none rounded-lg" value={formData.additionalComment} onChange={handleChange} placeholder="Add your additional comment here..." rows={4}></textarea>
+          </div>
+          <div className="flex justify-end">
               <button
                 type="submit"
-                className="rounded-lg bg-orange-500 px-6 py-3 text-white w-fit cursor-pointer"
+                className="rounded-lg bg-emerald-500 px-6 py-3 text-white w-fit cursor-pointer"
               >
                 Update
               </button>
             </div>
           </form>
+          </div>
         </div>
       </div>
     </>

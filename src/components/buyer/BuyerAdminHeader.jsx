@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import { IoIosNotifications } from "react-icons/io";
 import AdminImg from '../../assets/admin-img.jpg'
+import LogoutPopup from '../common/LogoutPopup';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform } from "framer-motion";
 import axios from 'axios';
@@ -8,20 +9,24 @@ import axios from 'axios';
 const BuyerAdminHeader = () => {
   const [showProfileTab, setShowProfileTab] = useState(false);
   const [showNotification,  setShowNotification] = useState(false);
+
   const [userData, setUserData] = useState({});
+  const [logoutPopupShow, setLogoutPopupShow] = useState(false);
 
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "-100%"]);
 
   const Route = useLocation().pathname
   const Pathname = Route.split("/").pop().split("-").join(" ");
-  const Navigate = useNavigate()
+  const Navigate = useNavigate();
 
   const handleLogout = async()=>{
 
    try {
+      
       const logout = await axios.post(`${import.meta.env.VITE_SERVER_URL}user/logout`, {}, {withCredentials: true});
       if(logout.status === 200){
+         setLogoutPopupShow(false)
           Navigate("/");
       }
    } catch (error) {
@@ -31,6 +36,7 @@ const BuyerAdminHeader = () => {
 
   const getProfileData = async()=>{
    try {
+      
       const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}user/profile`, {withCredentials: true});
       if(response.status === 200){
          setUserData(response.data?.user)
@@ -44,17 +50,25 @@ const BuyerAdminHeader = () => {
   useEffect(() => {
     getProfileData()
   }, [])
+
+  // Close Logout Popup
+
+  const closeLogoutPopup = ()=>{
+    setLogoutPopupShow(false)
+  }
   
 
 
   return (
+    <>
+    { logoutPopupShow &&<LogoutPopup logout={handleLogout} logoutShow={closeLogoutPopup}/> }
     <div className=' backdrop-blur-xl bg-transparent w-full  flex justify-between items-center p-3 px-6 '>
          <div className=''>
             <h2 className='text-2xl font-bold capitalize'> {Pathname} </h2>
          </div>
          <div className='flex justify-end items-center gap-6'>
              <div className='relative' onMouseEnter={()=>setShowNotification(true)} onMouseLeave={()=>setShowNotification(false)}>
-              <div className='h-10 w-10 rounded-lg border-2 border-orange-500 flex items-center justify-center relative cursor-pointer'>
+              <div className='h-10 w-10 rounded-lg border-2 border-emerald-500 flex items-center justify-center relative cursor-pointer'>
 
              <IoIosNotifications className='text-2xl bell text-teal-950'/>
              <span className='w-5 h-5 bg-red-500 rounded-full absolute -top-1 -right-1 text-white text-[12px] flex items-center justify-center'>5</span>
@@ -74,21 +88,23 @@ const BuyerAdminHeader = () => {
               </motion.div>
              </div>
              <div className='flex items-center gap-4 relative cursor-pointer' onMouseEnter={()=>setShowProfileTab(true)} onMouseLeave={()=>setShowProfileTab(false)}>
-                <span className='h-10 w-10 rounded-lg overflow-hidden'>
-                  <img className='w-full object-cover' src={AdminImg} alt="" />
-                </span>
+                <div className='h-10 w-10 rounded-lg relative'>
+                  <img className='w-full object-cover rounded-lg' src={AdminImg} alt="" />
+                  {userData?.isActive && <span className='h-2.5 w-2.5 rounded-full bg-green-500 absolute z-50 bottom-0 right-0'></span>}
+                </div>
                  <h3 className='text-lg font-bold capitalize'> {userData.name} </h3>
                  <motion.ul
                  animate={showProfileTab ? {opacity: 1, y: 0, display: "block"} : {opacity: 0, y: 10, display: "none" }}
                  transition={{ duration: .3}}
                  viewport={{ once: true }}
                  className='w-full bg-white absolute top-[130%] p-8 py-6 rounded-lg shadow-[0_0_15px_#00000020] flex flex-col gap-4 z-40' >
-                  <li><Link to={""} className='text-lg hover:text-green-400 transition-all duration-300'> My Profile </Link></li>
-                  <li><button className='text-lg hover:text-green-400 transition-all duration-300' onClick={handleLogout}> Log Out </button></li>
+                  <li><Link to={"profile"} className='text-lg hover:text-green-400 transition-all duration-300'> My Profile </Link></li>
+                  <li><button className='text-lg hover:text-green-400 transition-all duration-300' onClick={()=>setLogoutPopupShow(!logoutPopupShow)}> Log Out </button></li>
                  </motion.ul>
              </div>
          </div>
     </div>
+    </> 
   )
 }
 
