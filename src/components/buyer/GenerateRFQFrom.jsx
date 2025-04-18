@@ -14,6 +14,7 @@ const GenerateRFQFrom = () => {
   const [brandData, setBrandData] = useState([]);
   const [agreement, setAgreement] = useState(false);
   const [downloadConditionPopup, setDownloadConditionPopup] = useState(false);
+  const [loggedUser, setLoggedUser] = useState({});
   const [formData, setFromData] = useState({
     product:"",
     category: "",
@@ -82,16 +83,33 @@ const GenerateRFQFrom = () => {
       const response = await axios.get(
         `${import.meta.env.VITE_SERVER_URL}user/supplier`
       );
-      if (response.status === 200) return setBrandData(response.data);
+      if (response.status === 200) return setBrandData(response.data.user);
     } catch (error) {
       console.error(error.message);
     }
   };
 
+  // Get Login User 
+
+  const getLoggedInUser = async()=>{
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}user/profile`,{withCredentials: true});
+      if(response.status === 200){
+       setLoggedUser(response.data?.user);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   useEffect(() => {
     getCategory();
     getBrands();
+    getLoggedInUser();
   }, []);
+
+
+
 
   // Handle Submit
 
@@ -106,6 +124,7 @@ const GenerateRFQFrom = () => {
     formDatas.append("DeliveryLocation", formData.DeliveryLocation);
     formDatas.append("pinCode", formData.pinCode);
     formDatas.append("comments", formData.comments);
+    formDatas.append("createdBy", loggedUser?._id)
     formDatas.append("orderQuantity", JSON.stringify(orderQuantity));
     if (file) {
       formDatas.append("document", file);

@@ -43,7 +43,7 @@ const SupplierForm = () => {
     const { confirm_password, ...dataToSubmit } = formData;
   
     try {
-      axios.post(`${import.meta.env.VITE_SERVER_URL}user`, dataToSubmit, {
+      axios.post(`${import.meta.env.VITE_SERVER_URL}supplier`, dataToSubmit, {
         headers: {
           "Content-Type": "application/json",
         },

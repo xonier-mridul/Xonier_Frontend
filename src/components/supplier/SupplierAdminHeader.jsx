@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform } from "framer-motion";
 import axios from 'axios';
 
-const BuyerAdminHeader = () => {
+const SupplierAdminHeader = () => {
   const [showProfileTab, setShowProfileTab] = useState(false);
   const [showNotification,  setShowNotification] = useState(false);
   const [userData, setUserData] = useState({});
@@ -92,5 +92,5 @@ const BuyerAdminHeader = () => {
   )
 }
 
-export default BuyerAdminHeader
+export default SupplierAdminHeader
 

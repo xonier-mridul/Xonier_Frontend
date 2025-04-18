@@ -84,7 +84,7 @@ const RFQHistoryComponent = ({ id, rfqHistory }) => {
                     </td>
                     <td className="p-4 text-start border-l-1 border-zinc-200">
                       {" "}
-                      {item.additionalComment}{" "}
+                      {item.additionalComment !== "" ? item.additionalComment : "N/A"}
                     </td>
                     <td className="p-4 text-start border-l-1 border-zinc-200">
                       {" "}

@@ -43,12 +43,12 @@ const RFQDetailTable = () => {
         <tbody>
         <tr className='border-b-1 border-zinc-200'>
         <th  className='bg-slate-100 border-b-1 border-zinc-200 w-1/3 p-4 px-6 font-semibold text-lg text-start'>Category</th>
-        <td className='w-2/3 p-4 px-6 text-lg'>{RFQData?.category?.category}</td>
+        <td className='w-2/3 p-4 px-6 text-lg'> <span className='capitalize'>{RFQData?.category?.category}</span></td>
          
         </tr>
         <tr className='border-b-1 border-zinc-200'>
         <th  className='bg-slate-100 border-b-1 border-zinc-200 w-1/3 p-4 px-6 font-semibold text-lg text-start'>Brand</th>
-        <td className='w-2/3 p-4 px-6 text-lg'>{RFQData?.brand?.company_name}</td>
+        <td className='w-2/3 p-4 px-6 text-lg'><span className='capitalize'>{RFQData?.brand?.company}</span></td>
          
         </tr>
         <tr className='border-b-1 border-zinc-200'>

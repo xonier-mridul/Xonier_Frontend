@@ -69,12 +69,11 @@ const CatalogForm = () => {
   // Fetch User Data
   useEffect(() => {
 
-    
     const getUsers = async () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}user/supplier`);
         if (response.status === 200 ) {
-          setUserData(response.data);
+          setUserData(response.data.user);
         }
       } catch (err) {
         console.error(err.message);

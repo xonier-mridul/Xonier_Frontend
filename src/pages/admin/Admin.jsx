@@ -1,7 +1,7 @@
 import { Outlet, Link } from "react-router-dom";
 import Logo from "../../assets/BildKart-Logo.png";
 import fav from "../../assets/b-fav.png";
-import DashboardHeader from "./DashboardHeader";
+import DashboardHeader from "../../components/admin/DashboardHeader";
 import { useState } from "react";
 
 
@@ -11,7 +11,7 @@ import { FaUsers, FaCartPlus } from "react-icons/fa";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 import { RiContactsBook3Fill } from "react-icons/ri";
 import { BsFillChatRightQuoteFill } from "react-icons/bs";
-import { FaAngleDown } from "react-icons/fa6";
+import { FaAngleDown, FaShopLock } from "react-icons/fa6";
 
 // Media End
 
@@ -183,6 +183,51 @@ const Admin = () => {
             </li>
 
             <li className="">
+            <button
+                className={` ${
+                  submenuShow === 5 && "mb-4"
+                } admin-list w-full  flex gap-3 text-xl items-center justify-between hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer`}
+                onClick={() => handleSubmenu(5)}
+              >
+                <div className="flex items-center justify-center gap-3">
+                  {" "}
+                  <span className="bg-orange-500 text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center ">
+                    {" "}
+                    <FaShopLock className="text-xl" />
+                  </span>{" "}
+                  <span
+                    className={`${
+                      showSidebar ? "opacity-100" : "opacity-0"
+                    } transition-all duration-300 `}
+                  >
+                    Manage BRFQ
+                  </span>
+                </div>{" "}
+                <span className="para">
+                  <FaAngleDown />
+                </span>{" "}
+              </button>
+              <ul
+                className={`${
+                  submenuShow === 5 ? "h-full p-5" : "h-0 pl-5"
+                } flex flex-col gap-5  pt-0 overflow-hidden list-disc ml-7 transition-all duration-300`}
+              >
+                <li>
+                  <Link to={"brfq"} className="capitalize text-xl ">
+                    Send BRFQ
+                  </Link>
+                </li>
+                <li>
+                  <Link to={""} className="capitalize text-xl ">
+                    Track BRFQ
+                  </Link>
+                </li>
+             
+              </ul>
+            </li>
+
+
+            <li className="">
               <button
                 className={` ${
                   submenuShow === 2 && "mb-4"
@@ -191,7 +236,7 @@ const Admin = () => {
               >
                 <div className="flex items-center justify-center gap-3">
                   {" "}
-                  <span className="bg-orange-500 text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center ">
+                  <span className="bg-orange-500 text-white h-8 w-8 min-w-8 rounded-full flex justify-center items-center ">
                     {" "}
                     <AiFillProduct className="text-xl" />
                   </span>{" "}

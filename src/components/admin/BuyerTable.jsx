@@ -17,12 +17,13 @@ const BuyerTable = () => {
 
         const getBuyer = async () => {
           try {
-            const supplier = await axios.get(
+            
+            const buyer = await axios.get(
               `${import.meta.env.VITE_SERVER_URL}user/buyer`
       
             );
-            if (supplier.status === 200) {
-              setSupplierData(supplier.data);
+            if (buyer.status === 200) {
+              setSupplierData(buyer.data.user);
               
              
             }
@@ -52,26 +53,27 @@ const BuyerTable = () => {
         <table className="w-full border-[1px] border-[#eff2f5]">
                   <thead>
                     <tr className="bg-slate-100">
-                      <th className="p-4 text-start">Company</th>
+                      <th className='p-4 text-start'> Name </th>
+                      <th className="p-4 text-start border-l-1 border-[#f1f1f1]">Company </th>
                       <th className="p-4 text-start border-l-1 border-[#f1f1f1]">Category</th>
                       <th className="p-4 text-start border-l-1 border-[#f1f1f1]">Trade Number</th>
                       <th className="p-4 text-start border-l-1 border-[#f1f1f1]">Email</th>
                       <th className="p-4 text-start border-l-1 border-[#f1f1f1]">Number</th>
-                      <th className="p-4 text-start border-l-1 border-[#f1f1f1]">Website</th>
+                      
                     </tr>
                   </thead>
                   <tbody>
                  {length > 0 ? filteredData.map((item, index) => (
                    <tr key={item._id}>
-                        <td className="p-4 border-b-[1px] border-[#f1f1f1]">{item.company}</td>
+                        <td className="p-4 border-b-[1px] border-[#f1f1f1]"> <span className='capitalize'>{item.name}</span> </td>
+                        <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1]"><span className='capitalize'>{item.company}</span></td>
                         <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1]">
-                          <span className='capitalize'>{item.category} </span>
+                          <span className=' text-lime-500 bg-emerald-50 capitalize text-sm  py-2 px-4 rounded-lg text-nowrap font-medium'>{item.category} </span>
                         </td>
                         <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1]">{item.tradeNumber}</td>
                         <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1]">  <span className='text-orange-400 p-1 px-4 rounded-lg bg-orange-50'>{item.email}</span></td>
                         <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1]">{item.number}</td>
-                        <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1]"> <Link className='text-blue-500 underline' to={item.website} target='_blank'>{item.website}</Link>
-                        </td>
+                        
                       </tr> 
                       
                     

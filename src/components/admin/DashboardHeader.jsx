@@ -1,19 +1,60 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { IoIosNotifications } from "react-icons/io";
+import axios from 'axios';
 import AdminImg from '../../assets/admin-img.jpg'
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform } from "framer-motion";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+
 const DashboardHeader = () => {
+   const [userProfileData, setUserProfileData] = useState({});
   const [showProfileTab, setShowProfileTab] = useState(false);
   const [showNotification,  setShowNotification] = useState(false)
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "-100%"]);
 
   const Route = useLocation().pathname
-  const Pathname = Route.split("/").pop().split("-").join(" ")
+  const Pathname = Route.split("/").pop().split("-").join(" ");
+  const Navigate = useNavigate();
+
+
+  const handleLogout = async(e)=>{
+     e.preventDefault();
+     try {
+        const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}user/logout`, {}, {withCredentials: true});
+        if(response.status === 200){
+           Navigate("/");
+        }
+     } catch (error) {
+        console.error(error)
+        toast.error("Logout failed");
+     }
+     
+  }
+
+  
+
+    const getProfileData = async ()=>{
+   try {
+    const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}user/profile`, {withCredentials: true})
+    if(response.status === 200){
+        setUserProfileData(response.data?.user)
+    }
+   } catch (error) {
+    console.error(error)
+   }
+    }
+    
+     useEffect(() => {
+       getProfileData()
+     }, [])
 
   return (
+   <>
+   <ToastContainer />
     <div className=' backdrop-blur-xl bg-transparent w-full  flex justify-between items-center p-3 px-6 '>
          <div className=''>
             <h2 className='text-2xl font-bold capitalize'> {Pathname} </h2>
@@ -43,18 +84,19 @@ const DashboardHeader = () => {
                 <span className='h-10 w-10 rounded-lg overflow-hidden'>
                   <img className='w-full object-cover' src={AdminImg} alt="" />
                 </span>
-                 <h3 className='text-lg font-bold '> Vikrant Sharma </h3>
+                 <h3 className='text-lg font-bold capitalize'> {userProfileData.name} </h3>
                  <motion.ul
                  animate={showProfileTab ? {opacity: 1, y: 0, display: "block"} : {opacity: 0, y: 10, display: "none" }}
                  transition={{ duration: .3}}
                  viewport={{ once: true }}
                  className='w-full bg-white absolute top-[130%] p-8 py-6 rounded-lg shadow-[0_0_15px_#00000020] flex flex-col gap-4 z-40' >
-                  <li><Link to={""} className='text-lg hover:text-green-400 transition-all duration-300'> My Profile </Link></li>
-                  <li><Link to={""} className='text-lg hover:text-green-400 transition-all duration-300'> Log Out </Link></li>
+                  <li><Link to={"profile"} className='text-lg hover:text-green-400 transition-all duration-300'> My Profile </Link></li>
+                  <li><button className='text-lg hover:text-green-400 transition-all duration-300' onClick={handleLogout}> Log Out </button></li>
                  </motion.ul>
              </div>
          </div>
     </div>
+    </>
   )
 }
 

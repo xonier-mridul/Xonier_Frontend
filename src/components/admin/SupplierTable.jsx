@@ -26,7 +26,7 @@ const SupplierTable = () => {
 
       );
       if (supplier.status === 200) {
-        setSupplierData(supplier.data);
+        setSupplierData(supplier.data.user);
        
       }
     } catch (error) {
@@ -115,7 +115,7 @@ const SupplierTable = () => {
                       </button>
                       <button
                         type="button"
-                        className="rounded-lg bg-lime-500 px-2 py-2 text-white cursor-pointer"
+                        className="rounded-lg bg-red-500 px-2 py-2 text-white cursor-pointer"
                         onClick={() => handleDelete(item._id, item.name)}
                       >
                         <MdDelete className="text-xl" />

@@ -9,14 +9,14 @@ const RFQList = () => {
 
     const getRfq = async()=>{
        try {
-        const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}new-rfq/paginate`);
+        const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}new-rfq/all`, {withCredentials: true});
         if(response.status === 200){
-            setRfqData(response.data?.RFQList);
+            setRfqData(response.data?.rfqList);
             setTotalPages(response.data?.totalPages)
         }
 
        } catch (error) {
-        
+        console.error(error)
        }
     }
 
@@ -27,7 +27,7 @@ const RFQList = () => {
   return (
     <>
       <div className='p-5 flex flex-col gap-5'>
-        <RFQListTable rfqData={rfqData} totalPages={totalPages}/>
+        <RFQListTable rfqData={rfqData} setRfqData={setRfqData} totalPages={totalPages}/>
       </div>
     </>
   )

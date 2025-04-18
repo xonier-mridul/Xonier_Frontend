@@ -4,13 +4,21 @@ import Logo from '../assets/BildKart-Logo.png'
 import { FaArrowRight, FaXmark } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import axios from 'axios';
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+
 
 
 
 const Navbar = () => {
 
-  const [showPass, setshowPass] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   const [ShowLogin, setShowLogin] = useState(false);
+
 
   const navigate = useNavigate()
 
@@ -31,45 +39,42 @@ const Navbar = () => {
   // Scroll Effect End
 
 
-   const handleLogin = (e)=>{
-      e.preventDefault();
-
+   const CheckUserLogin = async()=>{
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}auth/verify-auth`, { withCredentials: true });
+      if(response.data.isAuthenticated){
+         setIsAuthenticated(true)
+      }
+    } catch (error) {
+      console.error(error)
+      setIsAuthenticated(false)
+    }
    }
 
-   const handleSignup = (e)=>{
-    e.preventDefault()
-    setShowLogin(false)
-    navigate('/signup');
+   useEffect(() => {
+     CheckUserLogin();
+   }, []);
 
-
+   const handleLogout = async(e)=>{
+    e.preventDefault();
+       try {
+        const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}user/logout`,{}, { withCredentials: true });
+        if(response.status === 200){
+          
+          setIsAuthenticated(false);
+          navigate('/');
+        }
+       } catch (error) {
+        console.error("Logout failed", error);
+        toast.error("Logout failed");
+       }
    }
+   
 
   return (
     <> 
-       {ShowLogin && <div className="fixed top-0 left-0 w-full h-full bg-[#00000024] backdrop-blur-md z-50" onClick={()=>setShowLogin(false)}></div>}
-       {ShowLogin && <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 bg-white p-10 pb-5 rounded-xl w-[650px] flex flex-col gap-3 ">
-       <h2 className='font-bold text-2xl '>LogIn</h2>
-       <span onClick={()=>setShowLogin(false)}><FaXmark className='absolute top-5 right-5 text-2xl cursor-pointer' /></span>
-
-       <form className='flex flex-col gap-3' onSubmit={handleLogin}>
-        <input type="email" placeholder="Enter your Email" className='w-full outline-none border-b-[1px] border-neutral-200 py-3 px-2' required />
-        {showPass ?  <div className='flex items-center w-full outline-none border-b-[1px] border-neutral-200 py-3 px-2'>
-          <input type="text" placeholder=" Enter your Password" className='w-full outline-none border-none' /> <FaEye onClick={()=>setshowPass(!showPass)}/>
-
-        </div> : <div className='flex items-center w-full outline-none border-b-[1px] border-neutral-200 py-3 px-2'>
-          <input type="password" placeholder=" Enter your Password" className='w-full outline-none border-none' /> <FaEyeSlash onClick={()=>setshowPass(!showPass)}/>
-
-        </div>}
-        <div className='flex items-center justify-end'><Link className='text-green-400 capitalize' to={''}> forgot password? </Link></div>
-       <button style={{borderRadius: "10px"}} className="capitalize font-bold flex items-center gap-3 rounded-md w-full justify-center text-lg btn-bg text-white  mb-2" type="submit" > Submit <FaArrowRight className="text-lg btn-arrow" /> </button>
-       </form>
-       <div className='flex items-center justify-center'>
-       <p>Not a member? <button className='text-green-500 underline ' onClick={handleSignup}> Sign Up </button></p>
-
-       </div>
-          
-       </div>}
-
+       
+      <ToastContainer />
       <div className={` ${isScrolled ? "bg-[#000000d6] py-4" : "bg-[#00000099] py-6"} transition-all duration-300 fixed top-0 w-full left-0 z-40`}>
         <div className="max-w-7xl mx-auto flex items-center justify-between">
             <div className="w-1/5">
@@ -112,9 +117,11 @@ const Navbar = () => {
             get a quote <FaArrowRight className="text-lg btn-arrow" />
             </Link>
 
-            <Link className={` ${isScrolled ? "py-3" : "py-4"} capitalize font-bold flex items-center gap-3 rounded-full  px-5 btn-bg text-white`} onClick={()=>setShowLogin(!ShowLogin)} > <span className='flex items-center gap-2' > <FaUser className='text-lg' />
+            {isAuthenticated ? <button onClick={handleLogout}  className={` ${isScrolled ? "py-3" : "py-4"} capitalize font-bold flex items-center gap-3 rounded-full  px-5 btn-bg text-white`}  > <span className='flex items-center gap-2' > <FaUser className='text-lg' />
+            Log Out </span> <FaArrowRight className="text-lg btn-arrow" />
+            </button> : <Link to={"/login"} className={` ${isScrolled ? "py-3" : "py-4"} capitalize font-bold flex items-center gap-3 rounded-full  px-5 btn-bg text-white`}  > <span className='flex items-center gap-2' > <FaUser className='text-lg' />
             Log In </span> <FaArrowRight className="text-lg btn-arrow" />
-            </Link>
+            </Link>}
             </div>
         </div>
       </div>

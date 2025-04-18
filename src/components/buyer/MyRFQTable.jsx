@@ -21,7 +21,7 @@ const MyRFQTable = () => {
   const getRFQ = async () => {
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}new-rfq/paginate?page=${currentPage}`
+        `${import.meta.env.VITE_SERVER_URL}new-rfq/myrfqs?page=${currentPage}`, {withCredentials: true}
       );
       if (res.status === 200) {
         setRFQ(res?.data?.RFQList);
@@ -119,7 +119,7 @@ const MyRFQTable = () => {
               </tr>
             </thead>
             <tbody>
-              {rfq?.map((rfq) => {
+              {rfq.length > 0 ?  rfq?.map((rfq) => {
               let Create =  new Date(rfq.createdAt).toLocaleDateString('en-GB');
               let Update = new Date(rfq.updatedAt).toLocaleDateString('en-GB')
               
@@ -135,11 +135,11 @@ const MyRFQTable = () => {
                   <td className="p-4 text-start border-l-1 border-zinc-200">
                    <span className=" text-red-500 bg-red-50 capitalize text-sm  py-2 px-4 rounded-lg text-nowrap font-medium"> {Update} </span>
                   </td>
-                  <td className="p-4 text-start border-l-1 border-zinc-200">
-                    {rfq.status}
+                  <td className=" p-4 text-start border-l-1 border-zinc-200">
+                    <span className={`${rfq.status === true ? "text-lime-500 bg-emerald-50 ":"bg-red-50 text-red-500"} rounded-lg py-2 px-4`}>{rfq.status === true ? "Approved" : "Pending"} </span>
                   </td>
                   <td className="p-4 border-zinc-200 border-l-1">
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2">
                       <button
                         type="button"
                         className="rounded-lg bg-blue-400 px-2 py-2 text-white cursor-pointer"
@@ -169,7 +169,11 @@ const MyRFQTable = () => {
                     </div>
                   </td>
                 </tr>
-              )})}
+              )}): (
+                <tr >
+                  <td  colSpan={6} className="text-center p-4">Data not found</td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

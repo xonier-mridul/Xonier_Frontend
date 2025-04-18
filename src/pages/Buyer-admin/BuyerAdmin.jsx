@@ -8,11 +8,11 @@ import { Outlet, Link } from "react-router-dom";
 
 
 import { AiFillDashboard, AiFillProduct } from "react-icons/ai";
-import {  FaUsers, FaShoppingCart } from "react-icons/fa";
+import {  FaUsers, FaShoppingCart, FaHistory } from "react-icons/fa";
 import { MdKeyboardDoubleArrowLeft, MdOutlineCreateNewFolder } from "react-icons/md";
 import { RiContactsBook3Fill } from "react-icons/ri";
 import { BsFillChatRightQuoteFill } from "react-icons/bs";
-import { FaAngleDown } from "react-icons/fa6";
+import { FaAngleDown, FaCodeCompare } from "react-icons/fa6";
 
 const BuyerAdmin = () => {
   const [showSidebar, setShowSidebar] = useState(true);
@@ -74,6 +74,14 @@ const BuyerAdmin = () => {
           </li>
           <li className="">
             < Link to={'my-rfq'} className="admin-list w-full flex gap-3 text-xl items-center hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer"> <span className="bg-orange-500 text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center  "> <FaShoppingCart className="text-xl "/></span>  <span className={`${showSidebar ? "opacity-100" : "opacity-0"} transition-all duration-300 capitalize `}> My RFQs </span> </ Link>
+            
+          </li>
+          <li className="">
+            < Link to={''} className="admin-list w-full flex gap-3 text-xl items-center hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer"> <span className="bg-orange-500 text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center  "> <FaCodeCompare className="text-xl "/></span>  <span className={`${showSidebar ? "opacity-100" : "opacity-0"} transition-all duration-300 capitalize `}> Compare Quotation </span> </ Link>
+            
+          </li>
+          <li className="">
+            < Link to={''} className="admin-list w-full flex gap-3 text-xl items-center hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer"> <span className="bg-orange-500 text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center  "> <FaHistory className="text-xl "/></span>  <span className={`${showSidebar ? "opacity-100" : "opacity-0"} transition-all duration-300 capitalize `}> Order History </span> </ Link>
             
           </li>
             </ul>
