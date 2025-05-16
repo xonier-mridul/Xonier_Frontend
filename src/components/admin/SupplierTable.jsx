@@ -23,7 +23,8 @@ const SupplierTable = () => {
   const getSupplier = async () => {
     try {
       const supplier = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}user/supplier`
+        `${import.meta.env.VITE_SERVER_URL}user/supplier`,
+        {withCredentials: true}
 
       );
       if (supplier.status === 200) {
@@ -57,7 +58,7 @@ const SupplierTable = () => {
   return (
     <>
       <ToastContainer />
-      <div className="bg-white border-orange-500 border-2 rounded-4xl p-8 m-5">
+      <div className="bg-white border-emerald-500 border-2 rounded-4xl p-8 m-5">
         <div className="mb-5">
           <input
             type="text"

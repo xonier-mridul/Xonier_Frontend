@@ -22,7 +22,7 @@ const data = [
 
 const DailySales = () => {
   return (
-    <div className="p-6 bg-white rounded-4xl border-orange-500 border-2">
+    <div className="p-6 bg-white rounded-4xl border-emerald-500 border-2">
       <h2 className="text-xl font-semibold mb-4">Daily Sales</h2>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data}>

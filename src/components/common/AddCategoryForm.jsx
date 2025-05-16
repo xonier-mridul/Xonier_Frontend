@@ -25,10 +25,11 @@ const AddCategoryForm = ({fetchCategories}) => {
           headers: {
             "Content-Type": "application/json",
           },
+          withCredentials: true
         }
       );
 
-      if (response.status === 201 || response.status === 204) {
+      if (response.status === 201) {
         fetchCategories();
 
         toast.success(`"${formData.category}" Category Added successfully`, {
@@ -56,7 +57,7 @@ const AddCategoryForm = ({fetchCategories}) => {
   return (
     <>
       <ToastContainer />
-      <div className="bg-white border-2 border-orange-500 rounded-4xl ">
+      <div className="bg-white border-2 border-emerald-500 rounded-4xl ">
         <h2 className="text-[20px] font-semibold p-9 py-6 border-b-1 border-zinc-200">
           Fill the form
         </h2>
@@ -79,7 +80,7 @@ const AddCategoryForm = ({fetchCategories}) => {
           
           <div className="flex justify-end">
             <button
-              className="capitalize font-bold flex items-center gap-3 rounded-lg bg-orange-500 px-7 py-3 text-white w-fit cursor-pointer disabled:bg-green-400"
+              className="capitalize font-bold flex items-center gap-3 rounded-lg bg-emerald-600 px-7 py-3 text-white w-fit cursor-pointer disabled:bg-green-400"
               type="submit"
             >
               {" "}

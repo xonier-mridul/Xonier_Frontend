@@ -38,7 +38,7 @@ const QuoteTable = () => {
 
   return (
     <>
-      <div className="bg-white rounded-4xl border-orange-500 border-2 p-8">
+      <div className="bg-white rounded-4xl border-emerald-500 border-2 p-8">
       
         <div className="mb-5">
           <input

@@ -44,9 +44,9 @@ const DashboardHeader = () => {
 
     const getProfileData = async ()=>{
    try {
-    const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}user/profile`, {withCredentials: true})
+    const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}user/profile`, {withCredentials: true});
     if(response.status === 200){
-        setUserProfileData(response.data?.user)
+        setUserProfileData(response.data?.user);
     }
    } catch (error) {
     console.error(error)
@@ -73,7 +73,7 @@ const DashboardHeader = () => {
          </div>
          <div className='flex justify-end items-center gap-6'>
              <div className='relative' onMouseEnter={()=>setShowNotification(true)} onMouseLeave={()=>setShowNotification(false)}>
-              <div className='h-10 w-10 rounded-lg border-2 border-orange-500 flex items-center justify-center relative cursor-pointer'>
+              <div className='h-10 w-10 rounded-lg border-2 border-emerald-500 flex items-center justify-center relative cursor-pointer'>
 
              <IoIosNotifications className='text-2xl bell text-teal-950'/>
              <span className='w-5 h-5 bg-red-500 rounded-full absolute -top-1 -right-1 text-white text-[12px] flex items-center justify-center'>5</span>

@@ -1,22 +1,23 @@
 import React from "react";
-import Logo from "../../assets/BildKart-Logo.png";
+import Logo from "../../assets/bildkart-admin-Logo.png";
 import fav from "../../assets/b-fav.png";
 import BuyerAdminHeader from "../../components/buyer/BuyerAdminHeader";
 import { useState } from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
-
+import { IoIosArrowDown } from "react-icons/io";
 
 import { AiFillDashboard, AiFillProduct } from "react-icons/ai";
 import {  FaUsers, FaShoppingCart, FaHistory } from "react-icons/fa";
-import { MdKeyboardDoubleArrowLeft, MdOutlineCreateNewFolder } from "react-icons/md";
-import { RiContactsBook3Fill } from "react-icons/ri";
-import { BsFillChatRightQuoteFill } from "react-icons/bs";
+import { MdKeyboardDoubleArrowLeft, MdOutlineCreateNewFolder, MdLogout, MdLockReset } from "react-icons/md";
 import { FaAngleDown, FaCodeCompare } from "react-icons/fa6";
+import LogoutPopup from "../../components/common/LogoutPopup";
 
 const BuyerAdmin = () => {
   const [showSidebar, setShowSidebar] = useState(true);
-  const [submenuShow, setSubmenuShow] = useState(0);
+  const [submenuShow, setSubmenuShow] = useState(null);
+  const [logoutPopupShow, setLogoutPopupShow] = useState(false);
   // Side Menu Start
 
   const handleSidebar = () => {
@@ -28,18 +29,44 @@ const BuyerAdmin = () => {
 
   const handleSubmenu = (n) => {
     if (showSidebar === true) {
-      return setSubmenuShow(n === submenuShow ? 0 : n);
+      return setSubmenuShow(n === submenuShow ? null : n);
     }
   };
   // Sub Menu End
+
+  // Navigate
+
+  const Navigate = useNavigate();
+
+
+  const handleLogout = async()=>{
+
+    try {
+       
+       const logout = await axios.post(`${import.meta.env.VITE_SERVER_URL}user/logout`, {}, {withCredentials: true});
+       if(logout.status === 200){
+        setLogoutPopupShow(false)
+           Navigate("/");
+       }
+    } catch (error) {
+       console.error(error);
+    }
+   }
+
+    // Close Logout Popup
+
+  const closeLogoutPopup = ()=>{
+    setLogoutPopupShow(false)
+  }
   return (
     <>
+      { logoutPopupShow && <LogoutPopup logout={handleLogout} logoutShow={closeLogoutPopup}/>}
       <div className="flex gap-2">
         {/* Sidebar */}
         <div
           className={` ${
             showSidebar ? "w-72" : "w-20"
-          } m-4 border-2 border-orange-500 rounded-4xl app-sidebar z-30 text-white min-h-screen  transition-all duration-300`}
+          } m-4 border-2 border-emerald-500 rounded-4xl app-sidebar z-30 text-white min-h-screen  transition-all duration-300`}
         >
           <div className="flex relative w-full  p-4">
             <span
@@ -55,7 +82,7 @@ const BuyerAdmin = () => {
             </span>
             {showSidebar ? (
               <img
-                className="w-40 pb-6 invert"
+                className="w-40 pb-6"
                 src={Logo}
                 alt="bildkart logo"
               />
@@ -65,24 +92,37 @@ const BuyerAdmin = () => {
           </div>
           <ul className="flex flex-col gap-3 p-3 pt-0 overflow-y-scroll admin-sidebar h-full ">
           <li className="">
-            < Link to={'/buyer-admin'} className="admin-list w-full flex gap-3 text-xl items-center hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer"> <span className="bg-orange-500 text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center  "> <AiFillDashboard className="text-xl "/></span>  <span className={`${showSidebar ? "opacity-100" : "opacity-0"} transition-all duration-300 `}> Dashboard </span> </ Link>
+            < Link to={'/buyer-admin'} className="admin-list w-full flex gap-3 text-xl items-center hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer tabs"> <span className="bg-emerald-600  tabs-icon text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center  "> <AiFillDashboard className="text-xl"/></span>  <span className={`${showSidebar ? "opacity-100" : "opacity-0"} transition-all duration-300 `}> Dashboard </span> </ Link>
             
           </li>
           <li className="">
-            < Link to={'create-rfq'} className="admin-list w-full flex gap-3 text-xl items-center hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer"> <span className="bg-orange-500 text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center  "> <MdOutlineCreateNewFolder className="text-xl "/></span>  <span className={`${showSidebar ? "opacity-100" : "opacity-0"} transition-all duration-300 capitalize `}> Create new RFQ </span> </ Link>
+            < Link to={'create-rfq'} className="admin-list w-full flex gap-3 text-xl items-center hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer tabs"> <span className="bg-emerald-600 tabs-icon  text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center  "> <MdOutlineCreateNewFolder className="text-xl "/></span>  <span className={`${showSidebar ? "opacity-100" : "opacity-0"} transition-all duration-300 capitalize `}> Create new RFQ </span> </ Link>
             
           </li>
           <li className="">
-            < Link to={'my-rfq'} className="admin-list w-full flex gap-3 text-xl items-center hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer"> <span className="bg-orange-500 text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center  "> <FaShoppingCart className="text-xl "/></span>  <span className={`${showSidebar ? "opacity-100" : "opacity-0"} transition-all duration-300 capitalize `}> My RFQs </span> </ Link>
+            < Link to={'my-rfq'} className="admin-list w-full flex gap-3 text-xl items-center hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer tabs"> <span className="bg-emerald-600 tabs-icon  text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center  "> <FaShoppingCart className="text-xl "/></span>  <span className={`${showSidebar ? "opacity-100" : "opacity-0"} transition-all duration-300 capitalize `}> My RFQs </span> </ Link>
             
           </li>
           <li className="">
-            < Link to={''} className="admin-list w-full flex gap-3 text-xl items-center hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer"> <span className="bg-orange-500 text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center  "> <FaCodeCompare className="text-xl "/></span>  <span className={`${showSidebar ? "opacity-100" : "opacity-0"} transition-all duration-300 capitalize `}> Compare Quotation </span> </ Link>
+            < Link to={'compare-quotation'} className="admin-list w-full flex gap-3 text-xl items-center hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer tabs"> <span className="bg-emerald-600 text-white h-8 w-8 min-w-8 tabs-icon  rounded-full flex justify-center items-center  "> <FaCodeCompare className="text-xl "/></span>  <span className={`${showSidebar ? "opacity-100" : "opacity-0"} transition-all duration-300 capitalize `}> Compare Quotation </span> </ Link>
+            
+          </li>
+          <li  className="flex flex-col gap-3">
+            < button onClick={()=>handleSubmenu("order")} className="admin-list tabs  relative w-full flex  gap-3 text-xl justify-between items-center hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer"> <div className="flex gap-3  items-center"> <span className="bg-emerald-600 text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center  tabs-icon"> <FaHistory className="text-xl "/></span>  <span className={`${showSidebar ? "opacity-100" : "opacity-0"} transition-all duration-300 capitalize `}> Order  </span> </div> <IoIosArrowDown className={`${submenuShow === "order" ? "rotate-180" : "rotate-0"} transition-all duration-300`}/>
+            
+             </ button>
+            <ul className={` ${submenuShow === "order" ? "h-auto": "h-0 hidden"} list-disc overflow-hidden pl-14 flex flex-col gap-4 transition-all duration-800`}>
+              <li><Link to={"order"} className="text-xl w-full capitalize"> My Orders </Link></li>
+              <li><Link to={"order-history"} className="text-xl w-full capitalize"> order History </Link></li>
+            </ul>
             
           </li>
           <li className="">
-            < Link to={''} className="admin-list w-full flex gap-3 text-xl items-center hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer"> <span className="bg-orange-500 text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center  "> <FaHistory className="text-xl "/></span>  <span className={`${showSidebar ? "opacity-100" : "opacity-0"} transition-all duration-300 capitalize `}> Order History </span> </ Link>
+            < Link to={'change-password'} className="admin-list w-full flex gap-3 text-xl items-center hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer tabs"> <span className="bg-emerald-600 text-white h-8 w-8 min-w-8 tabs-icon  rounded-full flex justify-center items-center  "> <MdLockReset className="text-xl "/></span>  <span className={`${showSidebar ? "opacity-100" : "opacity-0"} transition-all duration-300 capitalize `}> Change Password </span> </ Link>
             
+          </li>
+          <li>
+            <button onClick={()=>setLogoutPopupShow(true)} className="admin-list w-full flex gap-3 text-xl items-center hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer tabs"><span className="bg-emerald-600 text-white h-8 w-8 min-w-8 tabs-icon  rounded-full flex justify-center items-center  "> <MdLogout className="text-xl "/></span>Logout</button>
           </li>
             </ul>
         </div>

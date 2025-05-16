@@ -1,5 +1,5 @@
 import React from 'react'
-import CatalogForm from '../../components/admin/CatalogForm'
+import CatalogForm from '../../components/common/CatalogForm'
 
 const Catalog = () => {
   return (

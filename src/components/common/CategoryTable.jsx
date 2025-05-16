@@ -172,7 +172,7 @@ const CategoryTable = ({
           </form>
         </div>
       )}
-      <div className="bg-white p-8 rounded-4xl border-2 border-orange-500">
+      <div className="bg-white p-8 rounded-4xl border-2 border-emerald-500">
         <table className="w-full border-1 border-zinc-200">
           <thead>
             <tr className="border-b-1 border-zinc-200 bg-slate-100">
@@ -230,7 +230,7 @@ const CategoryTable = ({
                 key={index + 1}
                 onClick={() => handlePageChange(index + 1)}
                 className={` ${
-                  currentPage === index + 1 ? "bg-orange-500 text-white" : ""
+                  currentPage === index + 1 ? "bg-emerald-500 text-white" : ""
                 } h-9 w-9 rounded-lg flex items-center justify-center cursor-pointer `}
               >
                 {index + 1}

@@ -27,8 +27,12 @@ const SubCategoryTable = () => {
   });
   const [updatedFormId, setUpdatedFormId] = useState(null)
 
-  const length = subCategoryData.length;
-
+  
+  const filteredData = subCategoryData.filter((item=>
+    `${item._id} ${item.categoryId?.category}  ${item.name}`.toLowerCase().includes(searchTerm.toLowerCase())
+  ))
+  
+  const length = filteredData.length;
 
   // Handle Change
 
@@ -50,7 +54,7 @@ const SubCategoryTable = () => {
     const fetching = async () => {
       try {
         let response = await axios.get(
-          `${import.meta.env.VITE_SERVER_URL}category`
+          `${import.meta.env.VITE_SERVER_URL}category`, {withCredentials: true}
         );
         if (isMounted) {
          return setCategoryData(response?.data);
@@ -73,7 +77,7 @@ const SubCategoryTable = () => {
     const fetching = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_SERVER_URL}sub-category/paginate?page=${currentPage}`
+          `${import.meta.env.VITE_SERVER_URL}sub-category/paginate?page=${currentPage}`, {withCredentials: true}
         );
         if (isMounted){
          setSubCategoryData(response?.data?.subCategory);
@@ -97,7 +101,8 @@ const SubCategoryTable = () => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}sub-category`,
-        formData
+        formData,
+        {withCredentials: true}
       );
   
       if (response.status === 201 || response.status === 204) {
@@ -145,7 +150,7 @@ const SubCategoryTable = () => {
 
       if (confirmDelete) {
         const response = await axios.delete(
-          `${import.meta.env.VITE_SERVER_URL}sub-category/${id}`
+          `${import.meta.env.VITE_SERVER_URL}sub-category/${id}`,{withCredentials: true}
         );
 
         if (response.status === 200 || response.status === 204) {
@@ -275,7 +280,7 @@ const SubCategoryTable = () => {
               </div>
               <div className="flex w-1/2 flex-col gap-3">
                 <label className="text-lg" htmlFor="name">
-                  Category
+                 Sub  Category
                 </label>
                 <input
                   type="text"
@@ -365,7 +370,7 @@ const SubCategoryTable = () => {
         </div>
       )}
       <ToastContainer />
-      <div className="bg-white border-2 border-orange-500 rounded-2xl p-8 m-5">
+      <div className="bg-white border-2 border-emerald-500 rounded-2xl p-8 m-5">
         <div className="mb-5 flex justify-between items-center">
           <input
             type="text"
@@ -376,7 +381,7 @@ const SubCategoryTable = () => {
           />
           <button
             type="button"
-            className=" rounded-lg bg-gray-900 px-6 py-3 text-white  justify-center disabled:bg-green-400 cursor-pointer"
+            className=" rounded-lg bg-emerald-600 px-6 py-3 text-white  justify-center disabled:bg-green-400 cursor-pointer"
             onClick={() => setShowModal(true)}
           >
             {" "}
@@ -397,7 +402,7 @@ const SubCategoryTable = () => {
           </thead>
           <tbody>
             {length > 0 ? (
-              subCategoryData.map((item, index) => (
+              filteredData.map((item, index) => (
                 <tr
                   className="border-b-[1px] border-l-1 border-zinc-200"
                   key={item._id}
@@ -447,7 +452,7 @@ const SubCategoryTable = () => {
                                   <button
                                       key={index + 1}
                                       onClick={() => handlePageChange(index + 1)}
-                                      className={` ${currentPage === index + 1 ? "bg-orange-500 text-white" : ""} h-9 w-9 rounded-lg flex items-center justify-center cursor-pointer `}>
+                                      className={` ${currentPage === index + 1 ? "bg-emerald-600 text-white" : ""} h-9 w-9 rounded-lg flex items-center justify-center cursor-pointer `}>
               
                                       {index + 1}
               

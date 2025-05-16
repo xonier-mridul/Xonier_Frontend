@@ -9,6 +9,7 @@ import { FaXmark, FaPlus, FaMinus } from "react-icons/fa6";
 // Media End
 
 const GenerateRFQFrom = () => {
+  const [errMessage, setErrorMessage] = useState("")
   const [active, setActive] = useState(1);
   const [categoryData, setCategoryData] = useState([]);
   const [brandData, setBrandData] = useState([]);
@@ -16,8 +17,9 @@ const GenerateRFQFrom = () => {
   const [downloadConditionPopup, setDownloadConditionPopup] = useState(false);
   const [loggedUser, setLoggedUser] = useState({});
   const [quantitySpread, setQuantitySpread] = useState("yes");
-  const [deliveryLocationSame, setDeliveryLocationSame] = useState("yes")
+  const [deliveryLocationSame, setDeliveryLocationSame] = useState("yes");
   const [file, setFile] = useState(null);
+  const [spreadQuantityTotal, setSpreadQuantityTotal] = useState(null)
 
   const [formData, setFromData] = useState({
     product: "",
@@ -68,7 +70,7 @@ const quantitySeparation = () => {
     });
   };
 
-  // Generate intervals
+  
   if (deliverySchedule === "weekly") {
     while (currentDate <= endDate) {
       intervals.push(new Date(currentDate));
@@ -113,11 +115,25 @@ const quantitySeparation = () => {
     setFromData({ ...formData, [name]: value });
   };
 
+  
+
   const handleSpreadQuantityChange = (index, field, value) => {
     const updatedData = [...spreadQuantity];
     updatedData[index][field] = value;
     setSpreadQuantity(updatedData);
-    console.log(spreadQuantity);
+
+     
+  const total = updatedData.reduce((acc, item) => {
+    const qty = parseFloat(item.quantity);
+    return acc + (isNaN(qty) ? 0 : qty);
+  }, 0);
+
+  setSpreadQuantityTotal(total);
+
+  if(Number(formData.quantity) === total){
+    setErrorMessage("")
+    return 
+  }
   };
 
   const addSpreadQuantityFields = () => {
@@ -166,7 +182,7 @@ const quantitySeparation = () => {
   const getBrands = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}user/supplier`
+        `${import.meta.env.VITE_SERVER_URL}user/supplier`, {withCredentials: true}
       );
       if (response.status === 200) return setBrandData(response.data.user);
     } catch (error) {
@@ -200,7 +216,34 @@ const quantitySeparation = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    if(quantitySpread !== "yes"){
 
+     if (
+      Number(formData.quantity) !==
+      Number(spreadQuantity.reduce((acc, init) => acc + Number(init.quantity), 0))
+    ) {
+      setErrorMessage(`Your quantity  and spread quantity ${Number(spreadQuantity.reduce((acc, init) => acc + Number(init.quantity), 0))} mismatched, please spread correctly`);
+      
+      return;
+    }
+   
+  }
+  
+    let finalSpreadQuantity = spreadQuantity;
+  
+    const hasEmptyLocation = spreadQuantity.some(item => item.location === "");
+    if (hasEmptyLocation) {
+      finalSpreadQuantity = spreadQuantity.map(item => {
+        if (item.location === "") {
+          return { ...item, location: formData.DeliveryLocation };
+        }
+        return item;
+      });
+  
+      setSpreadQuantity(finalSpreadQuantity); 
+    }
+  
     const formDatas = new FormData();
     formDatas.append("product", formData.product);
     formDatas.append("category", formData.category);
@@ -214,11 +257,17 @@ const quantitySeparation = () => {
     formDatas.append("pinCode", formData.pinCode);
     formDatas.append("comments", formData.comments);
     formDatas.append("createdBy", loggedUser?._id);
-    formDatas.append("spreadQuantity", quantitySpread === "yes" ? JSON.stringify(quantitySpreadData) : JSON.stringify(spreadQuantity));
+    formDatas.append(
+      "spreadQuantity",
+      quantitySpread === "yes"
+        ? JSON.stringify(quantitySpreadData)
+        : JSON.stringify(finalSpreadQuantity) 
+    );
+  
     if (file) {
       formDatas.append("document", file);
     }
-
+  
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}new-rfq`,
@@ -229,9 +278,11 @@ const quantitySeparation = () => {
           },
         }
       );
-
+  
       if (response.status === 201) {
         toast.success("RFQ generated successfully");
+        setErrorMessage("");
+        setSpreadQuantityTotal(null);
         setFromData({
           product: "",
           category: "",
@@ -257,10 +308,10 @@ const quantitySeparation = () => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error("RFQ not generated");``
+      setErrorMessage(error?.response?.data?.message || "Something went wrong");
     }
   };
-
+  
   // Download
 
   const downloadSpecSheet = async () => {
@@ -307,6 +358,10 @@ const quantitySeparation = () => {
   const toggle = () => {
     setAgreement((prev) => !prev);
   };
+
+ 
+
+  
 
   return (
     <>
@@ -375,7 +430,7 @@ const quantitySeparation = () => {
             <li
               className={`${
                 active === 1
-                  ? " border-solid border-b-orange-500 border-b-4"
+                  ? " border-solid border-b-emerald-500 border-b-4"
                   : "border-dashed"
               } transition-all capitalize py-3 px-4 rounded-lg border-1 font-semibold border-[#E4E6EF] cursor-pointer`}
               onClick={() => setActive(1)}
@@ -385,7 +440,7 @@ const quantitySeparation = () => {
             <li
               className={`${
                 active === 2
-                  ? " border-solid border-b-orange-500 border-b-4"
+                  ? " border-solid border-b-emerald-500 border-b-4"
                   : "border-dashed"
               } transition-all capitalize py-3 px-4 rounded-lg border-1 font-semibold border-[#E4E6EF] cursor-pointer`}
               onClick={() => setActive(2)}
@@ -422,7 +477,7 @@ const quantitySeparation = () => {
               <div className="flex justify-end ">
                 <button
                   type="submit"
-                  className="rounded-lg bg-orange-500 px-6 py-3 text-white w-fit cursor-pointer"
+                  className="rounded-lg bg-emerald-600 px-6 py-3 text-white w-fit cursor-pointer"
                 >
                   {" "}
                   Submit{" "}
@@ -477,7 +532,7 @@ const quantitySeparation = () => {
                 <div className="w-1/2 flex flex-col gap-2">
                   <label htmlFor="category">Select Category</label>
                   <select
-                    className="w-full p-3  border-1 bg-white border-[#E4E6EF] outline-none rounded-lg"
+                    className="w-full p-3 capitalize border-1 bg-white border-[#E4E6EF] outline-none rounded-lg"
                     name="category"
                     id="category"
                     value={formData.category}
@@ -497,7 +552,7 @@ const quantitySeparation = () => {
                 <div className="w-1/2 flex flex-col gap-2">
                   <label htmlFor="brand">Select Brand</label>
                   <select
-                    className="w-full p-3 border-1 bg-white border-[#E4E6EF] outline-none rounded-lg"
+                    className="w-full capitalize p-3 border-1 bg-white border-[#E4E6EF] outline-none rounded-lg"
                     name="brand"
                     id="brand"
                     value={formData.brand}
@@ -596,7 +651,7 @@ const quantitySeparation = () => {
                   <div className="flex flex-col gap-2">
                     <label htmlFor="quantity">Quantity ({formData.measurement === ""? "Enter units above" : formData.measurement}) </label>
                     <input
-                      type="text"
+                      type="number"
                       name="quantity"
                       value={formData.quantity}
                       onChange={handleChange}
@@ -769,7 +824,7 @@ const quantitySeparation = () => {
                           <div className="flex flex-col gap-2">
                             <label htmlFor="quantity">Quantity ({formData.measurement === ""? "Enter units above" : formData.measurement})</label>
                             <input
-                              type="text"
+                              type="number"
                               className="w-full p-3 bg-white border-1 border-[#E4E6EF] outline-none rounded-lg"
                               required
                               placeholder="Quantity"
@@ -823,7 +878,7 @@ const quantitySeparation = () => {
                             <input
                               type="text"
                               name="location"
-                              value={spreadQuantity[index].location}
+                              value={spreadQuantity[index].location ?? ""}
                               className="w-full p-3 bg-white border-1 border-[#E4E6EF] outline-none rounded-lg"
                               onChange={(e) =>
                                 handleSpreadQuantityChange(
@@ -832,7 +887,7 @@ const quantitySeparation = () => {
                                   e.target.value
                                 )
                               }
-                              required
+                              
                               placeholder="Location"
                             />
                           </div>
@@ -855,14 +910,21 @@ const quantitySeparation = () => {
                         </div>
                       </div>
                     ))}
+                    {formData.quantity && <div className="flex flex-col items-end mt-3">
+                       <p className="capitalize text-lg">Total quantity:  <span className="text-green-600 font-medium">{formData.quantity || "n/a"}</span></p>
+                       <p className="capitalize text-lg">Spread quantity total:  <span className={`${Number(formData.quantity) !== Number(spreadQuantityTotal) ? "text-red-500" : "text-green-600"}  font-medium`}>{spreadQuantityTotal || "n/a"}</span></p>
+                    </div>}
                   </div>
                 )}
+              </div>
+              <div className="flex justify-end">
+                  {errMessage && <p className={`text-red-500`}>{errMessage} </p>}
               </div>
 
               <div className="flex justify-end ">
                 <button
                   type="submit"
-                  className="rounded-lg bg-orange-500 px-6 py-3 text-white w-fit cursor-pointer"
+                  className="rounded-lg bg-emerald-600 px-6 py-3 text-white w-fit cursor-pointer"
                 >
                   Submit
                 </button>

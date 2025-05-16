@@ -57,7 +57,7 @@ const BuyerOrderedProduct = () => {
      const [productData, setProductData] = useState(data)
   return (
     <>
-      <div className='bg-white p-5 rounded-4xl border-orange-500 border-2'>
+      <div className='bg-white p-5 rounded-4xl border-emerald-500 border-2'>
         <h3 className='capitalize font-bold text-[22px]' > Recent Ordered Products</h3>
         <p className='para text-xl capitalize pb-5' > updated 37 minutes ago</p>
         <table className='w-full border-[1px] border-[#f1f1f1]'>

@@ -77,6 +77,12 @@ input::placeholder, textarea::placeholder{
   cursor: grabbing;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 .admin-sidebar::-webkit-scrollbar{
 
  width: 6px;
@@ -510,7 +516,16 @@ left: 0;
   animation: bell 2s ease-in-out infinite;
 }
 
+.tabs-icon{
+  transition: all;
+  transition-duration: 0.3s;
+  
+}
 
+.tabs:hover .tabs-icon{
+  transform: scale(1.1);
+  /* box-shadow: 0px 0px 10px #01929770 !important; */
+}
 
 
 

@@ -20,11 +20,15 @@ const SupplierBRFQTable = ({assignBRFQ}) => {
           .toLowerCase()
           .includes(searchTerm.toLowerCase())
       );
+
+    // Table Data Length
+
+    const length = filteredData.length;
     
     
   return (
     <>
-       <div className="bg-white border-orange-500 border-2 rounded-4xl p-8 m-5">
+       <div className="bg-white border-emerald-500 border-2 rounded-4xl p-8 m-5">
        <div className="mb-5">
           <input
             type="text"
@@ -59,27 +63,27 @@ const SupplierBRFQTable = ({assignBRFQ}) => {
             </tr>
         </thead>
         <tbody>
-          {filteredData?.map((item)=>{
+          {length > 0 ? filteredData?.map((item)=>{
 
-             const quantity = item?.brfqId?.rfqId?.orderQuantity.reduce((acc, init)=> acc + init.quantity, 0);
+             
             return(
             <tr className='border-[#f1f1f1] border-b-1' key={item._id}>
               <td className='p-4 text-start '>{item.brfqId?._id}</td>
               <td className='p-4 border-l-1 border-[#f1f1f1] text-start'> <span className='capitalize'>{item.brfqId?.rfqId?.product}</span></td>
-              <td className='p-4 border-l-1 border-[#f1f1f1] text-start'>{quantity}</td>
+              <td className='p-4 border-l-1 border-[#f1f1f1] text-start'>{item.brfqId?.rfqId?.quantity} ({item.brfqId?.rfqId?.measurement})</td>
               <td className='p-4 border-l-1 border-[#f1f1f1] text-start'>{item.brfqId?.rfqId?.DeliveryLocation}</td>
-              <td className='p-4 border-l-1 border-[#f1f1f1] text-start'> { new Date(item.brfqId?.rfqId?.orderQuantity[0].deliveryDate).toLocaleDateString()} </td>
+              <td className='p-4 border-l-1 border-[#f1f1f1] text-start'> { new Date(item.brfqId?.rfqId?.spreadQuantityData[0].fromDate).toLocaleDateString()} </td>
               <td className='p-4 border-l-1 border-[#f1f1f1] text-start'> {item.status === true ? "True" : "False"} </td>
               <td className='p-4 border-l-1 border-[#f1f1f1] text-start'> 
               <div className="flex items-center gap-4">
                     <button
-                      className="rounded-lg bg-teal-600 px-2 py-2 text-white"
+                      className="rounded-lg bg-teal-600 hover:scale-105 transition-all duration-300 cursor-pointer px-2 py-2 text-white"
                       onClick={()=> navigate(`detail/${item._id}`)}
                     >
                       <FaEye className="text-xl" />
                     </button>
                     <button
-                      className="rounded-lg bg-lime-500 px-2 py-2 text-white"
+                      className="rounded-lg bg-lime-500 px-2 py-2 text-white hover:scale-105 cursor-pointer transition-all duration-300"
                       onClick={()=> navigate(`add-quotation/${item._id}`)}
                     >
                       <MdEdit className="text-xl" />
@@ -87,7 +91,11 @@ const SupplierBRFQTable = ({assignBRFQ}) => {
                   </div>
               </td>
             </tr>)
-})}
+}) : (
+  <tr className='border-[#f1f1f1] border-b-1'>
+     <td className='p-4  text-center' colSpan={7}> Data not found</td>
+  </tr>
+)}
           
         </tbody>
         </table>    

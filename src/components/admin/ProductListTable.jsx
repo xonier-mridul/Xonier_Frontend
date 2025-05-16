@@ -27,7 +27,7 @@ const ProductListTable = () => {
   const getCatalog = async (currentPage) => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}catalog?page=${currentPage}`
+        `${import.meta.env.VITE_SERVER_URL}catalog/paginate?page=${currentPage}`, {withCredentials: true}
       );
       if (response.status === 200) {
         setCatalogData(response?.data?.response);
@@ -56,7 +56,7 @@ const ProductListTable = () => {
   const getSeller = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}user/supplier`
+        `${import.meta.env.VITE_SERVER_URL}user/supplier`, {withCredentials: true}
       );
       if (response.status === 200) {
         setSellerData(response.data.user);
@@ -146,7 +146,7 @@ const ProductListTable = () => {
   return (
     <>
       <ToastContainer />
-      <div className="bg-white shadow-lg rounded-2xl m-5 border-2 border-orange-500">
+      <div className="bg-white shadow-lg rounded-2xl m-5 border-2 border-emerald-500">
         <div className="mb-5 flex justify-between items-center px-8 py-6 border-b-1 border-gray-300">
           <div className="flex gap-3 items-center">
             <input
@@ -160,7 +160,7 @@ const ProductListTable = () => {
             <select
               name="product"
               id="product"
-              className="border-1 border-[#B5B5C3] outline-none rounded-lg p-3 text-lg text-gray-600"
+              className="border-1 border-[#B5B5C3] outline-none rounded-lg px-3 py-2.5 text-lg text-gray-600"
               onChange={(e) => handleProductFilter(e.target.value)}
             >
               <option value="" hidden>
@@ -176,7 +176,7 @@ const ProductListTable = () => {
 
             <select
               name="supplier"
-              className="border-1 border-[#B5B5C3] outline-none rounded-lg p-3 text-lg text-gray-600"
+              className="border-1 border-[#B5B5C3] outline-none rounded-lg px-3 py-2.5 text-lg text-gray-600"
               id="supplier"
               onChange={(e) => handleSupplierFilter(e.target.value)}
             >
@@ -194,7 +194,7 @@ const ProductListTable = () => {
 
           <Link
             to={"/admin/catalog"}
-            className="bg-black p-3 px-8 rounded-lg text-white text-lg"
+            className="bg-emerald-600 p-3 px-8 rounded-lg text-white text-lg"
           >
             Add Product
           </Link>
@@ -306,7 +306,7 @@ const ProductListTable = () => {
                 key={index + 1}
                 onClick={() => handlePageChange(index + 1)}
                 className={` ${
-                  currentPage === index + 1 ? "bg-orange-500 text-white" : ""
+                  currentPage === index + 1 ? "bg-emerald-500 text-white" : ""
                 } h-9 w-9 rounded-lg flex items-center justify-center cursor-pointer `}
               >
                 {index + 1}

@@ -5,12 +5,15 @@ import Footer from './components/Footer'
 import ScrollToTop from './components/ScrollToTop'
 import ChatBot from './components/ChatBot'
 import AnimatedCursor from "react-animated-cursor";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 function App() {
   
   return (
     <>
+    <ToastContainer />
      <Navbar/>
      <ScrollToTop/>
      <AnimatedCursor

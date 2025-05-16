@@ -72,7 +72,7 @@ const BuyerRegistrationForm = () => {
       }
     } catch (error) {
       console.error(error);
-      toast.error("User not created");
+      setErrorMessage(error.response?.data?.message)
     }
   };
 

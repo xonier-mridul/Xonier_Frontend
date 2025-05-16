@@ -11,16 +11,14 @@ const BRFQAssign = ({ brfqData, suppliers }) => {
 
   const [selectedSuppliers, setSelectedSuppliers] = useState([]);
 
-  const quantity = brfqData?.rfqId?.orderQuantity.reduce(
-    (acc, sin) => acc + sin.quantity,
-    0
-  );
+  const quantity = brfqData?.rfqId?.quantity
+ 
 
   const deliveryDate = new Date(
-    brfqData?.rfqId?.orderQuantity[0]?.deliveryDate
+    brfqData?.rfqId?.spreadQuantityData[0]?.fromDate
   ).toLocaleDateString();
 
-
+  
   const handleChange = (e) => {
     const supplierId = e.target.value;
     const supplier = suppliers.find((item) => item._id === supplierId);
@@ -70,24 +68,24 @@ const BRFQAssign = ({ brfqData, suppliers }) => {
     <>
       <ToastContainer />
       <div className="flex items-center gap-3 mx-5">
-        <div className="w-1/2 bg-white border-orange-500 border-2 rounded-4xl p-3 px-4 ">
-          <h2>
-            <span className="text-lg font-semibold">BRFQ ID:</span>{" "}
-            {brfqData?._id}
+        <div className="w-1/2 bg-white border-emerald-500 border-2 rounded-4xl p-3 px-4 ">
+          <h2 className="text-lg font-semibold">
+            BRFQ ID:
+            <span className="text-emerald-500"> {brfqData?._id} </span>
           </h2>
         </div>
-        <div className="w-1/2 bg-white border-orange-500 border-2 rounded-4xl p-3 px-4 ">
-          <h2 className="capitalize">
-            <span className="text-lg font-semibold">Buyer Name:</span>{" "}
-            {brfqData?.rfqId?.createdBy?.name}
+        <div className="w-1/2 bg-white border-emerald-500 border-2 rounded-4xl p-3 px-4 ">
+          <h2 className="capitalize text-lg font-semibold">
+            Buyer Name:
+            <span className="text-emerald-500"> {brfqData?.rfqId?.createdBy?.name} </span>
           </h2>
         </div>
       </div>
 
-      <div className="bg-white border-orange-500 flex flex-col gap-4 border-2 rounded-4xl p-8 m-5 my-2">
+      <div className="bg-white border-emerald-500 flex flex-col gap-4 border-2 rounded-4xl p-8 m-5 my-2">
         <div className="flex justify-end items-center">
           <button
-            className="bg-black text-white px-5 py-2 rounded-lg"
+            className="bg-emerald-600 text-white px-5 py-2 rounded-lg"
             onClick={() => navigate(-1)}
           >
             Back
@@ -96,48 +94,48 @@ const BRFQAssign = ({ brfqData, suppliers }) => {
          
          {/* BRFQ Data Table */}
         
-        <table className="w-full border-[1px] border-[#eff2f5]">
+        <table className="w-full border-[1px] border-stone-200">
           <tbody>
-            <tr className="border-b-[1px] border-[#eff2f5]">
+            <tr className="border-b-[1px] border-stone-200">
               <th className="bg-slate-100 p-4 px-6 font-semibold text-lg text-start">
                 Product Name
               </th>
-              <td className="p-4 px-6 text-lg capitalize">
+              <td className="p-4 px-6 border-l-1 border-stone-200 text-lg capitalize">
                 {brfqData?.rfqId?.product}
               </td>
             </tr>
-            <tr className="border-b-[1px] border-[#eff2f5]">
+            <tr className="border-b-[1px] border-stone-200">
               <th className="bg-slate-100 p-4 px-6 font-semibold text-lg text-start">
                 Quantity
               </th>
-              <td className="p-4 px-6 text-lg">{quantity}</td>
+              <td className="p-4 px-6 border-l-1 border-stone-200 text-lg">{quantity}</td>
             </tr>
-            <tr className="border-b-[1px] border-[#eff2f5]">
+            <tr className="border-b-[1px] border-stone-200">
               <th className="bg-slate-100 p-4 px-6 font-semibold text-lg text-start">
                 Delivery Location
               </th>
-              <td className="p-4 px-6 text-lg capitalize">
+              <td className="p-4 px-6 text-lg border-l-1 border-stone-200 capitalize">
                 {brfqData?.rfqId?.DeliveryLocation}
               </td>
             </tr>
-            <tr className="border-b-[1px] border-[#eff2f5]">
+            <tr className="border-b-[1px] border-stone-200">
               <th className="bg-slate-100 p-4 px-6 font-semibold text-lg text-start">
                 Pin Code
               </th>
-              <td className="p-4 px-6 text-lg">{brfqData?.rfqId?.pinCode}</td>
+              <td className="p-4 px-6 border-l-1 border-stone-200 text-lg">{brfqData?.rfqId?.pinCode}</td>
             </tr>
-            <tr className="border-b-[1px] border-[#eff2f5]">
+            <tr className="border-b-[1px] border-stone-200">
               <th className="bg-slate-100 p-4 px-6 font-semibold text-lg text-start">
                 Delivery From Date
               </th>
-              <td className="p-4 px-6 text-lg">{deliveryDate}</td>
+              <td className="p-4 px-6 border-l-1 border-stone-200 text-lg">{deliveryDate}</td>
             </tr>
-            <tr className="border-b-[1px] border-[#eff2f5]">
+            <tr className="border-b-[1px] border-stone-200">
               <th className="bg-slate-100 p-4 px-6 font-semibold text-lg text-start">
                 Measurement
               </th>
-              <td className="p-4 px-6 text-lg">
-                {brfqData?.rfqId?.measurement}
+              <td className="p-4 px-6 border-l-1 border-stone-200 text-lg">
+                <span className="capitalize text-sm tracking-wide bg-green-500 px-4 py-1 text-white rounded-lg">{brfqData?.rfqId?.measurement}</span>
               </td>
             </tr>
           </tbody>
@@ -168,7 +166,7 @@ const BRFQAssign = ({ brfqData, suppliers }) => {
               </select>
               <button
                 type="submit"
-                className="mt-4 bg-orange-500 text-white px-5 py-2 rounded-md"
+                className="mt-4 bg-emerald-600 text-white px-5 py-2 rounded-md"
               >
                 Assign
               </button>

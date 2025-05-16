@@ -9,7 +9,9 @@ const VerifyOTP = () => {
   const [otp, setOtp] = useState(new Array(6).fill(''));
   const [message, setMessage] = useState('');
   const [counter, setCounter] = useState(60);
+  const [verificationEmail, setVerificationEmail] = useState("")
   const inputRefs = useRef([]);
+
 
 
   // Navigate
@@ -54,9 +56,10 @@ const VerifyOTP = () => {
     }
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}otp/verify`, { otp: finalOTP });
+      const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}user/verify-otp`, { otp: finalOTP, emailForVerification: verificationEmail });
       if (response.status === 200) {
         toast.success("OTP verified successfully");
+        localStorage.clear("emailForVerify")
         setTimeout(() => { 
             navigate("/login")
         }, 3000);
@@ -84,6 +87,9 @@ const VerifyOTP = () => {
       });
     }, 1000);
 
+    const email = localStorage.getItem("emailForVerify")
+    setVerificationEmail(email);
+
     return () => clearInterval(interval); 
   }, []);
 
@@ -91,9 +97,9 @@ const VerifyOTP = () => {
     <>
       <ToastContainer />
       <div className="bg-stone-200 pt-48 py-28 w-full flex justify-center">
-        <div className="bg-white shadow-lg flex flex-col gap-5 p-9 rounded-2xl w-[550px]">
+        <div className="bg-white shadow-lg flex flex-col gap-5 p-9 rounded-2xl w-[570px]">
           <h2 className="text-2xl font-bold">Please Verify your OTP</h2>
-          <p>OTP sent to your registered email or number</p>
+          <p>OTP sent to your  email <span className='text-green-500 text-lg'>{verificationEmail || "Not Found"}</span> and valid for <span className='text-red-500'>10 min</span></p>
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             <div className="grid grid-cols-6 gap-3">
               {otp.map((data, index) => (
@@ -124,7 +130,7 @@ const VerifyOTP = () => {
             <div className={`${counter === 0 ? "justify-between" : "justify-center"} flex  items-center`}>
               <p>You get your OTP  within <span className='text-teal-600 text-lg'>{counter}s</span></p>
               {counter === 0 && <button className='text-teal-600 underline' type='button' onClick={handleRegenerateOtp}>
-                Resend Otp
+                Resend OTP
                </button>}
             </div>
           </form>

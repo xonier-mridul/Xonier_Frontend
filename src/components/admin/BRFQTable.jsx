@@ -28,7 +28,7 @@ const BRFQTable = ({ BRFQData }) => {
 
   return (
     <>
-      <div className="bg-white border-orange-500 border-2 rounded-4xl p-8 m-5">
+      <div className="bg-white border-emerald-500 border-2 rounded-4xl p-8 m-5">
         <div className="mb-5">
           <input
             type="text"
@@ -78,7 +78,7 @@ const BRFQTable = ({ BRFQData }) => {
                   </td>
                   <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1]">
                     <div className="flex items-center gap-4">
-                      <button className="rounded-lg bg-teal-600 px-2 py-2 text-white">
+                      <button className="rounded-lg bg-teal-600 px-2 py-2 text-white" onClick={()=>navigate(`detail/${item._id}`)}>
                         <FaEye className="text-xl" />
                       </button>
                      <button className={`rounded-lg ${item.assigned !== true ? "bg-orange-500" : "bg-green-500"} px-2 py-2 text-white`} onClick={()=>navigate(`assign/${item._id}`)}>

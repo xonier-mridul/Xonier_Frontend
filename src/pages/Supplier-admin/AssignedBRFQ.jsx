@@ -17,7 +17,6 @@ const AssignedBRFQ = () => {
             const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}assigned/getbyid/${id}`, {withCredentials: true});
             if(response.status === 200){
                setData(response.data?.brfq);
-               console.log(response.data?.brfq);
             }
         } catch (error) {
             console.error(error);

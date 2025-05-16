@@ -31,7 +31,7 @@ const Assign = () => {
 
     const getSuppliers = async()=>{
         try {
-            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}user/supplier`);
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}user/supplier`, {withCredentials: true});
             if(response.status === 200){
                 setSupplierData(response.data?.user)
             }

@@ -1,5 +1,5 @@
 import React from 'react'
-import SubCategoryTable from '../../components/admin/SubCategoryTable'
+import SubCategoryTable from '../../components/common/SubCategoryTable'
 
 const SubCategory = () => {
   return (

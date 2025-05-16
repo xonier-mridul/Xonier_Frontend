@@ -12,6 +12,7 @@ import { ImCross } from "react-icons/im";
 const RFQDetail = () => {
     const [RFQData, setRFQData] = useState([]);
     const [totalQuantity, setTotalQuantity] = useState([])
+    const [message, setErrMessage] = useState(null);
 
     const params = useParams();
     const navigate = useNavigate();
@@ -23,7 +24,10 @@ const RFQDetail = () => {
             if(!id) return
             const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}new-rfq/single/${id}`)
             if(response.status === 200){
-               setRFQData(response.data)
+               setRFQData(response.data);
+               if(response.data?.process === "created by buyer"){
+                  setErrMessage("* RFQ not approved yet, waiting for admin response")
+               }
                
             }
         } catch (error) {
@@ -36,19 +40,36 @@ const RFQDetail = () => {
     }, []);
 
     
-
+   // Handle Approve
 
     const handleApprove = async()=>{
         try {
             if(!id) return 
             const response = await axios.patch(`${import.meta.env.VITE_SERVER_URL}new-rfq/approve/${id}`,{})
             if(response.status === 200){
-               toast.success("RFQ Approved successfully")
+               toast.success("RFQ Approved successfully");
+               setErrMessage(null)
             } 
         } catch (error) {
             console.error(error);
-            toast.error(error?.response?.data?.message);
+            setErrMessage(error?.response?.data?.message);
         }
+    }
+
+    // Handle Reject
+
+    const handleReject = async()=>{
+       try {
+        if(!id) return
+        const response = await axios.patch(`${import.meta.env.VITE_SERVER_URL}new-rfq/reject/${id}`,{}, {withCredentials: true});
+        if(response.status === 200){
+            toast.success("RFQ Reject successfully");
+            setErrMessage(null)
+        }
+       } catch (error) {
+        console.error(error);
+        setErrMessage(error?.response?.data?.message);
+       }
     }
     
      
@@ -58,11 +79,11 @@ const RFQDetail = () => {
   return (
     <>
       <ToastContainer />
-      <div className='bg-white rounded-4xl flex flex-col gap-6 border-orange-500 border-2 m-6 p-8'>
+      <div className='bg-white rounded-4xl flex flex-col gap-6 border-emerald-500 border-2 m-6 p-8'>
         <div className="flex items-center">
-          <h2 className='font-semibold text-2xl w-1/2'> RFQ id: <span className='text-orange-500'>{RFQData?._id} </span></h2>
+          <h2 className='font-semibold text-2xl w-1/2'> RFQ id: <span className='text-emerald-600'>{RFQData?._id} </span></h2>
           <div className='w-1/2 flex justify-end'>
-          <button className='capitalize font-medium text-lg text-white bg-black py-2 px-8 cursor-pointer rounded-md' onClick={()=>navigate(-1)}>
+          <button className='capitalize font-medium text-lg text-white bg-emerald-600 py-2 px-8 cursor-pointer rounded-md' onClick={()=>navigate(-1)}>
                 Back
             </button>
 
@@ -113,26 +134,24 @@ const RFQDetail = () => {
         </tbody>
         </table>
         <div className='flex flex-col gap-5 '>
-            <h2 className='font-semibold text-2xl'>Quantity with Delivery date</h2>
+            <h2 className='font-semibold text-2xl'>Quantity with Delivery date {RFQData?.process === "updated by admin" &&<span className='text-red-500 text-xl tracking-wide'>(Updated by Admin)</span>}</h2>
             <table className='w-full border-[1px] border-zinc-200'>
                 <thead>
                     
-                    <tr className='bg-slate-100 border-b-1 border-zinc-200'>
+                    <tr className='bg-slate-100 border-b-1 border-zinc-200 '>
                         <th className='p-4 text-start'> S.No.</th>
                         <th className='p-4 text-start border-l-1 border-zinc-200'>Quantity ({RFQData?.measurement})</th>
                         <th className='p-4 text-start border-l-1 border-zinc-200'>Delivery Date <span className='capitalize'>({RFQData?.deliverySchedule}) </span></th>
                         <th className='p-4 text-start border-l-1 border-zinc-200'>Delivery Location</th>
-
                     </tr>
                     
-
                 </thead>
                 <tbody>
                 {RFQData?.spreadQuantityData?.length > 0 ? RFQData?.spreadQuantityData?.map((item,index)=>(
                     <tr className='border-b-[1px] border-l-1 border-zinc-200' key={item._id}>
                         <td className='p-4 border-zinc-200 border-l-1'> {index + 1} </td>
                         <td className='p-4 border-zinc-200 border-l-1'> {item.quantity} </td>
-                        <td className='p-4 border-zinc-200 border-l-1 flex items-center gap-2'> <span className='py-1 px-4 rounded-lg bg-green-500 text-white text-sm tracking-wide'> {new Date(item?.fromDate).toLocaleDateString()} </span> - <span className='py-1 px-4 rounded-lg bg-green-500 text-white text-sm tracking-wide'> {new Date(item.toDate).toLocaleDateString()}</span> </td>
+                        <td className='p-4 border-zinc-200 border-l-1 flex items-center gap-2'> <span className='py-1 px-4 rounded-lg bg-emerald-500 text-white text-sm tracking-wide'> {new Date(item?.fromDate).toLocaleDateString()} </span> - <span className='py-1 px-4 rounded-lg bg-emerald-600 text-white text-sm tracking-wide'> {new Date(item.toDate).toLocaleDateString()}</span> </td>
                         <td className='p-4 border-zinc-200 border-l-1'> {item?.location} </td>
                     </tr>
                 )) : <tr className='border-b-[1px] border-l-1 border-zinc-200'>
@@ -147,15 +166,22 @@ const RFQDetail = () => {
             </table>
 
         </div>
+        <div className='flex justify-end gap-4'> 
+             <p className='text-red-500'>  {message} </p> 
+        </div>
         
         <div className='flex justify-end items-center gap-4'>
             
-        {RFQData.status !== true ?<> <button className='capitalize font-medium text-lg text-white bg-green-500 py-2 px-8 cursor-pointer rounded-md flex gap-2 items-center' onClick={handleApprove}> <FaCheck /> Approved </button>
-            <button className='capitalize font-medium text-lg text-white bg-red-500 py-2 px-8 cursor-pointer rounded-md flex gap-2 items-center'> <ImCross className='text-sm'/> Rejected </button></> : 
-            <button className='capitalize font-medium text-lg text-white bg-green-500 py-2 px-8 cursor-pointer rounded-md flex gap-2 items-center' disabled> Approved <FaCheck /></button>
-            } 
+        {(RFQData.process !== "denied by buyer" && RFQData.process !== "approved by buyer") && <> <button className='capitalize font-medium text-lg text-white bg-green-500 disabled:bg-green-400 py-2 px-8 cursor-pointer rounded-md flex gap-2 items-center' onClick={handleApprove} disabled={RFQData.process !== "updated by admin"}> <FaCheck /> Approved </button>
+            <button className='capitalize font-medium text-lg text-white bg-red-500 py-2 px-8 cursor-pointer rounded-md flex gap-2 items-center' onClick={handleReject}> <ImCross className='text-sm'/> Rejected </button></> }
+           {RFQData.process === "approved by buyer" && <button className='capitalize font-medium text-lg text-white bg-green-500 py-2 px-8 rounded-md flex gap-2 items-center' disabled> Approved <FaCheck /></button>}
+           {RFQData.process === "denied by buyer" && <button className='capitalize font-medium text-lg text-white bg-red-500 py-2 px-8  rounded-md flex gap-2 items-center' disabled><FaXmark /> Rejected </button>}
+            
+               
+            
             
         </div>
+       
       </div>
     </>
   )

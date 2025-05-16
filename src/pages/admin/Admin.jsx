@@ -1,4 +1,5 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Logo from "../../assets/bildkart-admin-logo.png";
 import fav from "../../assets/b-fav.png";
 import DashboardHeader from "../../components/admin/DashboardHeader";
@@ -8,16 +9,21 @@ import { useState } from "react";
 // Media Start
 import { AiFillDashboard, AiFillProduct } from "react-icons/ai";
 import { FaUsers, FaCartPlus } from "react-icons/fa";
-import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
+import { MdKeyboardDoubleArrowLeft, MdLockReset } from "react-icons/md";
 import { RiContactsBook3Fill } from "react-icons/ri";
 import { BsFillChatRightQuoteFill } from "react-icons/bs";
 import { FaAngleDown, FaShopLock } from "react-icons/fa6";
+import LogoutPopup from "../../components/common/LogoutPopup";
 
 // Media End
 
 const Admin = () => {
   const [showSidebar, setShowSidebar] = useState(true);
   const [submenuShow, setSubmenuShow] = useState(0);
+  const [logoutPopupShow, setLogoutPopupShow] = useState(false)
+
+
+  const Navigate = useNavigate();
   // Side Menu Start
 
   const handleSidebar = () => {
@@ -36,15 +42,35 @@ const Admin = () => {
   };
   // Sub Menu End
 
+
+  const logoutShow =()=>{
+    setLogoutPopupShow(false)
+  }
+
+
+  // Handle Logout
+
+  const handleLogout = async()=>{
+    try {
+      const logout = await axios.post(`${import.meta.env.VITE_SERVER_URL}user/logout`, {}, {withCredentials: true});
+      if(logout.status === 200){
+         setLogoutPopupShow(false)
+          Navigate("/");
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <>
-      
+      {logoutPopupShow && <LogoutPopup logout={handleLogout} logoutShow={logoutShow}/>}
       <div className="flex gap-2">
         {/* Sidebar */}
         <div
           className={` ${
             showSidebar ? "w-72" : "w-20"
-          } m-4 border-2 border-orange-500 rounded-4xl app-sidebar z-30 text-white min-h-screen  transition-all duration-300`}
+          } m-4 border-2 border-emerald-500 rounded-4xl app-sidebar z-30 text-white min-h-screen  transition-all duration-300`}
         >
           <div className="flex relative w-full  p-4">
             <span
@@ -73,10 +99,10 @@ const Admin = () => {
             <li className="">
               <Link
                 to={"/admin"}
-                className="admin-list w-full flex gap-3 text-xl items-center hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer"
+                className="admin-list w-full tabs flex gap-3 text-xl items-center hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer"
               >
                 {" "}
-                <span className="bg-orange-500 text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center  ">
+                <span className="bg-emerald-500 tabs-icon text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center  ">
                   {" "}
                   <AiFillDashboard className="text-xl " />
                 </span>{" "}
@@ -94,12 +120,12 @@ const Admin = () => {
               <button
                 className={` ${
                   submenuShow === 1 && "mb-4"
-                } admin-list w-full  flex gap-2 text-xl items-center justify-between hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer`}
+                } admin-list w-full tabs  flex gap-2 text-xl items-center justify-between hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer`}
                 onClick={() => handleSubmenu(1)}
               >
                 <div className="flex items-center justify-center gap-2">
                   {" "}
-                  <span className="bg-orange-500 text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center ">
+                  <span className="bg-emerald-500 tabs-icon text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center ">
                     {" "}
                     <FaUsers className="text-xl" />
                   </span>{" "}
@@ -137,12 +163,12 @@ const Admin = () => {
               <button
                 className={` ${
                   submenuShow === 4 && "mb-4"
-                } admin-list w-full  flex gap-2 text-xl items-center justify-between hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer`}
+                } admin-list w-full tabs flex gap-2 text-xl items-center justify-between hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer`}
                 onClick={() => handleSubmenu(4)}
               >
                 <div className="flex items-center justify-center gap-2">
                   {" "}
-                  <span className="bg-orange-500 text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center ">
+                  <span className="bg-emerald-500 tabs-icon text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center ">
                     {" "}
                     <FaUsers className="text-xl" />
                   </span>{" "}
@@ -175,7 +201,7 @@ const Admin = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link to={""} className="capitalize text-xl ">
+                  <Link to={"approved-rfq"} className="capitalize text-xl ">
                     Approved RFQ{" "}
                   </Link>
                 </li>
@@ -186,12 +212,12 @@ const Admin = () => {
             <button
                 className={` ${
                   submenuShow === 5 && "mb-4"
-                } admin-list w-full  flex gap-3 text-xl items-center justify-between hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer`}
+                } admin-list w-full tabs flex gap-3 text-xl items-center justify-between hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer`}
                 onClick={() => handleSubmenu(5)}
               >
                 <div className="flex items-center justify-center gap-3">
                   {" "}
-                  <span className="bg-orange-500 text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center ">
+                  <span className="bg-emerald-500 tabs-icon text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center ">
                     {" "}
                     <FaShopLock className="text-xl" />
                   </span>{" "}
@@ -225,18 +251,71 @@ const Admin = () => {
              
               </ul>
             </li>
+            <li className="">
+            <button
+                className={` ${
+                  submenuShow === 6 && "mb-4"
+                } admin-list w-full  flex gap-3 text-xl tabs items-center justify-between hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer`}
+                onClick={() => handleSubmenu(6)}
+              >
+                <div className="flex items-center justify-center gap-3">
+                  {" "}
+                  <span className="bg-emerald-500 tabs-icon text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center ">
+                    {" "}
+                    <FaShopLock className="text-xl" />
+                  </span>{" "}
+                  <span
+                    className={`${
+                      showSidebar ? "opacity-100" : "opacity-0"
+                    } transition-all duration-300 `}
+                  >
+                    Manage VRFQ
+                  </span>
+                </div>{" "}
+                <span className="para">
+                  <FaAngleDown />
+                </span>{" "}
+              </button>
+              <ul
+                className={`${
+                  submenuShow === 6 ? "h-full p-5" : "h-0 pl-5"
+                } flex flex-col gap-5  pt-0 overflow-hidden list-disc ml-7 transition-all duration-300`}
+              >
+                <li>
+                  <Link to={"vrfq"} className="capitalize text-xl ">
+                    Send VRFQ
+                  </Link>
+                </li>
+                <li>
+                  <Link to={"vrfq/compare-quotation"} className="capitalize text-xl ">
+                    Compare Quotation
+                  </Link>
+                </li>
+                <li>
+                  <Link to={""} className="capitalize text-xl ">
+                    Track VRFQ
+                  </Link>
+                </li>
+                <li>
+                  <Link to={""} className="capitalize text-xl ">
+                   VRFQ Evaluation
+                  </Link>
+                </li>
+             
+              </ul>
+            </li>
 
 
             <li className="">
               <button
                 className={` ${
                   submenuShow === 2 && "mb-4"
-                } admin-list w-full  flex gap-3 text-xl items-center justify-between hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer`}
+                } admin-list w-full tabs flex gap-3 text-xl items-center justify-between hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer`}
                 onClick={() => handleSubmenu(2)}
               >
                 <div className="flex items-center justify-center gap-3">
                   {" "}
-                  <span className="bg-orange-500 text-white h-8 w-8 min-w-8 rounded-full flex justify-center items-center ">
+                  <span className="bg-emerald-500 tabs-icon text-white h-8 w-8 min-w-8 rounded-full flex justify-center items-center ">
                     {" "}
                     <AiFillProduct className="text-xl" />
                   </span>{" "}
@@ -289,12 +368,12 @@ const Admin = () => {
               <button
                 className={` ${
                   submenuShow === 3 && "mb-4"
-                } admin-list w-full flex gap-3 text-xl items-center justify-between hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer`}
+                } admin-list w-full flex gap-3 text-xl tabs items-center justify-between hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer`}
                 onClick={() => handleSubmenu(3)}
               >
                 <div className="flex items-center justify-center gap-3">
                   {" "}
-                  <span className="bg-orange-500 text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center ">
+                  <span className="bg-emerald-500 tabs-icon text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center ">
                     {" "}
                     <FaCartPlus className="text-xl" />
                   </span>{" "}
@@ -317,7 +396,7 @@ const Admin = () => {
                 } flex flex-col gap-5  pt-0 overflow-hidden list-disc ml-7 transition-all duration-300`}
               >
                 <li>
-                  <Link to={"new-order"} className="capitalize text-xl ">
+                  <Link to={"order"} className="capitalize text-xl ">
                     New Order{" "}
                   </Link>
                 </li>
@@ -341,10 +420,10 @@ const Admin = () => {
             <li className="">
               <Link
                 to={"inquiries"}
-                className="admin-list w-full flex gap-3 text-xl items-center hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer"
+                className="admin-list w-full flex tabs gap-3 text-xl items-center hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer"
               >
                 {" "}
-                <span className="bg-orange-500 text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center  ">
+                <span className="bg-emerald-500 tabs-icon text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center  ">
                   {" "}
                   <BsFillChatRightQuoteFill className="text-xl" />
                 </span>{" "}
@@ -360,11 +439,31 @@ const Admin = () => {
             </li>
             <li className="">
               <Link
-                to={"contact"}
-                className="admin-list w-full flex gap-3 text-xl items-center hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer"
+                to={"change-password"}
+                className="admin-list w-full flex tabs gap-3 text-xl items-center hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer"
               >
                 {" "}
-                <span className="bg-orange-500 text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center ">
+                <span className="bg-emerald-500 tabs-icon text-white h-8 w-8 min-w-8  rounded-full flex justify-center items-center  ">
+                  {" "}
+                  <MdLockReset className="text-xl" />
+                </span>{" "}
+                <span
+                  className={`${
+                    showSidebar ? "opacity-100" : "opacity-0"
+                  } transition-all duration-300 `}
+                >
+                  {" "}
+                  Change Password
+                </span>{" "}
+              </Link>
+            </li>
+            <li className="">
+              <Link
+                to={"contact"}
+                className="admin-list w-full flex gap-3 text-xl tabs items-center hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer"
+              >
+                {" "}
+                <span className="bg-emerald-500 tabs-icon text-white h-8 w-8 min-w-8 rounded-full flex justify-center items-center ">
                   {" "}
                   <RiContactsBook3Fill className="text-xl" />
                 </span>{" "}
@@ -378,13 +477,33 @@ const Admin = () => {
                 </span>{" "}
               </Link>
             </li>
+            <li className="">
+              <button
+                
+                className="admin-list w-full flex gap-3 text-xl tabs items-center hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer"  onClick={()=>setLogoutPopupShow(true)}
+              >
+                {" "}
+                <span className="bg-emerald-500 tabs-icon text-white h-8 w-8 min-w-8 rounded-full flex justify-center items-center ">
+                  {" "}
+                  <RiContactsBook3Fill className="text-xl" />
+                </span>{" "}
+                <span
+                  className={`${
+                    showSidebar ? "opacity-100" : "opacity-0"
+                  } transition-all duration-300 `}
+                >
+                  {" "}
+                  Logout
+                </span>{" "}
+              </button>
+            </li>
           </ul>
         </div>
 
         <div
           className={`flex-1 ${
-            showSidebar ? "pl-74" : "pl-22"
-          } transition-all duration-300  bg-stone-100 min-h-screen `}
+            showSidebar ? "pl-76" : "pl-22"
+          } transition-all duration-300  bg-stone-100 min-h-screen w-full`}
         >
           <DashboardHeader />
           <Outlet />

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import AddCategoryForm from "../../components/admin/AddCategoryForm";
-import CategoryTable from "../../components/admin/CategoryTable";
+import AddCategoryForm from "../../components/common/AddCategoryForm";
+import CategoryTable from "../../components/common/CategoryTable";
 import axios from "axios";
 
 const Category = () => {
@@ -29,7 +29,7 @@ const Category = () => {
 
   return (
     <>
-      <div className="p-5 flex flex-col gap-5">
+      <div className="p-7 flex flex-col gap-5">
         <AddCategoryForm fetchCategories={fetchCategories} />
         <CategoryTable
           categoryData={categoryData}

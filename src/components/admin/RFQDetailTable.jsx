@@ -1,6 +1,7 @@
-import React, {useState, useEffect} from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import React, {useState, useEffect} from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { MdEdit } from "react-icons/md";
+import axios from 'axios';
 
 
 const RFQDetailTable = () => {
@@ -38,38 +39,38 @@ const RFQDetailTable = () => {
     <>
       <div className='bg-white rounded-4xl flex flex-col gap-6 border-emerald-500 border-2 p-8'>
         <div className="">
-          <h2 className='font-semibold text-2xl'> RFQ id: <span className='text-orange-500'>{RFQData?._id} </span></h2>
+          <h2 className='font-semibold text-2xl'> RFQ id: <span className='text-orange-500'>{RFQData?._id || "N/A"} </span></h2>
         </div>
         <table className='w-full border-[1px] border-[#eff2f5]'>
         <tbody>
         <tr className='border-b-1 border-zinc-200'>
         <th  className='bg-slate-100 border-b-1 border-zinc-200 w-1/3 p-4 px-6 font-semibold text-lg text-start'>Product Name </th>
-        <td className='w-2/3 p-4 px-6 text-lg'> <span className='capitalize'>{RFQData?.product}</span></td>
+        <td className='w-2/3 p-4 px-6 text-lg'> <span className='capitalize'>{RFQData?.product || "N/A"}</span></td>
          
         </tr>
         <tr className='border-b-1 border-zinc-200'>
         <th  className='bg-slate-100 border-b-1 border-zinc-200 w-1/3 p-4 px-6 font-semibold text-lg text-start'>Category</th>
-        <td className='w-2/3 p-4 px-6 text-lg'> <span className='capitalize'>{RFQData?.category?.category}</span></td>
+        <td className='w-2/3 p-4 px-6 text-lg'> <span className='capitalize'>{RFQData?.category?.category || "N/A"}</span></td>
          
         </tr>
         <tr className='border-b-1 border-zinc-200'>
         <th  className='bg-slate-100 border-b-1 border-zinc-200 w-1/3 p-4 px-6 font-semibold text-lg text-start'>Brand</th>
-        <td className='w-2/3 p-4 px-6 text-lg'><span className='capitalize'>{RFQData?.brand?.company}</span></td>
+        <td className='w-2/3 p-4 px-6 text-lg'><span className='capitalize'>{RFQData?.brand?.company || "N/A"}</span></td>
          
         </tr>
         <tr className='border-b-1 border-zinc-200'>
         <th  className='bg-slate-100 border-b-1 border-zinc-200 w-1/3 p-4 px-6 font-semibold text-lg text-start'>Delivery Location</th>
-        <td className='w-2/3 p-4 px-6 text-lg'>{RFQData?.DeliveryLocation}</td>
+        <td className='w-2/3 p-4 px-6 text-lg'>{RFQData?.DeliveryLocation || "N/A"}</td>
          
         </tr>
         <tr className='border-b-1 border-zinc-200'>
         <th  className='bg-slate-100 border-b-1 border-zinc-200 w-1/3 p-4 px-6 font-semibold text-lg text-start'>Pin Code</th>
-        <td className='w-2/3 p-4 px-6 text-lg'>{RFQData?.pinCode}</td>
+        <td className='w-2/3 p-4 px-6 text-lg'>{RFQData?.pinCode || "N/A"}</td>
          
         </tr>
         <tr className='border-b-1 border-zinc-200'>
         <th  className='bg-slate-100 border-b-1 border-zinc-200 w-1/3 p-4 px-6 font-semibold text-lg text-start'>Message</th>
-        <td className='w-2/3 p-4 px-6 text-lg'>{RFQData?.comments}</td>
+        <td className='w-2/3 p-4 px-6 text-lg'>{RFQData?.comments || "N/A"}</td>
          
         </tr>
         <tr className='border-b-1 border-zinc-200'>
@@ -79,7 +80,7 @@ const RFQDetailTable = () => {
         </tr>
         <tr className='border-b-1 border-zinc-200'>
         <th  className='bg-slate-100 border-b-1 border-zinc-200 w-1/3 p-4 px-6 font-semibold text-lg text-start'>Created At</th>
-        <td className='w-2/3 p-4 px-6 text-lg '><span className='py-1 px-4 rounded-lg bg-orange-500 text-sm text-white'>{new Date(RFQData.createdAt).toLocaleDateString()}</span></td>
+        <td className='w-2/3 p-4 px-6 text-lg '><span className='py-1 px-4 rounded-lg bg-orange-500 text-sm text-white'>{new Date(RFQData.createdAt).toLocaleDateString() || "N/A"}</span></td>
          
         </tr>
         </tbody>
@@ -91,8 +92,8 @@ const RFQDetailTable = () => {
                     
                     <tr className='bg-slate-100 border-b-1 border-zinc-200'>
                         <th className='p-4 text-start'> S.No.</th>
-                        <th className='p-4 text-start border-l-1 border-zinc-200'>Quantity ({RFQData?.measurement})</th>
-                        <th className='p-4 text-start border-l-1 border-zinc-200'>Delivery Date ({RFQData?.deliverySchedule})</th>
+                        <th className='p-4 text-start border-l-1 border-zinc-200'>Quantity ({RFQData?.measurement || "N/A"})</th>
+                        <th className='p-4 text-start border-l-1 border-zinc-200'>Delivery Date ({RFQData?.deliverySchedule || "N/A"})</th>
                         <th className='p-4 text-start border-l-1 border-zinc-200'> Delivery Location </th>
                     </tr>
                     
@@ -131,7 +132,10 @@ const RFQDetailTable = () => {
             </thead> */}
         </table>
         </div>
-        <div className='flex justify-end items-center '>
+        <div className='flex justify-end items-center gap-3'>
+            <Link to={`/admin/rfq-list/update-rfq/${RFQData?._id}`} className='capitalize font-medium text-lg text-white bg-emerald-600 py-2 px-8 cursor-pointer rounded-md flex gap-2 items-center'>
+              <MdEdit className='text-xl'/> Edit
+            </Link>
             <button className='capitalize font-medium text-lg text-white bg-black py-2 px-8 cursor-pointer rounded-md' onClick={()=>navigate(-1)}>
                 Back
             </button>

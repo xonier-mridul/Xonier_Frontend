@@ -10,7 +10,7 @@ const NewBRFQ = () => {
           const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}assigned/getbysupplier`, {withCredentials: true});
           if(response.status === 200){
             setAssignedBRFQData(response?.data?.assignBRFQ);
-            console.log(response?.data?.assignBRFQ);
+            
           }
         } catch (error) {
           console.error(error)

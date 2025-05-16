@@ -9,13 +9,17 @@ import { MdEdit } from "react-icons/md";
 const RFQListTable = ({ rfqData, setRfqData, totalPages }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [buyerUser, setBuyerUser] = useState([]);
-  const [rfqFilterData, setRfqFilterData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedBuyer, setSelectedBuyer] = useState("all");
+  const [selectedProcess, setSelectedProcess] = useState('all')
   const navigate = useNavigate();
 
+  // Fetch buyers
   const getBuyerUsers = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}user/buyer`
+        `${import.meta.env.VITE_SERVER_URL}user/buyer`,
+        { withCredentials: true }
       );
       if (response.status === 200) {
         setBuyerUser(response.data?.user || []);
@@ -26,9 +30,32 @@ const RFQListTable = ({ rfqData, setRfqData, totalPages }) => {
   };
 
   useEffect(() => {
-    setRfqFilterData(rfqData);
     getBuyerUsers();
-  }, [rfqData]);
+  }, []);
+
+  
+  const getFilteredData = () => {
+    return rfqData.filter((item) => {
+      const matchesBuyer =
+        selectedBuyer === "all" || item.createdBy?._id === selectedBuyer;
+
+      const matchesProcess =
+        selectedProcess === "all" || item.process === selectedProcess;
+
+      const matchesSearch = `${item._id} ${item.createdBy?.name} ${item.product} ${item.process} ${item.DeliveryLocation}`
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+
+      return matchesBuyer && matchesSearch && matchesProcess;
+    });
+  };
+
+  const handleBuyerFilter = (e) => {
+    setSelectedBuyer(e.target.value);
+  };
+  const handleProcessFilter = (e) => {
+    setSelectedProcess(e.target.value);
+  };
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
@@ -36,31 +63,24 @@ const RFQListTable = ({ rfqData, setRfqData, totalPages }) => {
     }
   };
 
-  const handleChange = (e) => {
-    const id = e.target.value;
-    if (id === "all") {
-      setRfqFilterData(rfqData);
-    } else {
-      const filtered = rfqData.filter(
-        (item) => item.createdBy?._id === id
-      );
-      setRfqFilterData(filtered);
-    }
-  };
+  const filteredData = getFilteredData();
 
   return (
-    <div className="bg-white rounded-4xl border-orange-500 border-2 p-8">
+    <div className="bg-white rounded-4xl border-emerald-500 border-2 p-8">
       <div className="mb-5 flex items-center gap-6">
         <input
           type="text"
           placeholder="Search..."
           className="w-60 p-2 border-1 border-[#f2f2f2] rounded-lg outline-none bg-slate-100"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
         <select
           name="buyer"
           id="buyer"
           className="w-60 p-2 border-1 border-[#f2f2f2] rounded-lg outline-none capitalize"
-          onChange={handleChange}
+          value={selectedBuyer}
+          onChange={handleBuyerFilter}
         >
           <option value="all">All Buyers</option>
           {buyerUser.map((item) => (
@@ -69,6 +89,19 @@ const RFQListTable = ({ rfqData, setRfqData, totalPages }) => {
             </option>
           ))}
         </select>
+
+        <select 
+        name="process"
+        id="process"
+        className="w-60 p-2 border-1 border-[#f2f2f2] rounded-lg outline-none capitalize"
+        value={selectedProcess}
+        onChange={handleProcessFilter}
+        > 
+        <option value="all">All RFQ's</option>
+        <option value="created by buyer">New</option>
+        <option value="approved by buyer">Approved</option>
+        <option value="denied by buyer"> Rejected </option>
+        </select>
       </div>
 
       <table className="w-full border-[1px] border-[#eff2f5]">
@@ -76,42 +109,36 @@ const RFQListTable = ({ rfqData, setRfqData, totalPages }) => {
           <tr className="bg-slate-100">
             <th className="p-4 text-start border-l border-neutral-200">RFQ ID</th>
             <th className="p-4 text-start border-l border-neutral-200">Buyer Name</th>
-            <th className="p-4 text-start border-l border-neutral-200">Product Category</th>
-            <th className="p-4 text-start border-l border-neutral-200">Quantity</th>
+            <th className="p-4 text-start border-l border-neutral-200">Product </th>
+            <th className="p-4 text-start border-l border-neutral-200">Process</th>
             <th className="p-4 text-start border-l border-neutral-200">Delivery Location</th>
-            <th className="p-4 text-start border-l border-neutral-200">Delivery Date</th>
-            <th className="p-4 text-start border-l border-neutral-200">Status</th>
             <th className="p-4 text-start border-l border-neutral-200">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {rfqFilterData?.map((item) => {
-            const deliveryDate = new Date(item?.toDate).toLocaleDateString();
-
-            
-
+          {filteredData?.map((item) => {
             return (
               <tr
                 key={item._id}
                 className="border-b-[1px] border-l-1 border-zinc-200"
               >
-                <td className="p-4 border-l-1 border-neutral-200">{item?._id}</td>
+                <td className="p-4 border-l-1 border-neutral-200 text-sm">{item?._id}</td>
                 <td className="p-4 border-l-1 border-neutral-200 capitalize">{item.createdBy?.name}</td>
                 <td className="p-4 border-l-1 border-neutral-200 capitalize">{item?.product}</td>
-                <td className="p-4 border-l-1 border-neutral-200">{item?.quantity}</td>
-                <td className="p-4 border-l-1 border-neutral-200">{item?.DeliveryLocation}</td>
-                <td className="p-4 border-l-1 border-neutral-200">{deliveryDate}</td>
-                <td className="p-4 border-l-1 border-neutral-200">
+                <td className="p-4 border-l-1 border-neutral-200 capitalize">
                   <span
                     className={`${
-                      item?.status === true
-                        ? "bg-green-500"
-                        : "bg-red-500"
-                    } text-sm py-1 px-4 rounded-lg text-white`}
+                      item.process === "updated by admin" && "bg-orange-500 text-white"
+                    } ${
+                      item.process === "denied by buyer" && "bg-red-500 text-white"
+                    } ${
+                      item.process === "approved by buyer" && "bg-green-500 text-white"
+                    } bg-blue-400 text-white px-3 py-1 rounded-md capitalize text-sm text-nowrap`}
                   >
-                    {item?.status === true ? "Approved" : "Pending"}
+                    {item?.process}
                   </span>
                 </td>
+                <td className="p-4 border-l-1 border-neutral-200">{item?.DeliveryLocation}</td>
                 <td className="p-4 border-l border-neutral-200">
                   <div className="flex items-center gap-4">
                     <button
@@ -136,7 +163,7 @@ const RFQListTable = ({ rfqData, setRfqData, totalPages }) => {
 
       <div className="flex justify-end items-center p-6">
         <div className="flex items-center gap-4">
-          <span className="cursor-pointer">
+          <span className="cursor-pointer" onClick={() => handlePageChange(currentPage - 1)}>
             <FaChevronLeft />
           </span>
           {[...Array(totalPages)].map((_, index) => (
@@ -144,13 +171,13 @@ const RFQListTable = ({ rfqData, setRfqData, totalPages }) => {
               key={index + 1}
               onClick={() => handlePageChange(index + 1)}
               className={`${
-                currentPage === index + 1 ? "bg-orange-500 text-white" : ""
+                currentPage === index + 1 ? "bg-emerald-600 text-white" : ""
               } h-9 w-9 rounded-lg flex items-center justify-center cursor-pointer`}
             >
               {index + 1}
             </button>
           ))}
-          <span className="cursor-pointer">
+          <span className="cursor-pointer" onClick={() => handlePageChange(currentPage + 1)}>
             <FaChevronRight />
           </span>
         </div>

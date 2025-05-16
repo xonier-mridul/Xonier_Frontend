@@ -74,9 +74,10 @@ const SupplierAdminHeader = () => {
               </motion.div>
              </div>
              <div className='flex items-center gap-4 relative cursor-pointer' onMouseEnter={()=>setShowProfileTab(true)} onMouseLeave={()=>setShowProfileTab(false)}>
-                <span className='h-10 w-10 rounded-lg overflow-hidden'>
-                  <img className='w-full object-cover' src={AdminImg} alt="" />
-                </span>
+                <div className='h-10 w-10 rounded-lg relative'>
+                                  <img className='w-full object-cover rounded-lg' src={AdminImg} alt="" />
+                                  {userData?.isActive && <span className='h-2.5 w-2.5 rounded-full bg-green-500 absolute z-50 bottom-0 right-0'></span>}
+                                </div>
                  <h3 className='text-lg font-bold capitalize'> {userData.name} </h3>
                  <motion.ul
                  animate={showProfileTab ? {opacity: 1, y: 0, display: "block"} : {opacity: 0, y: 10, display: "none" }}

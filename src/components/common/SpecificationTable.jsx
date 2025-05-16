@@ -26,8 +26,7 @@ const SpecificationTable = () => {
   const isMounted = useRef(true);
   const isMount = useRef(true);
 
-  const length = specificationData.length;
-
+  
   // Handle Change
 
   const handleChange = (e) => {
@@ -35,57 +34,57 @@ const SpecificationTable = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  // Get Category Data
+  let filteredData = specificationData.filter((item=>
+    `${item._id} ${item.category.category} ${item.name}`.toLowerCase().includes(searchTerm.toLowerCase())
+))
+
+const handleCategoryFilter = (e)=>{
+  setSpecificationData( specificationData.filter(item=>item.category?._id === e.target.value));
+ 
+}
+
+const length = filteredData.length;
+
+
+  // Get Category Data or Specification Data
+  const getCategory = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}category`
+      );
+
+      if (response.status === 200 && isMount.current)
+        return setCategoryData(response.data);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+
+
+  const getSpecification = async () => {
+    try {
+      const response = await axios.get(
+        `${
+          import.meta.env.VITE_SERVER_URL
+        }specification/paginate?page=${currentPage}`
+      );
+      if (response.status === 200 && isMounted.current) {
+        setTotalPages(response.data.totalPages);
+        setSpecificationData(response.data.response);
+        console.log(response.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    isMount.current = true;
-
-    const getCategory = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_SERVER_URL}category`
-        );
-
-        if (response.status === 200 && isMount.current)
-          return setCategoryData(response.data);
-      } catch (error) {
-        console.error(error.message);
-      }
-    };
-    getCategory();
-
-    return () => {
-      isMount.current = false;
-    };
-  }, []);
-
-  // Get Specification Data
-
-  useEffect(() => {
-    isMounted.current = true;
-
-    const getSpecification = async () => {
-      try {
-        const response = await axios.get(
-          `${
-            import.meta.env.VITE_SERVER_URL
-          }specification/paginate?page=${currentPage}`
-        );
-        if (response.status === 200 && isMounted.current) {
-          setTotalPages(response.data.totalPages);
-          setSpecificationData(response.data.response);
-          console.log(response.data);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  
     getSpecification();
-
-    return () => {
-      isMounted.current = false;
-    };
-  }, [currentPage, specificationData]);
+    getCategory();
+    
+  }, [currentPage]);
 
   // Handle Submit
 
@@ -98,6 +97,7 @@ const SpecificationTable = () => {
       );
 
       if (response.status === 201) {
+        getSpecification();
         setFormData({
           name: "",
           category: "",
@@ -204,6 +204,7 @@ const SpecificationTable = () => {
       );
 
       if (response.status === 200) {
+        getSpecification();
         setUpdatedId(null);
         setFormData({
           name: "",
@@ -390,8 +391,11 @@ const SpecificationTable = () => {
         </div>
       )}
 
-      <div className="bg-white border-2 border-orange-500 rounded-4xl p-8 m-5">
+      <div className="bg-white border-2 border-emerald-600 rounded-4xl p-8 m-5">
         <div className="mb-5 flex justify-between items-center">
+          <div className="flex items-center gap-4">
+
+         
           <input
             type="text"
             placeholder="Search..."
@@ -399,9 +403,18 @@ const SpecificationTable = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+
+          <select name="selectCategory" id="selectCategory" className="w-full border-1 border-zinc-200 outline-none py-2 px-3 rounded-lg" onChange={handleCategoryFilter}>
+            <option value="" hidden >Filter with Category</option>
+            {categoryData?.map(item=>(
+              <option value={item._id}>{item.category}</option>
+            ))}
+          </select>
+
+          </div>
           <button
             type="button"
-            className=" rounded-lg bg-slate-900 px-6 py-3 text-white  justify-center disabled:bg-green-400 cursor-pointer"
+            className=" rounded-lg bg-emerald-600 px-6 py-3 text-white  justify-center disabled:bg-green-400 cursor-pointer"
             onClick={() => setShowModal(true)}
           >
             {" "}
@@ -422,7 +435,7 @@ const SpecificationTable = () => {
           </thead>
           <tbody>
             {length > 0 ? (
-              specificationData.map((item, index) => (
+              filteredData.map((item, index) => (
                 <tr
                   className="border-b-[1px] border-l-1 border-zinc-200"
                   key={item._id}
@@ -476,7 +489,7 @@ const SpecificationTable = () => {
                 key={index + 1}
                 onClick={() => handlePageChange(index + 1)}
                 className={` ${
-                  currentPage === index + 1 ? "bg-orange-500 text-white" : ""
+                  currentPage === index + 1 ? "bg-emerald-600 text-white" : ""
                 } h-9 w-9 rounded-lg flex items-center justify-center cursor-pointer `}
               >
                 {index + 1}

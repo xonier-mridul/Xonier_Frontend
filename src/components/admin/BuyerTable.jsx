@@ -20,8 +20,8 @@ const BuyerTable = () => {
           try {
             
             const buyer = await axios.get(
-              `${import.meta.env.VITE_SERVER_URL}user/buyer`
-      
+              `${import.meta.env.VITE_SERVER_URL}user/buyer`,
+               {withCredentials: true}
             );
             if (buyer.status === 200) {
               setSupplierData(buyer.data.user);
@@ -41,7 +41,7 @@ const BuyerTable = () => {
     const length = filteredData.length
   return (
     <>
-    <div className="bg-white border-orange-500 border-2 rounded-4xl p-8 m-5">
+    <div className="bg-white border-emerald-500 border-2 rounded-4xl p-8 m-5">
     <div className="mb-5">
           <input
             type="text"

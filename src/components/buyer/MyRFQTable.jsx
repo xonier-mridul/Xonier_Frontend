@@ -16,6 +16,7 @@ const MyRFQTable = () => {
   const [rfq, setRFQ] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+   const [searchTerm, setSearchTerm] = useState("")
   const navigate = useNavigate();
 
   const getRFQ = async () => {
@@ -36,6 +37,10 @@ const MyRFQTable = () => {
   useEffect(() => {
     getRFQ();
   }, [currentPage]);
+
+  const filteredData = rfq.filter((item=>
+    `${item._id} ${item.company} ${item.process} ${new Date(item.createdAt).toLocaleDateString()} ${new Date(item.updatedAt).toLocaleDateString()} ${(item.status.toString())}`.toLowerCase().includes(searchTerm.toLowerCase())
+))
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
@@ -68,7 +73,7 @@ const MyRFQTable = () => {
       }
     } catch (error) {
       console.error(error);
-      toast.error("RFQ deleted successfully", {
+      toast.error(`${error.response.data.message}`, {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -86,14 +91,14 @@ const MyRFQTable = () => {
   return (
     <>
       <ToastContainer />
-      <div className="bg-white shadow-lg rounded-2xl m-5 border-2 border-orange-500">
+      <div className="bg-white shadow-lg rounded-2xl m-5 border-2 border-emerald-500">
         <div className="mb-5 flex justify-between items-center px-8 py-6 border-b-1 border-gray-300">
           <input
             type="text"
             placeholder="Search..."
             className="w-60 p-3 border-1 border-[#f2f2f2] rounded-lg outline-none bg-slate-100"
-            //   value={searchTerm}
-            //   onChange={(e) => setSearchTerm(e.target.value)}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         <div className="p-4 px-7">
@@ -119,7 +124,7 @@ const MyRFQTable = () => {
               </tr>
             </thead>
             <tbody>
-              {rfq.length > 0 ?  rfq?.map((rfq) => {
+              {filteredData.length > 0 ?  filteredData?.map((rfq) => {
               let Create =  new Date(rfq.createdAt).toLocaleDateString('en-GB');
               let Update = new Date(rfq.updatedAt).toLocaleDateString('en-GB')
               
@@ -190,7 +195,7 @@ const MyRFQTable = () => {
                 key={index + 1}
                 onClick={() => handlePageChange(index + 1)}
                 className={` ${
-                  currentPage === index + 1 ? "bg-orange-500 text-white" : ""
+                  currentPage === index + 1 ? "bg-emerald-500 text-white" : ""
                 } h-9 w-9 rounded-lg flex items-center justify-center cursor-pointer `}>
                 {index + 1}
               </button>

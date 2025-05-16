@@ -25,16 +25,16 @@ import SupplierRegister from "./pages/SupplierRegister.jsx";
 import GetAQuote from "./pages/GetaQuote.jsx";
 import SupplierTable from "./components/admin/SupplierTable.jsx";
 import BuyerTable from "./components/admin/BuyerTable.jsx";
-import Category from "./pages/admin/Category.jsx";
-import SubCategory from "./pages/admin/SubCategory.jsx";
-import Catalog from "./pages/admin/Catalog.jsx";
+import Category from "./pages/Common/Category.jsx";
+import SubCategory from "./pages/Common/SubCategory.jsx";
+import Catalog from "./pages/Common/Catalog.jsx";
 import Inquiry from "./pages/admin/Inquiry.jsx";
 import Specification from "./pages/admin/Specification.jsx";
 import ProductList from "./pages/admin/ProductList.jsx";
 import ProductView from "./pages/admin/ProductView.jsx";
 import ProductListOutlet from "./pages/admin/ProductListOutlet.jsx";
-import ProductEditPage from "./components/admin/ProductEditPage.jsx";
-import ProductEdit from "./pages/admin/ProductEdit.jsx";
+import ProductEditPage from "./components/common/ProductEditPage.jsx";
+import ProductEdit from "./pages/Common/ProductEdit.jsx";
 import ContactUs from "./pages/admin/ContactUs.jsx";
 import BuyerAdmin from "./pages/Buyer-admin/BuyerAdmin.jsx";
 import BuyerDashboard from "./pages/Buyer-admin/BuyerDashboard.jsx";
@@ -67,6 +67,36 @@ import VerifyOTP from "./components/VerifyOTP.jsx";
 import SupplierProfile from "./pages/Supplier-admin/SupplierProfile.jsx";
 import SupplierProfileOutlet from "./pages/Supplier-admin/SupplierProfileOutlet.jsx";
 import SupplierProfileUpdate from "./pages/Supplier-admin/SupplierProfileUpdate.jsx";
+import ChangePassword from "./pages/Common/ChangePassword.jsx";
+import ProductListsForSupplierOutlet from "./pages/Common/ProductListsForSupplierOutlet.jsx";
+import ProductListForSupplier from "./pages/Common/ProductListForSupplier.jsx";
+import ProductViewPage from "./pages/Supplier-admin/ProductViewPage.jsx";
+import MyQuotation from "./pages/Supplier-admin/MyQuotation.jsx";
+import VRFQOutlet from "./components/admin/VRFQOutlet.jsx";
+import VRFQPage from "./pages/admin/VRFQPage.jsx";
+import VRFQDetailPage from "./pages/admin/VRFQDetailPage.jsx";
+import BRFQDetail from "./pages/admin/BRFQDetail.jsx";
+import OrderDetail from "./pages/Common/OrderDetail.jsx";
+import NewOrderOutlet from "./components/admin/NewOrderOutlet.jsx";
+import Order from "./pages/Supplier-admin/Order.jsx";
+import UpdateTracking from "./pages/Common/UpdateTracking.jsx";
+import BuyerOrder from "./pages/Buyer-admin/BuyerOrder.jsx";
+import CompareQuotation from "./pages/admin/CompareQuotation.jsx";
+import QuotationDetail from "./pages/Supplier-admin/QuotationDetail.jsx";
+import BuyerOrderHistory from "./pages/Buyer-admin/BuyerOrderHistory.jsx";
+import SupplierOrderHistory from "./pages/Supplier-admin/SupplierOrderHistory.jsx";
+import QuotationEdit from "./pages/Supplier-admin/QuotationEdit.jsx";
+import ApprovedRFQ from "./pages/admin/ApprovedRFQ.jsx";
+import CommonOutlet from "./pages/Common/CommonOutlet.jsx";
+import BuyerProfile from "./pages/Buyer-admin/BuyerProfile.jsx";
+import BuyerProfileUpdate from "./pages/Buyer-admin/BuyerProfileUpdate.jsx";
+import AdminProfileUpdate from "./pages/admin/AdminProfileUpdate.jsx";
+import ForgotPassword from "./pages/ForgotPassword.jsx";
+import PasswordVerifyOTP from "./components/PasswordVerifyOtp.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
+import About from "./pages/About.jsx";
+
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -78,14 +108,32 @@ const router = createBrowserRouter(
         <Route path="/supplier" element={<Supplier />} />
         <Route path="/buyer-register" element={<BuyerRegister />} />
         <Route path="/supplier-register" element={<SupplierRegister />} />
+        <Route path="/about" element={<About/>} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/quote" element={<GetAQuote />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<LogIn />} />
         <Route path="verify-otp" element={<VerifyOTP/>} />
+        <Route path="/forget-password" element={<CommonOutlet/>}>
+           <Route index element={<ForgotPassword/>}/> 
+           <Route path="verify-otp" element={<PasswordVerifyOTP/>} />
+        </Route>
+        
       </Route>
+        <Route path="/reset-password" element={
+          <ProtectedRoute allowedRoles={["admin", "buyer", "supplier"]}>
+          <ResetPassword/>
+          </ProtectedRoute>} />
+
+      
+        
+      
+
+
+      
 
       {/* Admin Panel with Nested Routes */}
+
 
       <Route
         path="/admin"
@@ -96,7 +144,10 @@ const router = createBrowserRouter(
         }
       >
         <Route index element={<Dashboard />} />
-        <Route path="profile" element={<Profile/>} />
+        <Route path="profile" element={<CommonOutlet/>} >
+          <Route index element={<Profile/>} />
+          <Route path="update" element={<AdminProfileUpdate/>}/>
+        </Route>
         <Route path="suppliers" element={<SupplierTable />} />
         <Route path="buyer" element={<BuyerTable />} />
         <Route path="category" element={<Category />} />
@@ -110,18 +161,34 @@ const router = createBrowserRouter(
           <Route path="rfq-detail/:id" element={<RFQDetailTable />} />
           <Route path="update-rfq/:id" element={<UpdateRFQ />} />
         </Route>
+        <Route path="approved-rfq" element={<RFQListOutlet/>}>
+          <Route index element={<ApprovedRFQ/>} />
+        </Route>
         <Route path="brfq" element={<BRFQOutlet/>}>
           <Route index element={<BRFQ/>} />
           <Route path="assign/:id" element={<Assign/>} />
-
+          <Route path="detail/:id" element={<BRFQDetail/>} />
+        </Route>
+        <Route path="vrfq" element={<VRFQOutlet/>}>
+           <Route index element={<VRFQPage/>} />
+           <Route path="vrfq-detail/:id" element={<VRFQDetailPage/>} />
+           <Route path="compare-quotation" element={<CompareQuotation/>}/>
         </Route>
         <Route path="product-list" element={<ProductListOutlet />}>
           <Route index element={<ProductList />} />
           <Route path="product-view/:id" element={<ProductView />} />
           <Route path="product-edit/:id" element={<ProductEdit />} />
         </Route>
-        <Route path="new-order" element={<NewOrder />} />
-        <Route path="order-history" element={<OrderHistory />} />
+        <Route path="order" element={<NewOrderOutlet />} >
+         <Route index element={<NewOrder/>}/>
+         <Route path="order-detail/:id" element={<OrderDetail/>} />
+        </Route>
+        <Route path="order-history" element={<NewOrderOutlet />} >
+          <Route index element={<OrderHistory/>} />
+          <Route path="order-detail/:id" element={<OrderDetail/>} />
+        </Route>
+        <Route path="change-password" element={<ChangePassword/>}/>
+        
       </Route>
 
       {/* Buyer admin Panel with nested routes */}
@@ -141,6 +208,19 @@ const router = createBrowserRouter(
           <Route path="rfq-history/:id" element={<RFQHistory />} />
           <Route path="rfq-detail/:id" element={<RFQDetail/>}/>
         </Route>
+        <Route path="order" element={<NewOrderOutlet/>}>
+           <Route index element={<BuyerOrder/>}/>
+        </Route>
+        <Route path="order-history" element={<NewOrderOutlet/>}>
+           <Route index element={<BuyerOrderHistory/>}/>
+           <Route path="order-detail/:id" element={<OrderDetail/>} />
+
+        </Route>
+        <Route path="profile" element={<CommonOutlet/>}>
+           <Route index element={<BuyerProfile/>}/>
+           <Route path="update" element={<BuyerProfileUpdate/>} />
+        </Route>
+        <Route path="change-password" element={<ChangePassword/>} />
       </Route>
 
 
@@ -152,6 +232,20 @@ const router = createBrowserRouter(
         </ProtectedRoute>
       }>
         <Route index element={<SupplierDashboard/>} />
+        <Route path="my-quotation" element={<NewOrderOutlet/>}>
+           <Route index element={<MyQuotation/>} />
+           <Route path="quotation-detail/:id" element={<QuotationDetail/>} />
+           <Route path="quotation-edit/:id" element={<QuotationEdit/>}/>
+        </Route>
+        <Route path="category" element={<Category/>}/>
+        <Route path="sub-category" element={<SubCategory/>} />
+        <Route path="specification" element={<Specification/>} />
+        <Route path="catalog" element={<Catalog/>} />
+        <Route path="product-list" element={<ProductListsForSupplierOutlet/>}>
+          <Route index element={<ProductListForSupplier/>} />
+          <Route path="product-view/:id" element={<ProductViewPage/>} />
+          <Route path="product-edit/:id" element={<ProductEdit/>} />
+        </Route>
         <Route path="brfq" element={<NewBRFQOutlet/>}>
            <Route index element={<NewBRFQ/>}/>
            <Route path="detail/:id" element={<AssignedBRFQ/>}/>
@@ -162,6 +256,18 @@ const router = createBrowserRouter(
            <Route index element={<SupplierProfile/>}/>
            <Route path="update" element={<SupplierProfileUpdate/>}/>
           </Route>
+          <Route path="change-password" element={<ChangePassword/>}/>
+          <Route path="order" element={<NewOrderOutlet/>}>
+            <Route index element={<Order/>} />
+            <Route path="order-detail/:id" element={<OrderDetail/>} />
+            <Route path="order-update/:id" element={<UpdateTracking/>} />
+          </Route>
+          <Route path="order-history" element={<NewOrderOutlet/>}>
+             <Route index element={<SupplierOrderHistory/>} />
+             <Route path="order-detail/:id" element={<OrderDetail/>} />
+
+          </Route>
+          
       </Route>
     </>
   )

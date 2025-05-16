@@ -15,7 +15,7 @@ const BuyerMonitor = () => {
     <>
       <div className="w-full  rounded-xl">
       <div className="grid grid-cols-4 gap-6">
-        <div ref={ref} className="bg-white flex-col items-center justify-center rounded-4xl border-orange-500 border-2 overflow-hidden p-9 py-7 flex gap-2">
+        <div ref={ref} className="bg-white flex-col items-center justify-center rounded-4xl border-emerald-500 border-2 overflow-hidden p-9 py-7 flex gap-2">
           <h3 className="text-xl font-bold uppercase flex justify-start w-full">My Orders</h3>
           <div className="flex gap-2 flex-col justify-center items-end w-full">
             <h3 className="para text-lg">Today's Order</h3>
@@ -40,7 +40,7 @@ const BuyerMonitor = () => {
           </div>
               </div>
         </div>
-        <div ref={ref} className="bg-white flex-col items-center justify-center rounded-4xl border-orange-500 border-2 overflow-hidden p-9 py-7 flex gap-2">
+        <div ref={ref} className="bg-white flex-col items-center justify-center rounded-4xl border-emerald-500 border-2 overflow-hidden p-9 py-7 flex gap-2">
           <h3 className="text-xl font-bold uppercase flex justify-start w-full">Cancel Orders</h3>
           <div className="flex gap-2 flex-col justify-center items-end w-full">
             <h3 className="para text-lg capitalize">All cancel order</h3>
@@ -66,7 +66,7 @@ const BuyerMonitor = () => {
           </div>
               </div>
         </div>
-        <div ref={ref} className="bg-white flex-col items-center justify-center rounded-4xl border-orange-500 border-2 overflow-hidden p-9 py-7 flex gap-2">
+        <div ref={ref} className="bg-white flex-col items-center justify-center rounded-4xl border-emerald-500 border-2 overflow-hidden p-9 py-7 flex gap-2">
           <h3 className="text-xl font-bold uppercase flex justify-start w-full">Delivered</h3>
           <div className="flex gap-2 flex-col justify-center items-end w-full">
             <h3 className="para text-lg">All delivered orders</h3>
@@ -91,7 +91,7 @@ const BuyerMonitor = () => {
           </div>
               </div>
         </div>
-        <div ref={ref} className="bg-white flex-col items-center justify-center rounded-4xl border-orange-500 border-2 overflow-hidden p-9 py-7 flex gap-2">
+        <div ref={ref} className="bg-white flex-col items-center justify-center rounded-4xl border-emerald-500 border-2 overflow-hidden p-9 py-7 flex gap-2">
           <h3 className="text-xl font-bold uppercase flex justify-start w-full">Venders </h3>
           <div className="flex gap-2 flex-col justify-center items-end w-full">
             <h3 className="para text-lg capitalize">Total Vendors</h3>

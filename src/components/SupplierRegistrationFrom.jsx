@@ -9,6 +9,8 @@ const SupplierRegistrationFrom = () => {
   const [passwordShow, setPasswordShow] = useState(false);
   const [confirmPasswordShow, setConfirmPasswordShow] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false)
+  
 
   // Navigate
 
@@ -34,6 +36,7 @@ const SupplierRegistrationFrom = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true)
     try {
       if (formData.password !== formData.password) {
         setErrorMessage("Passwords do not match!");
@@ -55,11 +58,16 @@ const SupplierRegistrationFrom = () => {
           password: "",
           cpassword: "",
         });
-        navigate("/verify-otp")
+        localStorage.setItem('emailForVerify', formData.email);
+        navigate("/verify-otp");
+        setErrorMessage("");
       }
     } catch (error) {
-      console.error(error);
-      toast.error(error.response?.data?.message);
+      console.error(error?.response);
+      setErrorMessage(error.response?.data?.message);
+    }
+    finally{
+      setIsLoading(false)
     }
   };
 
@@ -117,6 +125,7 @@ const SupplierRegistrationFrom = () => {
                 placeholder="Company name"
                 value={formData.company}
                 onChange={handleChange}
+                required
               />
             </div>
             <select
@@ -181,7 +190,7 @@ const SupplierRegistrationFrom = () => {
             </div>
             <div className="flex justify-end">
               <button className="py-3 capitalize font-bold flex items-center gap-3 rounded-full px-5 btn-bg text-white cursor-pointer">
-                Submit <FaArrowRight className="text-lg btn-arrow" />
+               {isLoading ? "Submitting..." : "Submit" }<FaArrowRight className="text-lg btn-arrow" />
               </button>
             </div>
           </form>
