@@ -4,7 +4,7 @@ import { FaArrowUpLong } from "react-icons/fa6";
 import Counter from "react-countup";
 import { motion, useInView } from "framer-motion";
 
-const SupplierMonitor = () => {
+const SupplierMonitor = ({orderData, deliveredOrderCount, totalSupplierCount}) => {
 
     const ref = useRef(null);
       const inView = useInView(ref, { threshold: 0.5, triggerOnce: true });
@@ -23,7 +23,7 @@ const SupplierMonitor = () => {
               <sup className="text-lg text-green-400">
                 <FaArrowUpLong />
               </sup>
-              <Counter start={0} end={inView ? 1200 : 0} duration={2} />
+              <Counter start={0} end={inView ? orderData : 0} duration={2} />
             </h2>
           </div>
           
@@ -74,7 +74,7 @@ const SupplierMonitor = () => {
               <sup className="text-lg text-green-400">
                 <FaArrowUpLong />
               </sup>
-              <Counter start={0} end={inView ? 8000 : 0} duration={2} />
+              <Counter start={0} end={inView ? deliveredOrderCount : 0} duration={2} />
             </h2>
           </div>
           
@@ -99,7 +99,7 @@ const SupplierMonitor = () => {
               <sup className="text-lg text-green-400">
                 <FaArrowUpLong />
               </sup>
-              <Counter start={0} end={inView ? 120 : 0} duration={2} />
+              <Counter start={0} end={inView ? totalSupplierCount : 0} duration={2} />
             </h2>
           </div>
           
