@@ -22,7 +22,6 @@ const SupplierAdmin = () => {
   const [logoutPopupShow, setLogoutPopupShow] = useState(false);
   
 
-
    const Navigate = useNavigate();
 
   // Side Menu Start
@@ -153,7 +152,7 @@ const SupplierAdmin = () => {
 
             </ul>
         </div>
-        <div className={`flex-1 ${showSidebar ? "pl-74" :"pl-22"} transition-all duration-300  bg-stone-100 min-h-screen `}>
+        <div className={`flex-1 ${showSidebar ? "pl-74" :"pl-22"} transition-all duration-300  bg-stone-100 min-h-screen w-full`}>
             <SupplierAdminHeader/>
             <Outlet/>
         </div>

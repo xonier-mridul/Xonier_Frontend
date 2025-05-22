@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   AreaChart,
   Area,
@@ -8,24 +8,48 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import moment from "moment"; 
 
-const data = [
-  { month: "Jan", sales: 400 },
-  { month: "Feb", sales: 600 },
-  { month: "Mar", sales: 800 },
-  { month: "Apr", sales: 1200 },
-  { month: "May", sales: 1500 },
-  { month: "Jun", sales: 1700 },
-  { month: "Jul", sales: 1200 },
-  { month: "Aug", sales: 900 },
-];
+const SalesChart = ({ orderData }) => {
+  const [chartData, setChartData] = useState([]);
 
-const SalesChart = () => {
+  useEffect(() => {
+    if (orderData && orderData.length > 0) {
+      const monthlySales = {};
+
+      orderData.forEach((order) => {
+        const spreadData = order.vrfqId?.brfqId?.rfqId?.spreadQuantityData || [];
+        spreadData.forEach((entry) => {
+          const month = moment(entry.fromDate).format("MMM"); 
+          
+          const quantity = entry.quantity || 0;
+
+          if (monthlySales[month]) {
+            monthlySales[month] += quantity;
+          } else {
+            monthlySales[month] = quantity;
+          }
+        });
+      });
+
+      const formattedData = Object.keys(monthlySales).map((month) => ({
+        month,
+        sales: monthlySales[month],
+      }));
+
+     
+      const monthOrder = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      formattedData.sort((a, b) => monthOrder.indexOf(a.month) - monthOrder.indexOf(b.month));
+
+      setChartData(formattedData);
+    }
+  }, [orderData]);
+
   return (
-    <div className="p-6 bg-white rounded-4xl border-emerald-500 border-2 ">
+    <div className="p-6 bg-white rounded-4xl border-emerald-500 border-2">
       <h2 className="text-xl font-semibold mb-4">Sales Overview</h2>
       <ResponsiveContainer width="100%" height={300}>
-        <AreaChart data={data}>
+        <AreaChart data={chartData}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="month" />
           <YAxis />

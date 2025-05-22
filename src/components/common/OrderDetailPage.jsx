@@ -72,7 +72,7 @@ const OrderDetailPage = ({orderData}) => {
                         {orderData?.vrfqId?.TotalPrice.length > 0 ? orderData?.vrfqId?.TotalPrice.map((item,index)=>(
                             < >
                             <tr key={item._id} className='border-b-1 border-stone-200'> 
-                              <td className='p-4 '><span className='capitalize'>{item.product.productName || "N/A"} </span></td>
+                              <td className='p-4 '><span className='capitalize'>{item?.product?.productName || "N/A"} </span></td>
                               <td className='p-4 border-l-1 border-stone-200'><span className='font-medium'>₹{item.pricePerUnit.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || "N/A"}</span> </td>
                               <td className='p-4 border-l-1 border-stone-200'>{item.totalUnit || "N/A"} </td>
                               {/* <td className='p-4 border-l-1 border-stone-200'> <span className='bg-green-50 px-5 py-2 text-sm text-green-500'>{item.gst || "N/A"} </span> </td> */}

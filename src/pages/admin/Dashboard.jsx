@@ -42,7 +42,7 @@ const Dashboard = () => {
      <>
      <div className='p-5 flex flex-col gap-5'>      
         <MainMoniter userQuantityData={userCount} orderCount={orderCount}/>
-        <Sales/>
+        <Sales orderCount={orderCount}/>
         <DashboardRowThree/>
         <QuoteTable/>
      </div>

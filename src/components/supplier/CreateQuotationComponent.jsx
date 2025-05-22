@@ -9,6 +9,8 @@ const CreateQuotationComponent = () => {
   const [error, setError] = useState("");
   const [userData, setUserData] = useState({});
   const [productData, setProductData] = useState([]);
+  const [productPrise, setProductPrise] = useState(null)
+  const [showPrisePopup, setShowPrisePopup] = useState(false)
   const [formData, setFormData] = useState({
     additionalComment: "",
     spreadQuantityData: [],
@@ -73,7 +75,7 @@ const CreateQuotationComponent = () => {
     );
 
     const totalUnit = assignedBRFQ?.brfqId?.rfqId?.quantity || 0;
-    const pricePerUnit = Number(filteredProduct?.finalPrice || 0);
+    const pricePerUnit = Number(productPrise) || Number(filteredProduct?.finalPrice );
     const total = pricePerUnit * totalUnit;
     const gst = total * 0.18; 
     const finalPrice = total + gst;
@@ -83,13 +85,18 @@ const CreateQuotationComponent = () => {
       price: [{
         pricePerUnit,
         totalUnit,
-        product: filteredProduct?._id || "",
+        product: filteredProduct?._id || null,
         total,
         gst,
         finalPrice
       }]
     }));
   };
+
+  useEffect(() => {
+    calculatePrice()
+  }, [productPrise])
+  
 
   const getProducts = async () => {
     try {
@@ -131,6 +138,8 @@ const CreateQuotationComponent = () => {
     }
   }, [assignedBRFQ, productData]);
 
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -170,6 +179,18 @@ const CreateQuotationComponent = () => {
 
   return (
     <>
+    {showPrisePopup && <div className="w-full h-full fixed top-0 left-0 z-40 backdrop-blur-xs" onClick={()=>setShowPrisePopup(false)}></div>}
+    {showPrisePopup && <div className="w-[650px] fixed flex flex-col gap-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg p-6 z-99 shadow-lg">
+       <h2 className="text-2xl font-semibold">Customize Product Prize</h2>
+       <div className="flex flex-col gap-2">
+        <label htmlFor="price"> Set Prize </label>
+        <div className="w-full border-1 border-zinc-200  rounded-lg flex items-center gap- overflow-hidden"><span className="py-2 px-4 bg-stone-100 text-xl">₹</span><input type="number" className="w-full outline-none p-2.5" value={productPrise} onChange={(e)=>setProductPrise(e.target.value)} placeholder="Edit prise" /></div>
+
+       </div>
+       <div className="flex justify-end">
+            <button className="bg-emerald-600 text-white px-6 py-2.5 rounded-lg w-fit cursor-pointer hover:scale-105 transition-all duration-300"  onClick={()=>setShowPrisePopup(false)}>Okay</button>
+       </div>
+    </div>}
       <ToastContainer />
       <div className="flex w-full items-center gap-5">
         <div className="w-1/2 bg-white rounded-4xl flex flex-col gap-6 border-emerald-500 border-2 px-4 py-3">
@@ -295,7 +316,10 @@ const CreateQuotationComponent = () => {
           </form>
           {/* PRICE TABLE */}
 
-          <div className="w-full">
+          <div className="w-full flex flex-col gap-4">
+            <div className="flex justify-end items-center">
+               <button className="bg-emerald-600 text-white px-6 py-2.5 rounded-lg w-fit cursor-pointer hover:scale-105 transition-all duration-300" onClick={()=>setShowPrisePopup(true)}> Edit Prise </button>
+            </div>
             <table className="w-full border-1 border-stone-200">
               <thead>
                 <tr className="bg-slate-100 border-b-1 border-stone-200">

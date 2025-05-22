@@ -11,6 +11,7 @@ import { MdEdit } from "react-icons/md";
 
 const ApprovedRFQTable = ({ rfqData }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
   const getFilteredData = () => {
     return rfqData.filter((item) => {

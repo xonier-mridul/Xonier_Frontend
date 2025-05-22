@@ -119,18 +119,44 @@ const RFQDetailTable = () => {
             </table>
 
         </div>
-        <div className='flex flex-col gap-5'>
-        <h2 className='font-semibold text-2xl'>Specification Data</h2>
-        <table className='w-full border-[1px] border-zinc-200'>
-            {/* <thead>
-                {Object.keys(RFQData?.document[0])?.map((item, i)=>(
+         <div className="flex flex-col gap-5 overflow-x-scroll">
+          <h2 className="font-semibold text-2xl">Specification Data</h2>
+          <table className="w-full border border-zinc-200 overflow-x-scroll">
+            <thead>
+              <tr className="bg-slate-100 border-b border-zinc-200">
+                <th className="p-4 border-zinc-200 border text-start w-20 text-nowrap">S No</th>
+                <th className="p-4 border-zinc-200 border text-start">
+                  Parameter
+                </th>
 
-                <tr className='bg-slate-100 border-b-1 border-zinc-200' key={item._id}>
-                   <th>{item}</th>
+                {RFQData?.document?.[0] &&
+                  Object.keys(RFQData.document[0].values).map((variant) => (
+                    <th
+                      key={variant}
+                      className="p-4 border-zinc-200 border text-start text-nowrap"
+                    >
+                      {variant}
+                    </th>
+                  ))}
+              </tr>
+            </thead>
+            <tbody>
+              {RFQData?.document?.map((item) => (
+                <tr key={item._id} className="border-b border-zinc-200 ">
+                  <td className="p-4 border-zinc-200 border font-semibold ">{item.S_No}</td>
+                  <td className="p-4 border-zinc-200 border font-semibold text-nowrap">
+                    {item.Key_parameter}
+                  </td>
+                  {item.values &&
+                    Object?.values(item?.values).map((val, idx) => (
+                      <td key={idx} className="p-4 border-zinc-200 border">
+                        {val}
+                      </td>
+                    ))}
                 </tr>
-                ))}
-            </thead> */}
-        </table>
+              ))}
+            </tbody>
+          </table>
         </div>
         <div className='flex justify-end items-center gap-3'>
             <Link to={`/admin/rfq-list/update-rfq/${RFQData?._id}`} className='capitalize font-medium text-lg text-white bg-emerald-600 py-2 px-8 cursor-pointer rounded-md flex gap-2 items-center'>

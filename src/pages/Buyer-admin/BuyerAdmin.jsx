@@ -126,7 +126,7 @@ const BuyerAdmin = () => {
           </li>
             </ul>
         </div>
-        <div className={`flex-1 ${showSidebar ? "pl-74" :"pl-22"} transition-all duration-300  bg-stone-100 min-h-screen `}>
+        <div className={`flex-1 ${showSidebar ? "pl-74" :"pl-22"} transition-all duration-300  bg-stone-100 min-h-screen w-full`}>
             <BuyerAdminHeader/>
             <Outlet/>
         </div>

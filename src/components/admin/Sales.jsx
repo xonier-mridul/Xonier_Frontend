@@ -1,16 +1,50 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import SalesChart from './SalesChart'
 import DailySales from './DailySales'
+import axios from "axios"
 
-const Sales = () => {
+const Sales = ({orderCount}) => {
+  const [orderData, setOrderData] = useState([])
+  const [weeklyOrderData, setWeeklyOrderData] = useState([])
+  console.log(weeklyOrderData)
+
+  const getData = async()=>{
+    try{
+      const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}order/all-received`, {withCredentials: true})
+      if(response.status === 200){
+        setOrderData(response?.data?.orders)
+      }
+    }
+    catch(err){
+      console.error(err)
+    }
+  }
+
+  const getWeeklyOrderData = async()=>{
+    try{
+      const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}order/daily-order`, {withCredentials: true})
+      if(response.status === 200){
+        setWeeklyOrderData(response?.data?.weeklyOrderData)
+      }
+    }
+    catch(err){
+      console.error(err)
+    }
+  }
+
+  useEffect(()=>{
+    getData(),
+    getWeeklyOrderData()
+  },[])
+
   return (
     <>
       <div className='flex gap-5'>
         <div className='w-3/5'>
-            <SalesChart/>
+            <SalesChart orderCount={orderCount} orderData={orderData}/>
         </div>
         <div className='w-2/5'>
-            <DailySales/>
+            <DailySales weeklyOrderData={weeklyOrderData}/>
         </div>
       </div>
     </>

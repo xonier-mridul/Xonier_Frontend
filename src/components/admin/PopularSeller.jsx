@@ -1,55 +1,13 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
 import logo from "../../assets/Havells_Logo.png"
  
 
-const PopularSeller = () => {
+const PopularSeller = ({supplierData}) => {
     
-    const data = [
-        {
-            _id:1,
-            supplier: "Polycap",
-            product: "Wire",
-            deliveries: 6198,
-
-        },
-        {
-            _id:2,
-            supplier: "KEI",
-            product: "Wire",
-            deliveries: 6172
-        },
-        {
-            _id:3,
-            supplier: "Havells",
-            product: "Wire",
-            deliveries: 2172
-        },
-        {
-            _id:4,
-            supplier: "Tata",
-            product: "Wire",
-            deliveries: 2023
-        },
-        {
-            _id:5,
-            supplier: "Tata",
-            product: "Wire",
-            deliveries: 2023
-        },
-        {
-            _id:6,
-            supplier: "Tata",
-            product: "Wire",
-            deliveries: 2023
-        },
-        {
-            _id:7,
-            supplier: "Tata",
-            product: "Wire",
-            deliveries: 2023
-        },
-    ]
-    const [sellerData, setSellerData] = useState(data)
+  
+  
+    
+    
   return (
     <>
       <div className='bg-white p-5 rounded-4xl border-emerald-500 border-2 '>
@@ -63,23 +21,29 @@ const PopularSeller = () => {
               </tr>
             </thead>
             <tbody>
-                {sellerData.map((e=>(
+                {supplierData?.length>0 ? supplierData?.map((e=>(
                     <tr className='border-b-1 border-[#f1f1f1]' key={e._id}>
                       <td className='p-4 py-2'>
                         <div className='flex items-center gap-5'>
                            <img className='h-11 w-11 object-contain' src={logo} alt="logo" />
-                           <div className='flex flex-col gap-1'>
-                              <h3 className='text-xl font-bold'>{e.supplier}</h3>
-                              <p className="para">{e.product}</p>
+                           <div className='flex flex-col gap-0.5'>
+                              <h3 className='text-lg font-bold capitalize'>{e.name}</h3>
+                              <p className="para capitalize whitespace-nowrap overflow-hidden text-ellipsis">{e.company}</p>
                            </div>
                         </div>
                       </td>
                       <td className='border-l-1 border-[#f1f1f1] p-4'>
-                        <h3 className='text-xl font-bold'>{e.deliveries}</h3>
+                        <h3 className='text-xl font-semibold text-green-500'>{e?.deliveries}</h3>
                         <p className="para">Deliveries</p>
                       </td>
                     </tr>
-                )))}
+                ))): (
+                  <>
+                    <tr >
+                      <td className="p-4 text-center" colSpan={2}>Data not found</td>
+                    </tr >
+                  </>
+                )}
                 
             </tbody>
           </table>

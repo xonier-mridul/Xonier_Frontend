@@ -95,6 +95,8 @@ import ForgotPassword from "./pages/ForgotPassword.jsx";
 import PasswordVerifyOTP from "./components/PasswordVerifyOtp.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import About from "./pages/About.jsx";
+import UserProfiles from "./pages/admin/UserProfiles.jsx"
+
 
 
 
@@ -148,6 +150,7 @@ const router = createBrowserRouter(
           <Route index element={<Profile/>} />
           <Route path="update" element={<AdminProfileUpdate/>}/>
         </Route>
+        <Route path="user-profile/:id" element={<UserProfiles/>} />
         <Route path="suppliers" element={<SupplierTable />} />
         <Route path="buyer" element={<BuyerTable />} />
         <Route path="category" element={<Category />} />
@@ -163,6 +166,7 @@ const router = createBrowserRouter(
         </Route>
         <Route path="approved-rfq" element={<RFQListOutlet/>}>
           <Route index element={<ApprovedRFQ/>} />
+          <Route path="rfq-detail/:id" element={<RFQDetailTable />} />
         </Route>
         <Route path="brfq" element={<BRFQOutlet/>}>
           <Route index element={<BRFQ/>} />

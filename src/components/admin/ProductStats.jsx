@@ -53,33 +53,37 @@ const data = [
     },
 ]
 
-const ProductStats = () => {
+const ProductStats = ({orderData}) => {
   const [productData, setProductData] = useState(data)
     
   return (
     <div className='bg-white p-5 rounded-4xl border-emerald-500 border-2'>
-        <h3 className='capitalize font-bold text-[22px]' > Products stats</h3>
+        <h3 className='capitalize font-bold text-[22px]' > Recent Orders</h3>
         <p className='para text-xl capitalize pb-5' > updated 37 minutes ago</p>
         <table className='w-full border-[1px] border-[#f1f1f1]'>
             <thead>
                 <tr>
 
-                <th className='p-4 bg-slate-100 border-l-1 border-[#f1f1f1]'> Order</th>
-                <th className='p-4 bg-slate-100 border-l-1 border-[#f1f1f1]'> Product</th>
-                <th className='p-4 bg-slate-100 border-l-1 border-[#f1f1f1]'> Quantity</th>
-                <th className='p-4 bg-slate-100 border-l-1 border-[#f1f1f1]'> Status</th>
+                <th className='p-4 bg-slate-100 border-l-1 border-[#f1f1f1] text-start'> Order</th>
+                <th className='p-4 bg-slate-100 border-l-1 border-[#f1f1f1] text-start'> Product</th>
+                <th className='p-4 bg-slate-100 border-l-1 border-[#f1f1f1] text-start'> Quantity</th>
+                <th className='p-4 bg-slate-100 border-l-1 border-[#f1f1f1] text-start'> Status</th>
                 </tr>
             </thead>
             <tbody>
-                {productData.map(e=>(
+                {orderData.length> 0 ? orderData.map(e=>(
 
                 <tr className='border-b-1 border-[#f1f1f1]' key={e._id}>
-                    <td className='p-4 para'>{e.order}</td>
-                    <td className='p-4 text-lg border-l-1 border-[#f1f1f1]'>{e.product}</td>
-                    <td className='p-4 text-lg border-l-1 border-[#f1f1f1]'>{e.quantity}</td>
-                    <td className=' p-4 border-l-1  border-[#f1f1f1]'> <span className={`${e.status === "Paid" ? "text-green-400 bg-green-200" : "text-red-500 bg-red-200 "} p-2 px-4 rounded-md font-semibold `}> {e.status} </span></td>
+                    <td className='p-4 para text-sm'>{e?._id}</td>
+                    <td className='p-4  border-l-1 border-[#f1f1f1] capitalize'>{e?.vrfqId?.brfqId?.rfqId?.product || "N/A"}</td>
+                    <td className='p-4  border-l-1 border-[#f1f1f1] capitalize'>{e?.vrfqId?.brfqId?.rfqId?.quantity || "N/A"}</td>
+                    <td className=' p-4 border-l-1  border-[#f1f1f1] capitalize text-sm'> <span className={`${e?.process === "delivered" ? "text-green-400 bg-green-100" : "text-orange-500 bg-orange-100 "} p-2 px-4 tracking-wide rounded-md font-semibold `}> {e?.process } </span></td>
                 </tr>
-                ))}
+                )):(
+                  <tr className='border-b-1 border-[#f1f1f1]'>
+                      <td className='p-4 para text-center' colSpan={4}> Data not found</td>
+                  </tr>
+                )}
                 
             </tbody>
 
