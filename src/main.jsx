@@ -97,6 +97,7 @@ import PasswordVerifyOTP from "./components/PasswordVerifyOtp.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import About from "./pages/About.jsx";
 import UserProfiles from "./pages/admin/UserProfiles.jsx"
+import NotFount from "./pages/Common/NotFount.jsx";
 
 
 
@@ -104,6 +105,7 @@ import UserProfiles from "./pages/admin/UserProfiles.jsx"
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
+      <Route path="*" element={<NotFount/>} /> 
       {/* User Routes */}
       <Route path="/" element={<App />}>
         <Route index element={<Home />} />
