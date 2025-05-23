@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from "../../assets/bildkart-admin-Logo.png";
+import Logo from "../../assets/bildkart-admin-logo.png";
 import fav from "../../assets/b-fav.png";
 import BuyerAdminHeader from "../../components/buyer/BuyerAdminHeader";
 import { useState } from "react";
