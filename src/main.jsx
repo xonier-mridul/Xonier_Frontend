@@ -22,7 +22,7 @@ import Supplier from "./pages/Supplier.jsx";
 import BuyerRegister from "./pages/BuyerRegister.jsx";
 import Contact from "./pages/Contact.jsx";
 import SupplierRegister from "./pages/SupplierRegister.jsx";
-import GetAQuote from "./pages/GetaQuote.jsx";
+import GetAQuote from "./pages/GetAQuote.jsx";
 
 import SupplierTable from "./components/admin/SupplierTable.jsx";
 import BuyerTable from "./components/admin/BuyerTable.jsx";
