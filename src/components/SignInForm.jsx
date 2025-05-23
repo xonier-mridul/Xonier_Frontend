@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import api from "../components/common/api"
 
 import { FaEye, FaEyeSlash, FaArrowRight } from "react-icons/fa";
 
@@ -33,11 +34,9 @@ const SignInForm = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}user/login`,
-        formData,
-        { withCredentials: true }
-      );
+      const response = await api.post('user/login', formData,
+        { withCredentials: true })
+        
 
       if (response.status === 200) {
         toast.success("Login Successfully");
