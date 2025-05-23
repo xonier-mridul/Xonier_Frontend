@@ -12,7 +12,7 @@ import {
 } from "react-router-dom";
 
 // Protected Route
-import ProtectedRoute from "./routes/ProtectedRoute.jsX";
+import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 
 import Home from "./pages/Home.jsx";
 import Buyer from "./pages/Buyer.jsx";
