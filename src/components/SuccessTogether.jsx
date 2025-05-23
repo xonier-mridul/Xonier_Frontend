@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { FaCheck, FaArrowRight  } from "react-icons/fa6";
 import { TbSlashes } from "react-icons/tb";
 import SaveMoney from "../assets/save-money.svg"
-import Financing from "../assets/Financing.svg"
+import Financing from "../assets/financing.svg"
 import Statistic from "../assets/statistics.svg"
 import Builder from '../assets/engineer.png'
 import Supplier from '../assets/supplier.png'
