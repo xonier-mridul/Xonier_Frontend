@@ -1,6 +1,6 @@
 import React from 'react'
 import PageBanner from '../components/PageBanner'
-import Contacts from "../assets/Contact-bg.jpg"
+import Contacts from "../assets/contact-bg.jpg"
 import ContactForm from '../components/ContactFrom'
 import Map from '../components/Map'
 
