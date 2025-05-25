@@ -89,7 +89,7 @@ const BuyerRegistrationForm = () => {
           <h3 className="text-xl font-semibold">Buyer sign up form</h3>
           <p className="text-neutral-400">
             Unlock your potential with expert guidance! Schedule a free
-            consultation toward personal and business success.
+            consultation toward personal & business success.
           </p>
         </div>
         <div className="flex flex-col gap-4">
