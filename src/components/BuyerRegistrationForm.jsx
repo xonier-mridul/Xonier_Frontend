@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 const BuyerRegistrationForm = () => {
   const [passwordShow, setPasswordShow] = useState(false);
   const [confirmPasswordShow, setConfirmPasswordShow] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState(""); 
 
   const [formData, setFormData] = useState({
@@ -39,7 +40,7 @@ const BuyerRegistrationForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    
+    setIsLoading(true)
     if (formData.password !== formData.cpassword) {
       setErrorMessage("Passwords do not match!");
       return;
@@ -67,12 +68,16 @@ const BuyerRegistrationForm = () => {
           cpassword: "",
           
         });
-        navigate("/login");
-
+        localStorage.setItem('emailForVerify', formData.email);
+        navigate("/verify-otp");
+        setErrorMessage("")
       }
     } catch (error) {
       console.error(error);
       setErrorMessage(error.response?.data?.message)
+    }
+    finally{
+      setIsLoading(false)
     }
   };
 
@@ -219,7 +224,7 @@ const BuyerRegistrationForm = () => {
 
             <div className="flex justify-end">
               <button className="py-3 capitalize font-bold flex items-center gap-3 rounded-full px-5 btn-bg text-white cursor-pointer">
-                Submit <FaArrowRight className="text-lg btn-arrow" />
+                {isLoading? "Submitting":"Submit"} <FaArrowRight className="text-lg btn-arrow" />
               </button>
             </div>
           </form>
