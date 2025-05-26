@@ -5,7 +5,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { IoIosArrowBack } from "react-icons/io";
 
 
-const UpdatePasswordForm = ({handleSubmit, newPassShow, passwords, handleChange, cNewPassShow, message, isLoading, setNewPassShow, setCNewPassShow, navigate}) => {
+const UpdatePasswordForm = ({handleSubmit, newPassShow, passwords, handleChange, cNewPassShow, message, isLoading, setNewPassShow, setCNewPassShow, navigate, userData}) => {
   
  
 
@@ -14,8 +14,15 @@ const UpdatePasswordForm = ({handleSubmit, newPassShow, passwords, handleChange,
     
       <div className="bg-white rounded-4xl flex flex-col gap-6 border-emerald-500 border-2 ">
         <div className="px-8 py-4 border-b-stone-200 border-b-1 flex justify-between">
-          <h2 className="text-2xl font-semibold">Change your password here</h2>
-          <button className="bg-teal-600 text-white px-5 py-2 rounded-lg hover:scale-103 cursor-pointer transition-all duration-300 flex gap-1.5 items-center" onClick={()=>navigate(-1)}><IoIosArrowBack className="text-lg"/> Back</button>
+          <div className="flex flex-col gap-0.5">
+          <h2 className="text-2xl font-semibold">Update  password</h2>
+          <p className="tracking-wide">Username: <span className="text-green-500 capitalize text-lg ">{userData?.name}({userData.role})</span></p>
+
+          </div>
+          <div className="flex justify-end items-center">
+
+          <button className="bg-teal-600 hover:bg-teal-700 w-fit text-white px-5 py-2 rounded-lg hover:scale-103 cursor-pointer transition-all duration-300 flex gap-1.5 items-center" onClick={()=>navigate(-1)}><IoIosArrowBack className="text-lg"/> Back</button>
+          </div>
         </div>
         <div className="px-8 py-6">
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>

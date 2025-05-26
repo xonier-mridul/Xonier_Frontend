@@ -6,21 +6,37 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 const UpdatePassword = () => {
-
+  const [userData, setUserData] = useState({});
   const [newPassShow, setNewPassShow] = useState(false);
   const [cNewPassShow, setCNewPassShow] = useState(false);
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const [passwords, setPasswords] = useState({
     newPassword: "",
     cNewPassword: "",
   });
+  const [message, setMessage] = useState("");
 
   const navigate = useNavigate();
 
   const { id } = useParams();
 
+  const getUserData = async () => {
+    try {
+      const response = await api.get(`/user/byid/${id}`, { withCredentials: true });
+      if (response.status === 200) {
+        setUserData(response.data?.user);
+        
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-  const [message, setMessage] = useState("");
+  useEffect(() => {
+    getUserData();
+  }, []);
+
+  // Handle Submit
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,8 +46,8 @@ const UpdatePassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true)
-    
+    setIsLoading(true);
+
     try {
       if (!id) return setMessage("Invalid user id");
       if (passwords.newPassword !== passwords.cNewPassword)
@@ -49,15 +65,13 @@ const UpdatePassword = () => {
           newPassword: "",
           cNewPassword: "",
         });
-
-       
+        navigate('/admin/buyer')
       }
     } catch (error) {
       console.error(error?.response?.data?.message);
       setMessage(error?.response?.data?.message);
-    }
-    finally{
-      setIsLoading(false)
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -74,6 +88,7 @@ const UpdatePassword = () => {
           isLoading={isLoading}
           setNewPassShow={setNewPassShow}
           setCNewPassShow={setCNewPassShow}
+          userData={userData}
         />
       </div>
     </>
