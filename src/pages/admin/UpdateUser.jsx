@@ -12,7 +12,6 @@ const UpdateUser = () => {
     company: "",
     email: "",
     number: "",
-    role:"buyer",
     category: "",
     tradeNumber: "",
     website: "",
@@ -79,7 +78,7 @@ const UpdateUser = () => {
         const response = await api.patch(`/user/update-user-by-admin/${id}`, formData, {withCredentials: true})
         if (response.status === 200){
             toast.success(`${userData?.name} profile updated successfully`)
-            navigate('/admin/buyer')
+            navigate(-1)
             setErrMessage(null)
             
         }

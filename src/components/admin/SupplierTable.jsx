@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import img from "../../assets/admin-img.jpg"
+import img from "../../assets/admin-img.jpg";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Media
 
-import { FaEye } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
+import { FaUserEdit, FaEye, FaEyeSlash } from "react-icons/fa";
+import { MdDelete, MdOutlinePassword } from "react-icons/md";
+import { AiOutlineUserAdd } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 
 const SupplierTable = () => {
   const [supplierData, setSupplierData] = useState([]);
@@ -20,16 +22,16 @@ const SupplierTable = () => {
       .includes(searchTerm.toLowerCase())
   );
 
+  const navigate = useNavigate();
+
   const getSupplier = async () => {
     try {
       const supplier = await axios.get(
         `${import.meta.env.VITE_SERVER_URL}user/supplier`,
-        {withCredentials: true}
-
+        { withCredentials: true }
       );
       if (supplier.status === 200) {
         setSupplierData(supplier.data.user);
-       
       }
     } catch (error) {
       console.error(error.response?.data?.message);
@@ -46,8 +48,8 @@ const SupplierTable = () => {
         `${import.meta.env.VITE_SERVER_URL}user/delete/${id}`
       );
       if (response.status === 200) {
-        toast.success(`${name} deleted successfully`)
-        setSupplierData(supplierData.filter(item=>item._id !== id))
+        toast.success(`${name} deleted successfully`);
+        setSupplierData(supplierData.filter((item) => item._id !== id));
       }
     } catch (error) {
       console.error(error?.response?.data?.message);
@@ -59,7 +61,7 @@ const SupplierTable = () => {
     <>
       <ToastContainer />
       <div className="bg-white border-emerald-500 border-2 rounded-4xl p-8 m-5">
-        <div className="mb-5">
+        <div className="mb-5 flex justify-between items-center">
           <input
             type="text"
             placeholder="Search..."
@@ -67,6 +69,14 @@ const SupplierTable = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+          <div className="flex items-center justify-end">
+            <button
+              className="bg-teal-600 px-5 py-2 rounded-lg text-white hover:bg-teal-700 transition-all duration-300 cursor-pointer hover:scale-103 flex items-center gap-1.5 tracking-wide"
+              onClick={() => navigate(`add-supplier`)}
+            >
+              <AiOutlineUserAdd className="text-xl" /> Add Supplier
+            </button>
+          </div>
         </div>
         <table className="w-full border-[1px] border-[#eff2f5]">
           <thead>
@@ -93,7 +103,22 @@ const SupplierTable = () => {
               filteredData.map((item, index) => (
                 <tr key={item._id}>
                   <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1]">
-                    <span className="capitalize"><div className='capitalize flex items-center flex-nowrap gap-3'>  <div className='relative h-10 w-10'><img className='h-10 w-10 rounded-lg' src={img} alt="" /> {item.isActive === true && <span className='absolute h-2.5 w-2.5 rounded-full bg-green-500 z-50 bottom-0 right-0'></span>} </div> {item.name}</div></span>
+                    <span className="capitalize">
+                      <div className="capitalize flex items-center flex-nowrap gap-3">
+                        {" "}
+                        <div className="relative h-10 w-10">
+                          <img
+                            className="h-10 w-10 rounded-lg"
+                            src={img}
+                            alt=""
+                          />{" "}
+                          {item.isActive === true && (
+                            <span className="absolute h-2.5 w-2.5 rounded-full bg-green-500 z-50 bottom-0 right-0"></span>
+                          )}{" "}
+                        </div>{" "}
+                        {item.name}
+                      </div>
+                    </span>
                   </td>
                   <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1]">
                     {" "}
@@ -109,19 +134,25 @@ const SupplierTable = () => {
                   <td className="p-4 border-zinc-200 border-b-[1px] border-l-1">
                     <div className="flex items-center gap-4">
                       <button
+                        className="rounded-lg bg-teal-600 px-2 py-2 text-white cursor-pointer hover:scale-104 transition-all duration-300 hover:bg-teal-700"
+                        onClick={() => navigate(`update-password/${item._id}`)}
+                      >
+                        <MdOutlinePassword className="text-xl" />
+                      </button>
+                      <button
+                                              className="rounded-lg bg-orange-500 px-2 py-2 text-white cursor-pointer hover:scale-104 transition-all duration-300 hover:bg-orange-600"
+                                              onClick={() => navigate(`update-user/${item._id}`)}
+                                            >
+                                              <FaUserEdit className="text-xl" />
+                                            </button>
+                      <button
                         type="button"
-                        className="rounded-lg bg-teal-600 px-2 py-2 text-white cursor-pointer"
+                        className="rounded-lg bg-green-500 hover:bg-green-600 px-2 py-2 text-white cursor-pointer hover:scale-104 transition-all duration-300"
                         onClick={""}
                       >
                         <FaEye className="text-xl" />
                       </button>
-                      <button
-                        type="button"
-                        className="rounded-lg bg-red-500 px-2 py-2 text-white cursor-pointer"
-                        onClick={() => handleDelete(item._id, item.name)}
-                      >
-                        <MdDelete className="text-xl" />
-                      </button>
+                      
                     </div>
                   </td>
                 </tr>

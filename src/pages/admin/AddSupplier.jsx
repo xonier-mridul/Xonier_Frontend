@@ -1,25 +1,28 @@
 import React, { useState } from "react";
-import AddBuyerFrom from "../../components/admin/AddBuyerFrom";
+
 import api from "../../components/common/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import AddSupplierForm from "../../components/admin/AddSupplierForm";
 
-const AddBuyer = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [errMessage, setErrMessage] = useState(null)
-  const [formData, setFormData] = useState({
-    name: "",
-    company: "",
-    email: "",
-    role: "buyer",
-    number: "",
-    category: "",
-    tradeNumber: "",
-    website: "",
-    password: "",
-  });
+const AddSupplier = () => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [errMessage, setErrMessage] = useState(null)
+    const [formData, setFormData] = useState({
+         name: "",
+          email: "",
+          number: "",
+          company: "",
+          role: "supplier",
+          category: "",
+          password: "",
+    })
+     const navigate = useNavigate();
 
-  const navigate = useNavigate();
+     const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,18 +32,16 @@ const AddBuyer = () => {
       if (response.status === 201) {
         setFormData({
           name: "",
-          company: "",
           email: "",
-          role: "buyer",
           number: "",
+          company: "",
+          role: "supplier",
           category: "",
-          tradeNumber: "",
-          website: "",
           password: "",
         });
-        toast.success("Buyer created successfully");
+        toast.success("Supplier created successfully");
         setErrMessage(null)
-        navigate("/admin/buyer");
+        navigate("/admin/suppliers");
       }
     } catch (error) {
       console.error(error);
@@ -50,14 +51,11 @@ const AddBuyer = () => {
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+
   return (
     <>
-      <div className="m-8 flex flex-col gap-8">
-        <AddBuyerFrom
+    <div className="m-8 flex flex-col gap-8">
+        <AddSupplierForm
           formData={formData}
           handleSubmit={handleSubmit}
           handleChange={handleChange}
@@ -67,7 +65,7 @@ const AddBuyer = () => {
         />
       </div>
     </>
-  );
-};
+  )
+}
 
-export default AddBuyer;
+export default AddSupplier

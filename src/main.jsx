@@ -101,6 +101,7 @@ import NotFount from "./pages/Common/NotFount.jsx";
 import AddBuyer from "./pages/admin/AddBuyer.jsx";
 import UpdatePassword from "./pages/Common/UpdatePassword.jsx";
 import UpdateUser from "./pages/admin/UpdateUser.jsx";
+import AddSupplier from "./pages/admin/AddSupplier.jsx";
 
 
 
@@ -157,7 +158,12 @@ const router = createBrowserRouter(
           <Route path="update" element={<AdminProfileUpdate/>}/>
         </Route>
         <Route path="user-profile/:id" element={<UserProfiles/>} />
-        <Route path="suppliers" element={<SupplierTable />} />
+        <Route path="suppliers" element={<CommonOutlet/>} >
+          <Route index element={<SupplierTable />}/>
+          <Route path="add-supplier" element={<AddSupplier/>} />
+          <Route path="update-password/:id" element={<UpdatePassword/>}/>
+          <Route path="update-user/:id" element={<UpdateUser/>}/>
+        </Route>
         <Route path="buyer" element={<CommonOutlet/>}>
           <Route index element={<BuyerTable />}/>
           <Route path="add-buyer" element={<AddBuyer/>} />

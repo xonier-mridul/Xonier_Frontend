@@ -65,7 +65,7 @@ const UpdatePassword = () => {
           newPassword: "",
           cNewPassword: "",
         });
-        navigate('/admin/buyer')
+        navigate(-1)
       }
     } catch (error) {
       console.error(error?.response?.data?.message);

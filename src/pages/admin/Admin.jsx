@@ -4,6 +4,8 @@ import Logo from "../../assets/bildkart-admin-logo.png";
 import fav from "../../assets/b-fav.png";
 import DashboardHeader from "../../components/admin/DashboardHeader";
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 // Media Start
@@ -64,6 +66,7 @@ const Admin = () => {
 
   return (
     <>
+      <ToastContainer/>
       {logoutPopupShow && <LogoutPopup logout={handleLogout} logoutShow={logoutShow}/>}
       <div className="flex gap-2">
         {/* Sidebar */}

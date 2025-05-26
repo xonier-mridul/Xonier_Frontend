@@ -4,7 +4,7 @@ import { FaArrowUpLong } from "react-icons/fa6";
 import Counter from "react-countup";
 import { motion, useInView } from "framer-motion";
 
-const BuyerMonitor = () => {
+const BuyerMonitor = ({orderCount, deliveredOrderCount, buyerCount}) => {
 
     const ref = useRef(null);
       const inView = useInView(ref, { threshold: 0.5, triggerOnce: true });
@@ -23,7 +23,7 @@ const BuyerMonitor = () => {
               <sup className="text-lg text-green-400">
                 <FaArrowUpLong />
               </sup>
-              <Counter start={0} end={inView ? 1200 : 0} duration={2} />
+              <Counter start={0} end={inView ? orderCount : 0} duration={2} />
             </h2>
           </div>
           
@@ -74,7 +74,7 @@ const BuyerMonitor = () => {
               <sup className="text-lg text-green-400">
                 <FaArrowUpLong />
               </sup>
-              <Counter start={0} end={inView ? 8000 : 0} duration={2} />
+              <Counter start={0} end={inView ? deliveredOrderCount : 0} duration={2} />
             </h2>
           </div>
           
@@ -92,14 +92,14 @@ const BuyerMonitor = () => {
               </div>
         </div>
         <div ref={ref} className="bg-white flex-col items-center justify-center rounded-4xl border-emerald-500 border-2 overflow-hidden p-9 py-7 flex gap-2">
-          <h3 className="text-xl font-bold uppercase flex justify-start w-full">Venders </h3>
+          <h3 className="text-xl font-bold uppercase flex justify-start w-full">Buyers </h3>
           <div className="flex gap-2 flex-col justify-center items-end w-full">
-            <h3 className="para text-lg capitalize">Total Vendors</h3>
+            <h3 className="para text-lg capitalize">Total Buyer</h3>
             <h2 className="flex text-3xl font-bold">
               <sup className="text-lg text-green-400">
                 <FaArrowUpLong />
               </sup>
-              <Counter start={0} end={inView ? 120 : 0} duration={2} />
+              <Counter start={0} end={inView ? buyerCount : 0} duration={2} />
             </h2>
           </div>
           

@@ -54,7 +54,7 @@ const UpdateUserForm = ({
                 <input
                   type="text"
                   name="name"
-                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg"
+                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg capitalize"
                   value={formData.name}
                   onChange={handleChange}
                 />
@@ -67,7 +67,7 @@ const UpdateUserForm = ({
                 <input
                   type="text"
                   name="company"
-                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg"
+                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg capitalize"
                   value={formData.company}
                   onChange={handleChange}
                 />
@@ -96,7 +96,7 @@ const UpdateUserForm = ({
                   onChange={handleChange}
                 />
               </div>
-              <div className="flex flex-col gap-2">
+              {userData.role === 'buyer' ? <div className="flex flex-col gap-2">
                 <label htmlFor="category" className="tracking-wide">
                   <span className="text-red-500 text-lg">*</span>Category
                 </label>
@@ -122,7 +122,29 @@ const UpdateUserForm = ({
                   <option value="engineers">Engineers</option>
                   <option value="contractor">General Contractor</option>
                 </select>
-              </div>
+              </div> :<div className="flex flex-col gap-2">
+                <label htmlFor="category" className="tracking-wide">
+                  <span className="text-red-500 text-lg">*</span>Category
+                </label>
+                <select
+                  name="category"
+                  id="category"
+                  onChange={handleChange}
+                  value={formData.category}
+                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg"
+                >
+                  <option value="" hidden>
+                    {" "}
+                    Select Category
+                    </option>
+                  <option value="material supplier"> Material Supplier</option>
+              <option value="service provider"> Service Provider</option>
+              <option value="transporter"> Transporter </option>
+              <option value="machine rentals"> Machine Rentals</option>
+              <option value="waste management">Waste Management</option>
+              <option value="interior">Interior</option>
+                </select>
+              </div>}
               <div className="flex flex-col gap-2">
                 <label htmlFor="tradeNumber" className="tracking-wide">
                   <span className="text-red-500 text-lg">*</span>Trade Number
@@ -152,7 +174,7 @@ const UpdateUserForm = ({
                 <p className="text-red-500">{errMessage}</p>
             </div>}
             <div className="flex justify-end"> 
-                <button className="text-white bg-teal-600 hover:bg-teal-700 px-6 py-2 rounded-lg hover:scale-104 transition-all duration-300 cursor-pointer flex items-center gap-2" type="submit">{isLoading ? "Updating" : "Update"}<IoMdCloudUpload className="text-xl"/></button>
+                <button className="text-white bg-teal-600 hover:bg-teal-700 px-6 py-2 rounded-lg hover:scale-104 transition-all duration-300 cursor-pointer flex items-center gap-2" type="submit">{isLoading ? "Updating..." : "Update"}<IoMdCloudUpload className="text-xl"/></button>
             </div>
           </form>
         </div>

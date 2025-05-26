@@ -3,7 +3,7 @@ import React, {useState} from "react";
 import { FaUserEdit, FaEye, FaEyeSlash,  } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa6";
 
-const AddBuyerFrom = ({formData, handleSubmit, handleChange, isLoading, navigate, errMessage}) => {
+const AddSupplierForm = ({formData, handleSubmit, handleChange, isLoading, navigate}) => {
     const [showPassword, setShowPassword] = useState(false)
     
     
@@ -12,7 +12,7 @@ const AddBuyerFrom = ({formData, handleSubmit, handleChange, isLoading, navigate
       <div className="bg-white rounded-4xl flex flex-col gap-6 border-emerald-500 border-2 ">
         <div className="px-8 py-5 flex justify-between items-center border-b-1 border-stone-200">
           <h2 className="text-xl font-semibold">
-            Add new Buyer
+            Add new Supplier
           </h2>
           <div className="flex justify-end">
 
@@ -44,13 +44,13 @@ const AddBuyerFrom = ({formData, handleSubmit, handleChange, isLoading, navigate
                     <div className="flex flex-col gap-2">
                         <label htmlFor="category" className="text-lg">Category</label>
                         <select name="category" id="category" className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg" onChange={handleChange}>
-                            <option value="" hidden>Select buyer category</option>
-                            <option value="construction company">Construction Company</option>
-                            <option value="sme">SMEs</option>
-                            <option value="property developers">Property Developers</option>
-                            <option value="architects"> Architects</option>
-                            <option value="engineers">Engineers</option>
-                            <option value="contractor">General Contractor</option>
+                            <option value="" hidden>Select Supplier category</option>
+                            <option value="material supplier"> Material Supplier</option>
+              <option value="service provider"> Service Provider</option>
+              <option value="transporter"> Transporter </option>
+              <option value="machine rentals"> Machine Rentals</option>
+              <option value="waste management">Waste Management</option>
+              <option value="interior">Interior</option>
                         </select>
                         
                     </div>
@@ -67,9 +67,6 @@ const AddBuyerFrom = ({formData, handleSubmit, handleChange, isLoading, navigate
                         {showPassword ? <div className="flex items-center w-full border-1 border-zinc-200  p-3 rounded-lg"> <input type="text" name="password" className="w-full outline-none" value={formData.password} onChange={handleChange} placeholder="Password"/> <span className="cursor-pointer hover:text-green-500 transition-all duration-300 hover:scale-110" onClick={()=>setShowPassword(false)}>< FaEyeSlash/></span>  </div> : <div className="flex items-center w-full border-1 border-zinc-200 outline-none p-3 rounded-lg"> <input type="password" name="password" className="w-full outline-none" value={formData.password} onChange={handleChange} placeholder="Password"/> <span className="cursor-pointer hover:text-green-500 transition-all duration-300 hover:scale-110" onClick={()=>setShowPassword(true)}>< FaEye/></span> </div> }
                     </div>
                 </div>
-                {errMessage && <div className="flex justify-end">
-                  <p className="text-red-500">{errMessage}</p>
-                </div>}
                 <div className="flex justify-end">
                     <button type="submit" className="bg-teal-600 text-white px-6 py-2 rounded-lg tracking-wide hover:bg-teal-700 hover:scale-105 transition-all duration-300 cursor-pointer flex gap-2 items-center" >{ isLoading ? "Submitting..." : "Submit"} <FaArrowRight /></button>
                 </div>
@@ -80,4 +77,4 @@ const AddBuyerFrom = ({formData, handleSubmit, handleChange, isLoading, navigate
   );
 };
 
-export default AddBuyerFrom;
+export default AddSupplierForm;
