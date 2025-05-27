@@ -3,7 +3,7 @@ import axios from 'axios'
 import { FaXmark } from "react-icons/fa6";
 import { IoLogOutOutline } from "react-icons/io5";
 
-const LogoutPopup = ({logout,logoutShow}) => {
+const LogoutPopup = ({logout,logoutShow, isLoading}) => {
   return (
     
     <>
@@ -14,7 +14,7 @@ const LogoutPopup = ({logout,logoutShow}) => {
          <div className='flex items-center justify-center'>
           <IoLogOutOutline className='text-6xl text-orange-400'/>
          </div>
-         <button className='bg-emerald-500 px-4 py-2 rounded-lg text-white hover:bg-emerald-600 transition-all duration-300 cursor-pointer' type='button' onClick={logout}>Logout</button>
+         <button className='bg-emerald-500 px-4 py-2 rounded-lg text-white hover:bg-emerald-600 transition-all duration-300 cursor-pointer' type='button' onClick={logout}>{isLoading ? "Loading..." : "Logout"}</button>
       </div>
     </> 
     

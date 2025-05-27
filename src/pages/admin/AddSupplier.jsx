@@ -17,18 +17,45 @@ const AddSupplier = () => {
           category: "",
           password: "",
     })
+    const [branchDetail, setBranchDetail] = useState([
+        {
+          gstNumber: "",
+          state: "",
+          address: "",
+        },
+      ]);
      const navigate = useNavigate();
+
+     const addBranchField = () => {
+    setBranchDetail([
+      ...branchDetail,
+      { gstNumber: "", state: "", address: "" },
+    ]);
+  };
+
+  const removeBranchField = (index) => {
+    if (branchDetail.length === 1) return;
+    const updated = branchDetail.filter((_, i) => i !== index);
+    setBranchDetail(updated);
+  };
 
      const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleBranchChange = (index, e) => {
+    const { name, value } = e.target;
+    const updatedBranches = [...branchDetail];
+    updatedBranches[index][name] = value;
+    setBranchDetail(updatedBranches);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await api.post("/user/add-user-by-admin", formData, { withCredentials: true });
+      const response = await api.post("/user/add-user-by-admin", {...formData, branchDetail}, { withCredentials: true });
       if (response.status === 201) {
         setFormData({
           name: "",
@@ -62,6 +89,10 @@ const AddSupplier = () => {
           isLoading={isLoading}
           navigate={navigate}
           errMessage={errMessage}
+          handleBranchChange={handleBranchChange}
+          branchDetail={branchDetail}
+          addBranchField={addBranchField}
+          removeBranchField={removeBranchField}
         />
       </div>
     </>

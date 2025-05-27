@@ -20,7 +20,7 @@ const SupplierAdmin = () => {
   const [showSidebar, setShowSidebar] = useState(true);
   const [submenuShow, setSubmenuShow] = useState("");
   const [logoutPopupShow, setLogoutPopupShow] = useState(false);
-  
+  const [isLoading, setIsLoading] = useState(false)
 
    const Navigate = useNavigate();
 
@@ -46,7 +46,7 @@ const SupplierAdmin = () => {
   // Handle Logout 
 
   const handleLogout = async()=>{
-
+   setIsLoading(true)
     try {
        
        const logout = await axios.post(`${import.meta.env.VITE_SERVER_URL}user/logout`, {}, {withCredentials: true});
@@ -56,6 +56,9 @@ const SupplierAdmin = () => {
        }
     } catch (error) {
        console.error(error);
+    }
+    finally{
+      setIsLoading(false)
     }
    }
 

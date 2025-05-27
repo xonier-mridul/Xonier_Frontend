@@ -148,7 +148,7 @@ const SupplierTable = () => {
                       <button
                         type="button"
                         className="rounded-lg bg-green-500 hover:bg-green-600 px-2 py-2 text-white cursor-pointer hover:scale-104 transition-all duration-300"
-                        onClick={""}
+                        onClick={()=>navigate(`/admin/user-profile/${item._id}`)}
                       >
                         <FaEye className="text-xl" />
                       </button>

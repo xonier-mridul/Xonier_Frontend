@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 // Media Start
 import { AiFillDashboard, AiFillProduct } from "react-icons/ai";
-import { FaUsers, FaCartPlus } from "react-icons/fa";
+import { FaUsers, FaCartPlus, FaParachuteBox } from "react-icons/fa";
 import { MdKeyboardDoubleArrowLeft, MdLockReset } from "react-icons/md";
 import { RiContactsBook3Fill } from "react-icons/ri";
 import { BsFillChatRightQuoteFill } from "react-icons/bs";
@@ -21,6 +21,7 @@ import LogoutPopup from "../../components/common/LogoutPopup";
 
 const Admin = () => {
   const [showSidebar, setShowSidebar] = useState(true);
+  const [isLoading, setIsLoading] = useState(false)
   const [submenuShow, setSubmenuShow] = useState(0);
   const [logoutPopupShow, setLogoutPopupShow] = useState(false)
 
@@ -53,7 +54,9 @@ const Admin = () => {
   // Handle Logout
 
   const handleLogout = async()=>{
+    setIsLoading(true)
     try {
+
       const logout = await axios.post(`${import.meta.env.VITE_SERVER_URL}user/logout`, {}, {withCredentials: true});
       if(logout.status === 200){
          setLogoutPopupShow(false)
@@ -62,12 +65,15 @@ const Admin = () => {
     } catch (error) {
       console.error(error)
     }
+    finally{
+      setIsLoading(false)
+    }
   }
 
   return (
     <>
       <ToastContainer/>
-      {logoutPopupShow && <LogoutPopup logout={handleLogout} logoutShow={logoutShow}/>}
+      {logoutPopupShow && <LogoutPopup logout={handleLogout} logoutShow={logoutShow} isLoading={isLoading}/>}
       <div className="flex gap-2">
         {/* Sidebar */}
         <div
@@ -309,6 +315,48 @@ const Admin = () => {
             </li>
 
 
+            <li className="">
+              <button
+                className={` ${
+                  submenuShow === 7 && "mb-4"
+                } admin-list w-full tabs flex gap-3 text-xl items-center justify-between hover:bg-white transition-all duration-300 p-2 rounded-lg hover:text-teal-950 cursor-pointer`}
+                onClick={() => handleSubmenu(7)}
+              >
+                <div className="flex items-center justify-center gap-3">
+                  {" "}
+                  <span className="bg-emerald-500 tabs-icon text-white h-8 w-8 min-w-8 rounded-full flex justify-center items-center ">
+                    {" "}
+                    <FaParachuteBox className="text-xl" />
+                  </span>{" "}
+                  <span
+                    className={`${
+                      showSidebar ? "opacity-100" : "opacity-0"
+                    } transition-all duration-300 `}
+                  >
+                    {" "}
+                    Create RFQ{" "}
+                  </span>
+                </div>{" "}
+                <span className="para">
+                  <FaAngleDown />
+                </span>{" "}
+              </button>
+              <ul
+                className={`${
+                  submenuShow === 7 ? "h-full p-5" : "h-0 pl-5"
+                } flex flex-col gap-5  pt-0 overflow-hidden list-disc ml-7 transition-all duration-300`}
+              >
+                <li>
+                  <Link to={"create-rfq"} className="capitalize text-xl ">
+                    category
+                  </Link>
+                </li>
+                
+                
+                
+                
+              </ul>
+            </li>
             <li className="">
               <button
                 className={` ${

@@ -1,63 +1,153 @@
-import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import Img from "../../assets/team-4.jpg"
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Img from "../../assets/team-4.jpg";
 import { FaUserPen } from "react-icons/fa6";
 import { IoIosArrowBack } from "react-icons/io";
 
-const UserProfileComponent = ({userData}) => {
-   
-  const navigate = useNavigate()
-  
+const UserProfileComponent = ({ userData, currentOrder }) => {
+  const navigate = useNavigate();
+
   return (
     <>
-      <div className='bg-white rounded-4xl flex flex-col gap-6 border-emerald-500 border-2 '>
-                    <div className='px-8 py-5 flex justify-between items-center border-b-1 border-stone-200'>
-                      <h2 className='text-xl font-semibold'><span className='capitalize'>{userData?.name}</span></h2>
-                      <button className='bg-emerald-600 py-2.5 px-6 rounded-lg text-white flex items-center justify-center gap-2 cursor-pointer hover:scale-104 transition-all duration-300 tracking-wide' onClick={()=>navigate(-1)}> <IoIosArrowBack className='text-2xl'/> Back </button>
-                    </div>
-                    <div className='px-8 py-5 flex gap-6 flex-col'>
-                      <h2 className='text-2xl font-semibold'> <span className='text-red-500'>*</span>User Detail</h2>
-                      <div className='flex  gap-6'>
-                         <div className="w-1/4">
-                            <img className='rounded-xl' src={Img} alt="" />
-                         </div>
-                         <div className="w-3/4 grid grid-cols-2 gap-5">
-                           <div className='flex gap-2 items-center col-span-2'>
-                            <h3 className='text-xl font-semibold '>User Id:</h3> <span className='capitalize text-xl tracking-wide text-green-500'>{userData._id || "N/A"}</span>
-                           </div>
-                         
-                           <div className='flex gap-2 items-center'>
-                            <h3 className='text-xl font-semibold'>Name:</h3> <span className='capitalize text-xl tracking-wide'>{userData.name || "N/A"}</span>
-                           </div>
-                         
-                           <div className='flex gap-2 items-center'>
-                            <h3 className='text-xl font-semibold'>Company:</h3> <span className='capitalize text-xl tracking-wide'>{userData.company || "N/A"}</span>
-                           </div>
-                         
-                         
-                           <div className='flex gap-2 items-center'>
-                            <h3 className='text-xl font-semibold'>Email:</h3> <span className=' text-xl tracking-wide'>{userData.email || "N/A"}</span>
-                           </div>
-            
-                           <div className='flex gap-2 items-center'>
-                            <h3 className='text-xl font-semibold'>Number:</h3> <span className=' text-xl tracking-wide'>{userData.number || "N/A"}</span>
-                           </div>
-            
-                           <div className='flex gap-2 items-center'>
-                            <h3 className='text-xl font-semibold'>Role:</h3> <span className='capitalize text-xl tracking-wide'>{userData.role || "N/A"}</span>
-                           </div>
-            
-                           <div className='flex gap-2 items-center'>
-                            <h3 className='text-xl font-semibold'>Member Since:</h3> <span className='capitalize text-xl tracking-wide'>{new Date(userData.createdAt).toLocaleDateString() || "N/A"}</span>
-                           </div>
-                         </div>
-                         </div> 
-                    </div>
-                   
-            
-                  </div>
-    </>
-  )
-}
+      <div className="bg-white rounded-4xl flex flex-col gap-6 border-emerald-500 border-2 ">
+        <div className="px-8 py-5 flex justify-between items-center border-b-1 border-stone-200">
+          <h2 className="text-xl font-semibold">
+            <span className="capitalize text-2xl font-semibold text-green-500">{userData?.name}</span>
+          </h2>
+          <button
+            className="bg-emerald-600 py-2.5 px-6 rounded-lg text-white flex items-center justify-center gap-2 cursor-pointer hover:scale-104 transition-all duration-300 tracking-wide"
+            onClick={() => navigate(-1)}
+          >
+            {" "}
+            <IoIosArrowBack className="text-2xl" /> Back{" "}
+          </button>
+        </div>
+        <div className="px-8 py-5 flex gap-6 flex-col">
+          <h2 className="text-2xl font-semibold">
+            {" "}
+            <span className="text-red-500">*</span>User Detail
+          </h2>
+          <div className="flex items-start gap-6">
+            <div className="w-1/4">
+              <img className="rounded-xl" src={Img} alt="" />
+            </div>
+            <div className="w-3/4 grid grid-cols-2 gap-6">
+              <div className="flex gap-2 items-center col-span-2">
+                <h3 className="text-lg font-semibold tracking-wide ">User Id:</h3>{" "}
+                <span className="capitalize text-xl tracking-wide text-green-500">
+                  {userData._id || "N/A"}
+                </span>
+              </div>
 
-export default UserProfileComponent
+              <div className="flex gap-2 items-center">
+                <h3 className="text-lg font-semibold tracking-wide">Name:</h3>{" "}
+                <span className="capitalize text-xl tracking-wide text-green-500">
+                  {userData.name || "N/A"}
+                </span>
+              </div>
+
+              <div className="flex gap-2 items-center">
+                <h3 className="text-lg font-semibold tracking-wide">Company:</h3>{" "}
+                <span className="capitalize text-xl tracking-wide text-green-500">
+                  {userData.company || "N/A"}
+                </span>
+              </div>
+
+              <div className="flex gap-2 items-center">
+                <h3 className="text-lg font-semibold tracking-wide">Category:</h3>{" "}
+                <span className="capitalize text-xl tracking-wide text-green-500">
+                  {userData.category || "N/A"}
+                </span>
+              </div>
+
+              <div className="flex gap-2 items-center">
+                <h3 className="text-lg font-semibold tracking-wide">Email:</h3>{" "}
+                <span className=" text-xl tracking-wide text-green-500">
+                  {userData.email || "N/A"}
+                </span>
+              </div>
+
+              <div className="flex gap-2 items-center">
+                <h3 className="text-lg font-semibold tracking-wide">Number:</h3>{" "}
+                <span className=" text-xl tracking-wide text-green-500">
+                  {userData.number || "N/A"}
+                </span>
+              </div>
+
+              <div className="flex gap-2 items-center">
+                <h3 className="text-lg font-semibold tracking-wide">Role:</h3>{" "}
+                <span className="capitalize text-xl tracking-wide text-green-500">
+                  {userData.role || "N/A"}
+                </span>
+              </div>
+              <div className="flex gap-2 items-center tracking-wide">
+                <h3 className="text-lg font-semibold">Rating:</h3>{" "}
+                <span className="capitalize text-xl tracking-wide text-green-500">
+                  {userData.rating || "N/A"}
+                </span>
+              </div>
+              
+
+              <div className="flex gap-2 items-center">
+                <h3 className="text-lg font-semibold tracking-wide">Member Since:</h3>{" "}
+                <span className="capitalize text-xl tracking-wide text-green-500">
+                  {new Date(userData.createdAt).toLocaleDateString() || "N/A"}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="w-full px-8 py-5 flex gap-5 flex-col">
+          <h2 className="text-2xl font-semibold">
+            {" "}
+            <span className="text-red-500">*</span>Orders Details
+          </h2>
+          <div className=" grid grid-cols-2 gap-x-5 gap-y-5 bg-stone-100 w-full rounded-lg p-6">
+          <div className="flex gap-2 items-center w-full">
+                <h3 className="text-lg tracking-wide font-semibold">Orders Delivered:</h3>{" "}
+                <span className="capitalize text-xl tracking-wide text-green-500 ">
+                  {userData.deliveries || "N/A"}
+                </span>
+              </div>
+          <div className="flex gap-2 tracking-wide items-center w-full">
+                <h3 className="text-lg font-semibold tracking-wide">Current Orders:</h3>{" "}
+                <span className="capitalize text-xl tracking-wide text-green-500">
+                  {currentOrder || "N/A"}
+                </span>
+              </div>
+          </div>
+        </div>
+        {userData.branchDetail && <div className="w-full px-8 py-5 flex gap-5 flex-col">
+            <h2 className="text-2xl font-semibold">
+            {" "}
+            <span className="text-red-500">*</span>Branch Details
+          </h2>
+          {userData.branchDetail.map((item,index)=>(
+            <div className="w-full bg-stone-100 p-6 grid-cols-2 grid gap-5 rounded-xl" key={item._id}>
+               <div className="flex gap-2 items-center">
+                <h3 className="text-lg font-semibold tracking-wide">GST Number:</h3>{" "}
+                <span className="capitalize text-xl tracking-wide text-green-500">
+                  {item?.gstNumber || "N/A"}
+                </span>
+              </div>
+               <div className="flex gap-2 items-center">
+                <h3 className="text-lg font-semibold tracking-wide">State:</h3>{" "}
+                <span className="capitalize text-xl tracking-wide text-green-500">
+                  {item?.state || "N/A"}
+                </span>
+              </div>
+               <div className="flex gap-2 items-center">
+                <h3 className="text-lg font-semibold tracking-wide">Address:</h3>{" "}
+                <span className="capitalize text-xl tracking-wide text-green-500">
+                  {item?.address || "N/A"}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>}
+      </div>
+    </>
+  );
+};
+
+export default UserProfileComponent;

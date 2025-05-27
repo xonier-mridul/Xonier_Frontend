@@ -16,6 +16,7 @@ import LogoutPopup from "../../components/common/LogoutPopup";
 
 const BuyerAdmin = () => {
   const [showSidebar, setShowSidebar] = useState(true);
+  const [isLoading, setIsLoading] = useState(false)
   const [submenuShow, setSubmenuShow] = useState(null);
   const [logoutPopupShow, setLogoutPopupShow] = useState(false);
   // Side Menu Start
@@ -40,7 +41,7 @@ const BuyerAdmin = () => {
 
 
   const handleLogout = async()=>{
-
+        setIsLoading(true)
     try {
        
        const logout = await axios.post(`${import.meta.env.VITE_SERVER_URL}user/logout`, {}, {withCredentials: true});
@@ -51,6 +52,9 @@ const BuyerAdmin = () => {
     } catch (error) {
        console.error(error);
     }
+    finally{
+      setIsLoading(false)
+    }
    }
 
     // Close Logout Popup
@@ -60,7 +64,7 @@ const BuyerAdmin = () => {
   }
   return (
     <>
-      { logoutPopupShow && <LogoutPopup logout={handleLogout} logoutShow={closeLogoutPopup}/>}
+      { logoutPopupShow && <LogoutPopup logout={handleLogout} logoutShow={closeLogoutPopup} isLoading={isLoading}/>}
       <div className="flex gap-2">
         {/* Sidebar */}
         <div

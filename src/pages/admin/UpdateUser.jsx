@@ -17,6 +17,13 @@ const UpdateUser = () => {
     website: "",
 
   })
+  const [branchDetail, setBranchDetail] = useState([
+    {
+      gstNumber: "",
+      state: "",
+      address: "",
+    },
+  ]);
   const [errMessage, setErrMessage] = useState(null)
 
   const params = useParams();
@@ -52,13 +59,34 @@ const UpdateUser = () => {
             tradeNumber: response.data?.user?.tradeNumber|| "",
             website: response.data?.user?.website|| "",
            
-            
-        })
+          })
+          if (response.data?.user?.branchDetail && response.data?.user?.branchDetail.length > 0) {
+      setBranchDetail(response.data?.user?.branchDetail);
+    }
         
       }
     } catch (error) {
       console.error(error);
     }
+  };
+  const handleBranchChange = (index, e) => {
+    const { name, value } = e.target;
+    const updatedBranches = [...branchDetail];
+    updatedBranches[index][name] = value;
+    setBranchDetail(updatedBranches);
+  };
+
+  const addBranchField = () => {
+    setBranchDetail([
+      ...branchDetail,
+      { gstNumber: "", state: "", address: "" },
+    ]);
+  };
+
+  const removeBranchField = (index) => {
+    if (branchDetail.length === 1) return;
+    const updated = branchDetail.filter((_, i) => i !== index);
+    setBranchDetail(updated);
   };
 
   
@@ -75,7 +103,7 @@ const UpdateUser = () => {
     
     try {
         if(!id) return setErrMessage('invalid user id, please try again')
-        const response = await api.patch(`/user/update-user-by-admin/${id}`, formData, {withCredentials: true})
+        const response = await api.patch(`/user/update-user-by-admin/${id}`, {...formData, branchDetail}, {withCredentials: true})
         if (response.status === 200){
             toast.success(`${userData?.name} profile updated successfully`)
             navigate(-1)
@@ -94,7 +122,10 @@ const UpdateUser = () => {
   return (
     <>
       <div className="p-5 flex flex-col gap-5">
-        <UpdateUserForm handleSubmit={handleSubmit} userData={userData} formData={formData} handleChange={handleChange} navigate={navigate} isLoading={isLoading} errMessage={errMessage} id={id}/>
+        <UpdateUserForm handleSubmit={handleSubmit} userData={userData} formData={formData} handleChange={handleChange} navigate={navigate} isLoading={isLoading} errMessage={errMessage} id={id} handleBranchChange={handleBranchChange}
+          branchDetail={branchDetail}
+          addBranchField={addBranchField}
+          removeBranchField={removeBranchField}/>
       </div>
     </>
   );
