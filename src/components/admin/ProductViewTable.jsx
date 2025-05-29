@@ -4,6 +4,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 
+// MEDIA
+
+import { FaUserEdit, FaListUl } from "react-icons/fa";
+
+
+
 const ProductViewTable = () => {
       // States Start
       const [catalogData, setCatalogData] = useState([])
@@ -36,8 +42,13 @@ const ProductViewTable = () => {
     <>
       <div className='bg-white rounded-2xl border-2 border-emerald-600 m-5'>
             <div className='mb-5 flex justify-between items-center px-8 py-6 border-b-1 border-gray-300'>
+
              <h2 className='font-semibold text-2xl capitalize'>{catalogData?.productName || "N/A"}</h2>
-             <Link to={"/admin/product-list"} className='text-lg text-white bg-emerald-600 py-3 px-6 rounded-lg cursor-pointer'> Product list </Link>
+              <div className='flex items-center gap-5'>
+             <Link to={"/admin/product-list"} className='text-lg text-white bg-emerald-600 py-2.5 px-6 rounded-lg cursor-pointer flex items-center gap-2'> <FaListUl className='text-lg'/> Product list </Link>
+             <Link to={`/admin/product-list/product-edit/${catalogData?._id}`} className='text-lg text-white bg-emerald-600 py-2.5 px-6 rounded-lg cursor-pointer flex items-center gap-2'> <FaUserEdit className='text-xl'/> Edit Product
+             </Link>
+              </div>
             </div>
             <div className='px-8 py-6'>
             <table className='w-full border-[1px] border-[#eff2f5] '>

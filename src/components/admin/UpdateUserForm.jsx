@@ -1,6 +1,7 @@
 import React from "react";
-import { IoMdCloudUpload } from "react-icons/io";
+import { IoMdCloudUpload, IoIosArrowBack } from "react-icons/io";
 import { FaPlus, FaMinus } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 
 const UpdateUserForm = ({
   handleSubmit,
@@ -40,18 +41,21 @@ const UpdateUserForm = ({
       <div className="bg-white rounded-4xl border-emerald-500 border-2 ">
         <div className="w-full flex justify-between items-center border-b-1 border-stone-200 px-8 py-6">
           <h2 className="font-bold text-2xl tracking-wide">User Edit Form</h2>
-          <div>
+          <div className="flex items-center gap-4">
             <button
-              className="bg-teal-600 px-5 py-2 rounded-lg text-white hover:scale-104 hover:bg-teal-700 transition-all duration-300 cursor-pointer"
+              className="bg-teal-600 px-5 py-2 rounded-lg text-white hover:scale-104 hover:bg-teal-700 transition-all duration-300 cursor-pointer flex items-center gap-2"
               onClick={() => navigate(-1)}
             >
-              Back
+             <IoIosArrowBack className="text-lg"/> Back
             </button>
+            
           </div>
         </div>
         <div className="px-8 py-6">
           <form className="flex flex-col gap-8" onSubmit={handleSubmit}>
-            <div className="grid grid-cols-2 gap-5">
+            <div className="font-semibold text-2xl"><span className="text-red-500">*</span>Personal Details</div>
+            <div className="p-5 rounded-lg bg-stone-50 grid grid-cols-2 gap-4">
+              
               <div className="flex flex-col gap-2">
                 <label htmlFor="name" className="tracking-wide">
                   <span className="text-red-500 text-lg">*</span>Name
@@ -59,24 +63,12 @@ const UpdateUserForm = ({
                 <input
                   type="text"
                   name="name"
-                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg capitalize"
+                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg capitalize bg-white"
                   value={formData.name}
                   onChange={handleChange}
                 />
               </div>
-              <div className="flex flex-col gap-2">
-                <label htmlFor="company" className="tracking-wide">
-                  {" "}
-                  <span className="text-red-500 text-lg">*</span>Company
-                </label>
-                <input
-                  type="text"
-                  name="company"
-                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg capitalize"
-                  value={formData.company}
-                  onChange={handleChange}
-                />
-              </div>
+              
               <div className="flex flex-col gap-2">
                 <label htmlFor="email" className="tracking-wide">
                   <span className="text-red-500 text-lg">*</span>Email
@@ -84,7 +76,7 @@ const UpdateUserForm = ({
                 <input
                   type="email"
                   name="email"
-                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg"
+                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg bg-white"
                   value={formData.email}
                   onChange={handleChange}
                 />
@@ -96,7 +88,7 @@ const UpdateUserForm = ({
                 <input
                   type="number"
                   name="number"
-                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg"
+                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg bg-white"
                   value={formData.number}
                   onChange={handleChange}
                 />
@@ -110,7 +102,7 @@ const UpdateUserForm = ({
                   id="category"
                   onChange={handleChange}
                   value={formData.category}
-                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg"
+                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg bg-white"
                 >
                   <option value="" hidden>
                     {" "}
@@ -136,7 +128,7 @@ const UpdateUserForm = ({
                   id="category"
                   onChange={handleChange}
                   value={formData.category}
-                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg"
+                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg bg-white"
                 >
                   <option value="" hidden>
                     {" "}
@@ -150,6 +142,52 @@ const UpdateUserForm = ({
               <option value="interior">Interior</option>
                 </select>
               </div>}
+              
+              
+            </div>
+            <div className="font-semibold text-2xl"><span className="text-red-500">*</span>Company Details</div>
+            <div className="p-5 rounded-lg bg-stone-50 grid grid-cols-2 gap-4">
+<div className="flex flex-col gap-2">
+                <label htmlFor="company" className="tracking-wide">
+                  {" "}
+                  <span className="text-red-500 text-lg">*</span>Company
+                </label>
+                <input
+                  type="text"
+                  name="company"
+                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg capitalize bg-white"
+                  value={formData.company}
+                  onChange={handleChange}
+                />
+              </div>
+<div className="flex flex-col gap-2">
+                <label htmlFor="address" className="tracking-wide">
+                  {" "}
+                  <span className="text-red-500 text-lg">*</span>Address
+                </label>
+                <input
+                  type="text"
+                  name="address"
+                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg capitalize bg-white"
+                  value={formData.address}
+                  onChange={handleChange}
+                  placeholder="Address"
+                />
+              </div>
+<div className="flex flex-col gap-2">
+                <label htmlFor="companyGSTNumber" className="tracking-wide">
+                  {" "}
+                  <span className="text-red-500 text-lg">*</span>Company GST Number
+                </label>
+                <input
+                  type="text"
+                  name="companyGSTNumber"
+                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg capitalize bg-white"
+                  value={formData.companyGSTNumber}
+                  onChange={handleChange}
+                  placeholder="Company GST number"
+                />
+              </div>
               <div className="flex flex-col gap-2">
                 <label htmlFor="tradeNumber" className="tracking-wide">
                   <span className="text-red-500 text-lg">*</span>Trade Number
@@ -157,21 +195,23 @@ const UpdateUserForm = ({
                 <input
                   type="text"
                   name="tradeNumber"
-                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg"
+                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg bg-white"
                   value={formData.tradeNumber}
                   onChange={handleChange}
+                  placeholder="Trade Number"
                 />
               </div>
-              <div className="flex flex-col gap-2 col-span-2">
+              <div className="flex flex-col gap-2 ">
                 <label htmlFor="website" className="tracking-wide">
                   <span className="text-red-500 text-lg">*</span>Website
                 </label>
                 <input
                   type="url"
                   name="website"
-                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg"
+                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg bg-white"
                   value={formData.website}
                   onChange={handleChange}
+                  placeholder="Website"
                 />
               </div>
             </div>
@@ -189,7 +229,7 @@ const UpdateUserForm = ({
                                   name="gstNumber"
                                   value={item.gstNumber}
                                   onChange={(e) => handleBranchChange(index, e)}
-                                  className="w-full bg-white border-1 border-zinc-200 outline-none p-3 rounded-lg"
+                                  className="w-full bg-white border-1 border-zinc-200 outline-none p-3 rounded-lg "
                                   placeholder="GST Number"
                                 />
                               </div>
@@ -199,7 +239,7 @@ const UpdateUserForm = ({
                                   name="state"
                                   value={item.state}
                                   onChange={(e) => handleBranchChange(index, e)}
-                                  className="w-full bg-white border-1 border-zinc-200 outline-none p-3 rounded-lg"
+                                  className="w-full bg-white border-1 border-zinc-200 outline-none p-3 rounded-lg "
                                 >
                                   <option value="" hidden>
                                     Select State

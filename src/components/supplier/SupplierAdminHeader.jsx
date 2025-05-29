@@ -5,6 +5,9 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform } from "framer-motion";
 import axios from 'axios';
 
+
+import { FaArrowLeft } from "react-icons/fa6";
+
 const SupplierAdminHeader = () => {
   const [showProfileTab, setShowProfileTab] = useState(false);
   const [showNotification,  setShowNotification] = useState(false);
@@ -49,8 +52,12 @@ const SupplierAdminHeader = () => {
 
   return (
     <div className=' backdrop-blur-xl bg-transparent w-full  flex justify-between items-center p-3 px-6 '>
-         <div className=''>
+         <div className='flex items-center gap-5'>
             <h2 className='text-2xl font-bold capitalize'> {Pathname} </h2>
+
+            <div className='flex items-center gap-2 '>
+               <button className='h-9 w-9 rounded-full flex justify-center items-center'><FaArrowLeft /></button>
+            </div>
          </div>
          <div className='flex justify-end items-center gap-6'>
              <div className='relative' onMouseEnter={()=>setShowNotification(true)} onMouseLeave={()=>setShowNotification(false)}>

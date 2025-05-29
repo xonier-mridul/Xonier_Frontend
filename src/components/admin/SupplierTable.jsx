@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import img from "../../assets/admin-img.jpg";
+import { Link } from "react-router-dom";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -86,7 +87,7 @@ const SupplierTable = () => {
               </th>
               <th className="p-4 text-start">Company</th>
               <th className="p-4 text-start border-l-1 border-[#f1f1f1]">
-                Number
+                Category
               </th>
 
               <th className="p-4 text-start border-l-1 border-[#f1f1f1]">
@@ -102,13 +103,13 @@ const SupplierTable = () => {
             {length > 0 ? (
               filteredData.map((item, index) => (
                 <tr key={item._id}>
-                  <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1]">
-                    <span className="capitalize">
-                      <div className="capitalize flex items-center flex-nowrap gap-3">
+                  <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1] hover:text-green-500">
+                    
+                      <Link to={`/admin/user-profile/${item._id}`} className="profile capitalize flex items-center flex-nowrap gap-3">
                         {" "}
                         <div className="relative h-10 w-10">
                           <img
-                            className="h-10 w-10 rounded-lg"
+                            className="h-10 w-10 rounded-lg profile-img"
                             src={img}
                             alt=""
                           />{" "}
@@ -116,26 +117,28 @@ const SupplierTable = () => {
                             <span className="absolute h-2.5 w-2.5 rounded-full bg-green-500 z-50 bottom-0 right-0"></span>
                           )}{" "}
                         </div>{" "}
-                        {item.name}
-                      </div>
-                    </span>
+                        {item?.name || "N/A"}
+                      </Link>
+                    
                   </td>
                   <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1]">
                     {" "}
-                    <span className="capitalize"> {item.company} </span>
+                    <span className="capitalize"> {item?.company || 'N/A'} </span>
                   </td>
                   <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1]">
-                    {item.number}
+                    <span className=" text-lime-500 bg-emerald-50 capitalize text-sm  py-2 px-4 rounded-lg text-nowrap font-medium">
+                      {item?.category || 'N/A'}
+                    </span>
                   </td>
 
                   <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1] text-orange-500">
-                    {item.email}
+                    {item?.email || 'N/A'}
                   </td>
                   <td className="p-4 border-zinc-200 border-b-[1px] border-l-1">
                     <div className="flex items-center gap-4">
                       <button
                         className="rounded-lg bg-teal-600 px-2 py-2 text-white cursor-pointer hover:scale-104 transition-all duration-300 hover:bg-teal-700"
-                        onClick={() => navigate(`update-password/${item._id}`)}
+                        onClick={() => navigate(`/admin/update-password/${item._id}`)}
                       >
                         <MdOutlinePassword className="text-xl" />
                       </button>

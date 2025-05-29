@@ -4,18 +4,24 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // media
+import { FaDownload, FaStarOfLife, FaUser, FaUserAlt } from "react-icons/fa";
 
 import { FaPlus, FaMinus } from "react-icons/fa";
 import { MdOutlinePercent, MdOutlineCurrencyRupee } from "react-icons/md";
+import { AiOutlineUserAdd } from "react-icons/ai";
+import { IoMdSearch } from "react-icons/io";
 
-const CatalogForm = () => {
+const AdminCatalogForm = ({ supplierData }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [errMessage, setErrorMessage] = useState(null)
+  const [errMessage, setErrorMessage] = useState(null);
   const [categoryData, setCategoryData] = useState([]);
+  const [assignSupplierShow, setAssignSupplierShow] = useState(false);
   const [subCategoryData, setSubCategoryData] = useState([]);
   const [specData, setSpecData] = useState([]);
   const [filterSpec, setFilterSpec] = useState([]);
   const [userData, setUserData] = useState([]);
+  const [selectedSupplier, setSelectedSupplier] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const [additionalSpecs, setAdditionalSpecs] = useState([
     {
       field: "",
@@ -30,6 +36,7 @@ const CatalogForm = () => {
     iso: "",
     specifications: {},
     createdBy: "",
+    coCreator: "",
   });
 
   const [paymentSchedule, setPaymentSchedule] = useState({
@@ -45,8 +52,17 @@ const CatalogForm = () => {
     productDiscount: "",
     discountValidity: "",
     productUnit: "",
-    condition:""
+    condition: "",
   });
+
+  const supplierFilterData = supplierData.filter((item) =>
+    `${item.name} ${item._id}}`.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleSupplierSelection = (id) => {
+    setSelectedSupplier(id);
+    setAssignSupplierShow(false);
+  };
 
   const addAdditionalSpec = () => {
     setAdditionalSpecs([...additionalSpecs, { field: "", value: "" }]);
@@ -63,14 +79,15 @@ const CatalogForm = () => {
     setAdditionalSpecs(updatedSpecs);
   };
 
-  const handleFileChange = (e)=>{
-      setCommercialCondition({...commercialCondition, condition: e.target.files[0]})
-      console.log(commercialCondition)
-  }
+  const handleFileChange = (e) => {
+    setCommercialCondition({
+      ...commercialCondition,
+      condition: e.target.files[0],
+    });
+    console.log(commercialCondition);
+  };
 
   // Handle payment schedule change
-
- 
 
   const handlePaymentScheduleChange = (e) => {
     const { name, value } = e.target;
@@ -87,21 +104,20 @@ const CatalogForm = () => {
     }));
   };
 
-  const CategoryHandleChange = (e) =>{
+  const CategoryHandleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
     getSubCategories(value);
-  }
+  };
 
   // Handle Commercial Condition Change
 
   const handleCommercialConditionChange = (e) => {
     const { name, value } = e.target;
     setCommercialCondition({ ...commercialCondition, [name]: value });
-    
   };
 
   // Handle specification input changes
@@ -116,21 +132,22 @@ const CatalogForm = () => {
     }));
   };
 
-
-  const verifyUser = async()=>{
+  const verifyUser = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}auth/verify-auth`, {withCredentials: true});
-      if(response.status === 200){
+      const response = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}auth/verify-auth`,
+        { withCredentials: true }
+      );
+      if (response.status === 200) {
         setFormData({
           ...formData,
-          createdBy: response.data?.user?._id
-
-        })
+          coCreator: response.data?.user?._id,
+        });
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   const getUsers = async () => {
     try {
@@ -196,7 +213,7 @@ const CatalogForm = () => {
     verifyUser();
     getUsers();
     getCategories();
-    
+
     getSpecification();
   }, []);
 
@@ -204,18 +221,16 @@ const CatalogForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true)
-  
+    setIsLoading(true);
     const formDataToSend = new FormData();
-  
-    formDataToSend.append("productName", formData.productName)
+    formDataToSend.append("productName", formData.productName);
     formDataToSend.append("category", formData.category);
     formDataToSend.append("subCategory", formData.subCategory);
-    formDataToSend.append("seller", formData.seller);
+    formDataToSend.append("seller", selectedSupplier);
     formDataToSend.append("iso", formData.iso);
-    formDataToSend.append("createdBy", formData.createdBy);
-  
-    
+    formDataToSend.append("createdBy", selectedSupplier);
+    formDataToSend.append("coCreator", formData.coCreator);
+
     formDataToSend.append(
       "specifications",
       JSON.stringify(
@@ -225,10 +240,9 @@ const CatalogForm = () => {
         }))
       )
     );
-  
+
     formDataToSend.append("addSpecifications", JSON.stringify(additionalSpecs));
     formDataToSend.append("paymentSchedule", JSON.stringify(paymentSchedule));
-  
 
     formDataToSend.append(
       "commercialCondition",
@@ -237,13 +251,15 @@ const CatalogForm = () => {
         priceValidity: commercialCondition.priceValidity,
         productDiscount: commercialCondition.productDiscount,
         discountValidity: commercialCondition.discountValidity,
-        productUnit: commercialCondition.productUnit
+        productUnit: commercialCondition.productUnit,
       })
     );
-  
+
     formDataToSend.append("condition", commercialCondition.condition);
-  
+
     try {
+      if (!selectedSupplier)
+        return setErrorMessage("Please select supplier first");
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}catalog`,
         formDataToSend,
@@ -254,7 +270,7 @@ const CatalogForm = () => {
           },
         }
       );
-  
+
       if (response.status === 201) {
         toast.success("Catalog Created successfully", {
           position: "top-right",
@@ -267,8 +283,7 @@ const CatalogForm = () => {
           theme: "colored",
           style: { backgroundColor: "#009689", color: "#fff" },
         });
-  
-        
+
         setFormData({
           productName: "",
           category: "",
@@ -278,7 +293,7 @@ const CatalogForm = () => {
           specifications: {},
           createdBy: "",
         });
-  
+
         setAdditionalSpecs([{ field: "", value: "" }]);
         setPaymentSchedule({
           advance: "",
@@ -286,7 +301,7 @@ const CatalogForm = () => {
           onDelivery: "",
           afterTesting: "",
         });
-  
+
         setCommercialCondition({
           productPrice: "",
           priceValidity: "",
@@ -294,17 +309,22 @@ const CatalogForm = () => {
           discountValidity: "",
           condition: null,
         });
+
+        setSelectedSupplier(null);
+        setErrorMessage(null);
       }
     } catch (error) {
-      console.error("Form submission error:", error.response?.data || error.message);
-      
-      setErrorMessage(error.response?.data?.message || "Something went wrong")
-    }
-    finally{
-      setIsLoading(false)
+      console.error(
+        "Form submission error:",
+        error.response?.data || error.message
+      );
+
+      setErrorMessage(error.response?.data?.message);
+    } finally {
+      setIsLoading(false);
     }
   };
-  
+
   useEffect(() => {
     if (specData?.length > 0) {
       const data = specData.filter(
@@ -314,18 +334,95 @@ const CatalogForm = () => {
     }
   }, [formData, specData]);
 
+  const supplierName = userData.filter(
+    (item) => item?._id === selectedSupplier
+  );
+
   return (
     <>
       <ToastContainer />
+      {assignSupplierShow && (
+        <div
+          className="fixed top-0 left-0 right-0 bottom-0 w-full backdrop-blur-sm bg-black/10 z-99"
+          onClick={() => setAssignSupplierShow(false)}
+        ></div>
+      )}
       <div className="bg-white w-full border-2 border-emerald-500 rounded-4xl">
         <h3 className="text-[20px] font-semibold p-9 py-6 border-b-1 border-zinc-200">
           Fill the form
         </h3>
         <form className="p-9 py-6 flex flex-col gap-5" onSubmit={handleSubmit}>
+          
+
+          <div className="w-full flex justify-between ">
+            <div>
+              {selectedSupplier ? (
+                <div
+                  className="bg-teal-600 px-5 py-2 flex items-center gap-2  text-white rounded-lg text-lg capitalize tracking-wide cursor-pointer hover:bg-teal-700 transition-all duration-300"
+                  onClick={() => navigate(`/admin/user-profile/`)}
+                >
+                  {" "}
+                  <FaUser className="text-lg" />
+                  {supplierName[0]?.company || "N/A"}
+                </div>
+              ) : (
+                <p>
+                  <span className="text-red-500 text-lg">*</span>Please Select
+                  the Supplier
+                </p>
+              )}
+            </div>
+            <div className="relative w-1/2 flex justify-end items-center">
+              <button
+                type="button"
+                className="rounded-lg px-5 py-2 border-teal-600 text-teal-600 border-2 flex items-center gap-1 tracking-wide cursor-pointer hover:bg-teal-600 hover:text-white transition-all duration-300"
+                onClick={() => setAssignSupplierShow(true)}
+              >
+                Assign Supplier <AiOutlineUserAdd className="text-xl" />
+              </button>
+              {assignSupplierShow && (
+                <div className="absolute top-12 bg-white w-full py-5 px-6 rounded-xl z-100 flex flex-col gap-3">
+                  <h3 className="text-lg font-semibold tracking-wide">
+                    <span className="text-red-500 text-xl">*</span>Assign
+                    Supplier
+                  </h3>
+                  <div className="w-full border-1 bg-white border-[#E4E6EF] rounded-lg flex justify-center gap-2 items-center px-2 py-2 text-sm">
+                    <IoMdSearch className="text-2xl text-green-500 " />
+                    <input
+                      type="text"
+                      className="w-full  outline-none "
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      placeholder="Search buyers..."
+                    />
+                  </div>
+                  <ul className="flex flex-col  bg-blue-50  rounded-xl overflow-hidden">
+                    {supplierFilterData.map((item, index) => (
+                      <li
+                        className="capitalize hover:bg-blue-100 px-4 py-2 transition-all duration-200 rounded-lg cursor-pointer flex items-center gap-2"
+                        onClick={() => handleSupplierSelection(item._id)}
+                      >
+                        {" "}
+                        <span className="text-green-500">
+                          <FaUserAlt />{" "}
+                        </span>{" "}
+                        {item.company}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+
+         
+
           {/* Main Form */}
           <div className="flex flex-col gap-5">
             <div className="flex flex-col gap-3">
-              <label className="text-lg" htmlFor="productName"> Product Name</label>
+              <label className="text-lg" htmlFor="productName">
+                {" "}
+                Product Name
+              </label>
               <input
                 type="text"
                 name="productName"
@@ -374,39 +471,24 @@ const CatalogForm = () => {
                   <option value="" hidden>
                     Select Sub Category
                   </option>
-                  {subCategoryData.length > 0 ? subCategoryData?.map((item) => (
-                    <option key={item._id} value={item._id}>
-                      {item.name}
+                  {subCategoryData.length > 0 ? (
+                    subCategoryData?.map((item) => (
+                      <option key={item._id} value={item._id}>
+                        {item.name}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="" disabled>
+                      {" "}
+                      Please select category first{" "}
                     </option>
-                  )): <option value="" disabled> Please select category first </option>}
+                  )}
                 </select>
               </div>
             </div>
 
             <div className="flex items-center gap-5">
-              <div className="flex w-1/2 flex-col gap-3">
-                <label className="text-lg" htmlFor="seller">
-                  Select Seller
-                </label>
-                <select
-                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg"
-                  name="seller"
-                  value={formData.seller}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="" hidden>
-                    Select Seller
-                  </option>
-                  {userData.map((item) => (
-                    <option key={item._id} value={item._id}>
-                      {item.company}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="flex w-1/2 flex-col gap-3">
+              <div className="flex w-full flex-col gap-3 ">
                 <label className="text-lg" htmlFor="iso">
                   ISO Certified
                 </label>
@@ -679,26 +761,34 @@ const CatalogForm = () => {
               </div>
 
               <div className="flex w-full flex-col gap-3 col-span-2">
-              <label htmlFor="productUnit">Product Unit</label>
-              <select name="productUnit" id="productUnit" className="border-1 border-zinc-200 bg-white w-full p-3 rounded-lg outline-none" value={commercialCondition.productUnit} onChange={handleCommercialConditionChange}>
-                    <option value="" hidden>Select product unit</option>
-                    <option value="mm">mm</option>
-                    <option value="cm">cm</option>
-                    <option value="m">meter</option>
-                    <option value="inch">inch</option>
-                    <option value="feet">feet</option>
-                    <option value="m²">m²</option>
-                    <option value="ft²">ft²</option>
-                    <option value="m³">m³</option>
-                    <option value="ft³">ft³</option>
-                    <option value="kg">kg</option>
-                    <option value="ton">ton</option>
-                    <option value="per piece">per piece</option>
-                    <option value="per bag">per bag</option>
-                    <option value="per bundle">per bundle</option>
-                    <option value="per roll">per roll</option>
-                    <option value="per sheet">per sheet</option>
-              </select>
+                <label htmlFor="productUnit">Product Unit</label>
+                <select
+                  name="productUnit"
+                  id="productUnit"
+                  className="border-1 border-zinc-200 bg-white w-full p-3 rounded-lg outline-none"
+                  value={commercialCondition.productUnit}
+                  onChange={handleCommercialConditionChange}
+                >
+                  <option value="" hidden>
+                    Select product unit
+                  </option>
+                  <option value="mm">mm</option>
+                  <option value="cm">cm</option>
+                  <option value="m">meter</option>
+                  <option value="inch">inch</option>
+                  <option value="feet">feet</option>
+                  <option value="m²">m²</option>
+                  <option value="ft²">ft²</option>
+                  <option value="m³">m³</option>
+                  <option value="ft³">ft³</option>
+                  <option value="kg">kg</option>
+                  <option value="ton">ton</option>
+                  <option value="per piece">per piece</option>
+                  <option value="per bag">per bag</option>
+                  <option value="per bundle">per bundle</option>
+                  <option value="per roll">per roll</option>
+                  <option value="per sheet">per sheet</option>
+                </select>
               </div>
 
               <div className="flex w-full flex-col gap-3 col-span-2">
@@ -708,23 +798,24 @@ const CatalogForm = () => {
                   name="conditions"
                   className=" border-1 border-zinc-200 bg-white w-full p-3 rounded-lg outline-none"
                   placeholder="Offer Validity"
-                 
                   onChange={handleFileChange}
                   required
                 />
               </div>
             </div>
           </div>
-          {errMessage && <div className="flex items-center justify-end">
-            <p className="text-red-500">{errMessage}</p>
-          </div>}
+          {errMessage && (
+            <div className="flex justify-end items-center">
+              <p className="text-red-500">{errMessage}</p>
+            </div>
+          )}
 
           <div className="flex items-center justify-end ">
             <button
               type="submit"
               className="rounded-lg bg-emerald-600 px-6 py-3 text-white w-fit cursor-pointer"
             >
-              {isLoading ? "Submitting..." : "Submit"}
+              {isLoading ? "Uploading..." : "Upload"}
             </button>
           </div>
         </form>
@@ -733,4 +824,4 @@ const CatalogForm = () => {
   );
 };
 
-export default CatalogForm;
+export default AdminCatalogForm;

@@ -15,7 +15,8 @@ const UpdateUser = () => {
     category: "",
     tradeNumber: "",
     website: "",
-
+    address:'',
+    companyGSTNumber:""
   })
   const [branchDetail, setBranchDetail] = useState([
     {
@@ -58,6 +59,8 @@ const UpdateUser = () => {
             category: response.data?.user?.category|| "",
             tradeNumber: response.data?.user?.tradeNumber|| "",
             website: response.data?.user?.website|| "",
+            address: response.data?.user?.address || "",
+            companyGSTNumber: response.data?.user?.companyGSTNumber || ""
            
           })
           if (response.data?.user?.branchDetail && response.data?.user?.branchDetail.length > 0) {

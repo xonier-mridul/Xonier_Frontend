@@ -17,6 +17,8 @@ const AddBuyer = () => {
     tradeNumber: "",
     website: "",
     password: "",
+    address:"",
+    companyGSTNumber:""
   });
 
   const navigate = useNavigate();
@@ -27,6 +29,7 @@ const AddBuyer = () => {
     try {
       const response = await api.post("/user/add-user-by-admin", formData, { withCredentials: true });
       if (response.status === 201) {
+        toast.success("Buyer created successfully");
         setFormData({
           name: "",
           company: "",
@@ -38,7 +41,7 @@ const AddBuyer = () => {
           website: "",
           password: "",
         });
-        toast.success("Buyer created successfully");
+        
         setErrMessage(null)
         navigate("/admin/buyer");
       }

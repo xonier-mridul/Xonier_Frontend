@@ -79,16 +79,16 @@ const BuyerTable = () => {
             {length > 0 ? (
               filteredData.map((item, index) => (
                 <tr key={item._id}>
-                  <td className="p-4 border-b-[1px] border-[#f1f1f1] hover:text-green-500 hover:underline transition-all duration-300">
+                  <td className="p-4 border-b-[1px] border-[#f1f1f1] hover:text-green-500 transition-all duration-300">
                     {" "}
                     <Link
                       to={`/admin/user-profile/${item._id}`}
-                      className="capitalize flex items-center flex-nowrap gap-3"
+                      className="capitalize flex items-center flex-nowrap gap-3 profile"
                     >
                       {" "}
                       <div className="relative h-10 w-10">
                         <img
-                          className="h-10 w-10 rounded-lg"
+                          className="h-10 w-10 rounded-lg profile-img"
                           src={img}
                           alt=""
                         />{" "}
@@ -118,7 +118,7 @@ const BuyerTable = () => {
                     <div className="flex items-center gap-2 ">
                       <button
                         className="rounded-lg bg-teal-600 px-2 py-2 text-white cursor-pointer hover:scale-104 transition-all duration-300 hover:bg-teal-700"
-                        onClick={() => navigate(`update-password/${item._id}`)}
+                        onClick={() => navigate(`/admin/update-password/${item._id}`)}
                       >
                         <MdOutlinePassword className="text-xl" />
                       </button>

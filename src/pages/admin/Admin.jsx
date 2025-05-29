@@ -3,7 +3,7 @@ import axios from "axios";
 import Logo from "../../assets/bildkart-admin-logo.png";
 import fav from "../../assets/b-fav.png";
 import DashboardHeader from "../../components/admin/DashboardHeader";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -16,6 +16,8 @@ import { RiContactsBook3Fill } from "react-icons/ri";
 import { BsFillChatRightQuoteFill } from "react-icons/bs";
 import { FaAngleDown, FaShopLock } from "react-icons/fa6";
 import LogoutPopup from "../../components/common/LogoutPopup";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 // Media End
 
@@ -25,6 +27,15 @@ const Admin = () => {
   const [submenuShow, setSubmenuShow] = useState(0);
   const [logoutPopupShow, setLogoutPopupShow] = useState(false)
 
+
+
+  useEffect(() => {
+    AOS.init({
+      duration: 300,
+      once: true
+    })
+  }, [])
+  
 
   const Navigate = useNavigate();
   // Side Menu Start

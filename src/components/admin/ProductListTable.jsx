@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { MdEdit, MdDelete } from "react-icons/md";
 import { FaEye, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaCartPlus } from "react-icons/fa6";
 
 // Media End
 
@@ -19,6 +20,9 @@ const ProductListTable = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
+  const [errMessage, setErrMessage] = useState(null);
+  const [showDeletePopup, setShowDeletePopup] = useState(false)
+  const [deleteCatalogId, setDeleteCatalogId] = useState(null)
   const navigate = useNavigate();
   const filterDataLength = filteredData.length;
 
@@ -74,6 +78,19 @@ const ProductListTable = () => {
 
   // Handle Delete
 
+
+  const handleDeletePopIp = (id)=>{
+   
+      setShowDeletePopup(true)
+      setDeleteCatalogId(id)
+   
+  }
+
+  const handleCancelDelete=()=>{
+    setShowDeletePopup(false)
+      setDeleteCatalogId(null)
+  }
+
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(
@@ -92,20 +109,11 @@ const ProductListTable = () => {
           style: { backgroundColor: "#009689", color: "#fff" },
         });
         setFilteredData(filteredData.filter((item) => item._id !== id));
+        setShowDeletePopup(false)
       }
     } catch (error) {
       console.error(error.message);
-      toast.error("Product not deleted successfully", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        style: { backgroundColor: "#009689", color: "#fff" },
-      });
+      setErrMessage(error?.response?.data?.message)
     }
   };
 
@@ -146,6 +154,16 @@ const ProductListTable = () => {
   return (
     <>
       <ToastContainer />
+      {showDeletePopup && <><div className='fixed top-0 left-0 right-0 bottom-0 backdrop-blur-sm z-99 bg-black/10'></div>
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-100 p-6 bg-white rounded-xl w-[550px] flex flex-col gap-4 shad" data-aos='fade-up' >
+        <h2 className=' text-2xl font-semibold'>Are you sure to delete this</h2>
+        <div className="flex items-center justify-end gap-3">
+
+          <button className="text-green-500 bg-green-100 px-5 py-2 rounded-lg hover:bg-green-500 hover:text-white transition-all duration-300 cursor-pointer" onClick={()=>handleDelete(deleteCatalogId)}>Yes</button>
+          <button className="text-red-500 bg-red-100 px-5 py-2 rounded-lg hover:bg-red-500 hover:text-white transition-all duration-300 cursor-pointer" onClick={handleCancelDelete}>No</button>
+        </div>
+      </div></>}
+
       <div className="bg-white shadow-lg rounded-2xl m-5 border-2 border-emerald-500">
         <div className="mb-5 flex justify-between items-center px-8 py-6 border-b-1 border-gray-300">
           <div className="flex gap-3 items-center">
@@ -194,9 +212,9 @@ const ProductListTable = () => {
 
           <Link
             to={"/admin/catalog"}
-            className="bg-emerald-600 p-3 px-8 rounded-lg text-white text-lg"
+            className="bg-emerald-600 p-2 px-8 rounded-lg text-white text-lg flex items-center gap-3 hover:scale-103 transition-all duration-300 hover:bg-emerald-700"
           >
-            Add Product
+            Add Product <FaCartPlus />
           </Link>
         </div>
 
@@ -254,7 +272,7 @@ const ProductListTable = () => {
                       <div className="flex items-center gap-4">
                         <button
                           type="button"
-                          className="rounded-lg bg-teal-600 px-2 py-2 text-white cursor-pointer"
+                          className="rounded-lg bg-teal-600 px-2 py-2 text-white cursor-pointer hover:scale-104 transition-all duration-300 hover:bg-teal-700"
                           onClick={() =>
                             navigate(
                               `/admin/product-list/product-view/${item._id}`
@@ -265,7 +283,7 @@ const ProductListTable = () => {
                         </button>
                         <button
                           type="button"
-                          className="rounded-lg bg-lime-500 px-2 py-2 text-white cursor-pointer"
+                          className="rounded-lg bg-lime-500 px-2 py-2 text-white cursor-pointer hover:scale-104 transition-all duration-300 hover:bg-lime-600"
                           onClick={() =>
                             navigate(
                               `/admin/product-list/product-edit/${item._id}`
@@ -276,8 +294,8 @@ const ProductListTable = () => {
                         </button>
                         <button
                           type="button"
-                          className="rounded-lg bg-red-500 px-2 py-2 text-white cursor-pointer"
-                          onClick={() => handleDelete(item._id)}
+                          className="rounded-lg bg-red-500 px-2 py-2 text-white cursor-pointer hover:scale-104 transition-all duration-300 hover:bg-red-600"
+                          onClick={() => handleDeletePopIp(item._id)}
                         >
                           <MdDelete className="text-xl" />
                         </button>

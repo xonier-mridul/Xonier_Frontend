@@ -16,6 +16,8 @@ const AddSupplier = () => {
           role: "supplier",
           category: "",
           password: "",
+          address:"",
+          companyGSTNumber:''
     })
     const [branchDetail, setBranchDetail] = useState([
         {
@@ -57,6 +59,7 @@ const AddSupplier = () => {
     try {
       const response = await api.post("/user/add-user-by-admin", {...formData, branchDetail}, { withCredentials: true });
       if (response.status === 201) {
+        toast.success("Supplier created successfully");
         setFormData({
           name: "",
           email: "",
@@ -66,7 +69,7 @@ const AddSupplier = () => {
           category: "",
           password: "",
         });
-        toast.success("Supplier created successfully");
+        
         setErrMessage(null)
         navigate("/admin/suppliers");
       }

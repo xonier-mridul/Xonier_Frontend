@@ -103,6 +103,7 @@ import UpdatePassword from "./pages/Common/UpdatePassword.jsx";
 import UpdateUser from "./pages/admin/UpdateUser.jsx";
 import AddSupplier from "./pages/admin/AddSupplier.jsx";
 import CreateRFQbyAdmin from "./pages/admin/CreateRFQbyAdmin.jsx";
+import AdminCatalog from "./pages/admin/AdminCatalog.jsx";
 
 
 
@@ -133,14 +134,7 @@ const router = createBrowserRouter(
         <Route path="/reset-password" element={
           <ProtectedRoute allowedRoles={["admin", "buyer", "supplier"]}>
           <ResetPassword/>
-          </ProtectedRoute>} />
-
-      
-        
-      
-
-
-      
+          </ProtectedRoute>} />   
 
       {/* Admin Panel with Nested Routes */}
 
@@ -159,10 +153,11 @@ const router = createBrowserRouter(
           <Route path="update" element={<AdminProfileUpdate/>}/>
         </Route>
         <Route path="user-profile/:id" element={<UserProfiles/>} />
+        <Route path="update-password/:id" element={<UpdatePassword/>}/>
         <Route path="suppliers" element={<CommonOutlet/>} >
           <Route index element={<SupplierTable />}/>
           <Route path="add-supplier" element={<AddSupplier/>} />
-          <Route path="update-password/:id" element={<UpdatePassword/>}/>
+          
           <Route path="update-user/:id" element={<UpdateUser/>}/>
         </Route>
         <Route path="create-rfq" element={<CommonOutlet/>} >
@@ -171,12 +166,12 @@ const router = createBrowserRouter(
         <Route path="buyer" element={<CommonOutlet/>}>
           <Route index element={<BuyerTable />}/>
           <Route path="add-buyer" element={<AddBuyer/>} />
-          <Route path="update-password/:id" element={<UpdatePassword/>}/>
+          
           <Route path="update-user/:id" element={<UpdateUser/>}/>
         </Route>
         <Route path="category" element={<Category />} />
         <Route path="sub-category" element={<SubCategory />} />
-        <Route path="catalog" element={<Catalog />} />
+        <Route path="catalog" element={<AdminCatalog />} />
         <Route path="inquiries" element={<Inquiry />} />
         <Route path="specification" element={<Specification />} />
         <Route path="contact" element={<ContactUs />} />
