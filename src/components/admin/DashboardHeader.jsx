@@ -77,13 +77,13 @@ const DashboardHeader = () => {
           </h2>
           <div className="flex items-center gap-4 ">
             <button
-              className="h-9 w-9 rounded-full flex justify-center items-center border-2 border-teal-600 text-teal-600 cursor-pointer hover:bg-teal-600 hover:text-white transition-all duration-300"
+              className="h-9 w-9 rounded-full flex justify-center items-center border-2 border-teal-600 text-teal-600 cursor-pointer hover:bg-blue-800 hover:text-white transition-all duration-300"
               onClick={() => Navigate(-1)}
             >
               <FaArrowLeft />
             </button>
             <button
-              className="h-9 w-9 rounded-full flex justify-center items-center border-2 border-teal-600 text-teal-600 cursor-pointer hover:bg-teal-600 hover:text-white transition-all duration-300"
+              className="h-9 w-9 rounded-full flex justify-center items-center border-2 border-teal-600 text-teal-600 cursor-pointer hover:bg-blue-800 hover:text-white transition-all duration-300"
               onClick={() => Navigate(1)}
             >
               <FaArrowRight />
@@ -113,7 +113,7 @@ const DashboardHeader = () => {
               viewport={{ once: true }}
               className="absolute -bottom-[150%] w-60 -left-[220%] rounded-lg bg-white shadow-[0_0_15px_#00000020] overflow-hidden"
             >
-              <div className="bg-[#019297] p-3 flex justify-center">
+              <div className="bg-blue-800 p-3 flex justify-center">
                 <h5 className="capitalize text-xl font-bold text-white">
                   Notifications
                 </h5>
@@ -135,7 +135,7 @@ const DashboardHeader = () => {
                 alt=""
               />
               {userProfileData?.isActive === true && (
-                <span className="h-2.5 w-2.5 rounded-full bg-green-500 absolute z-50 bottom-0 right-0"></span>
+                <span className="h-2.5 w-2.5 rounded-full bg-green-600 absolute z-50 bottom-0 right-0"></span>
               )}
             </div>
             <h3 className="text-lg font-bold capitalize">

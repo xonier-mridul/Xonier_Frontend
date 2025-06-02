@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const AddCategoryForm = ({fetchCategories}) => {
+  const [isLoading, setIsLoading]  = useState(false)
   const [formData, setFormData] = useState({
     category: "",
     // specification: [],
@@ -16,6 +17,7 @@ const AddCategoryForm = ({fetchCategories}) => {
   };
 
   const handleSubmit = async (e) => {
+    setIsLoading(true)
     e.preventDefault();
     try {
       const response = await axios.post(
@@ -32,17 +34,7 @@ const AddCategoryForm = ({fetchCategories}) => {
       if (response.status === 201) {
         fetchCategories();
 
-        toast.success(`"${formData.category}" Category Added successfully`, {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-          style: { backgroundColor: "#009689", color: "#fff" },
-        });
+        toast.success(`"${formData.category}" Category Added successfully`);
         setFormData({
           category: "",
           specification: [],
@@ -50,6 +42,10 @@ const AddCategoryForm = ({fetchCategories}) => {
       }
     } catch (error) {
       console.log(error.message);
+      
+    }
+    finally{
+      setIsLoading(false)
     }
   };
 
@@ -84,7 +80,7 @@ const AddCategoryForm = ({fetchCategories}) => {
               type="submit"
             >
               {" "}
-              Submit
+              {isLoading ? "Submitting" :  "Submit" }
             </button>
           </div>
         </form>

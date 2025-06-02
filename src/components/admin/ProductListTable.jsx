@@ -222,15 +222,15 @@ const ProductListTable = () => {
           <table className="w-full border-[1px] border-zinc-200">
             <thead>
               <tr className="bg-slate-100 border-b-1 border-zinc-200">
-                <th className="p-4 text-start">Manufacturer</th>
+                <th className="p-4 text-start">Product Name</th>
                 <th className="p-4 text-start border-l-1 border-zinc-200">
                   Category
                 </th>
                 <th className="p-4 text-start border-l-1 border-zinc-200">
-                  Product
+                  Developer Type
                 </th>
                 <th className="p-4 text-start border-l-1 border-zinc-200">
-                  ISO Certification
+                  Experience Level
                 </th>
                 <th className="p-4 text-start border-l-1 border-zinc-200">
                   Actions
@@ -247,7 +247,7 @@ const ProductListTable = () => {
                   >
                     <td className="p-4 border-zinc-200 border-l-1">
                       
-                     <span className="capitalize"> {item.seller?.company} </span>
+                     <span className="capitalize"> {item?.productName} </span>
                     </td>
                     <td className="p-4 border-zinc-200 border-l-1">
                       {" "}
@@ -255,18 +255,12 @@ const ProductListTable = () => {
                     </td>
                     <td className="p-4 border-zinc-200 border-l-1">
                       {" "}
-                      {item.subCategory.name}{" "}
+                      {item.subCategory.name }{" "}
                     </td>
                     <td className="p-4 border-zinc-200 border-l-1">
-                      <span
-                        className={` ${
-                          item.iso === "yes"
-                            ? "text-lime-500 bg-emerald-50"
-                            : "text-red-500 bg-red-50"
-                        } capitalize  py-2 px-4 rounded-lg  font-semibold`}
-                      >
-                        {item.iso}
-                      </span>
+                      
+                        <span className="bg-green-600 px-4 py-1.5 rounded-lg text-white text-sm tracking-wide">{item?.experience || "N/A"}</span>
+                      
                     </td>
                     <td className="p-4 border-zinc-200 border-l-1">
                       <div className="flex items-center gap-4">

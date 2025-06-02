@@ -144,7 +144,7 @@ const ContactDataTable = ({ contactData, setContactData, getContactData }) => {
                     </button>
                     <button
                       type="button"
-                      className="rounded-lg bg-lime-500 px-2 py-2 text-white cursor-pointer"
+                      className="rounded-lg bg-blue-500 px-2 py-2 text-white cursor-pointer"
                     >
                       <MdEdit className="text-xl" />
                     </button>

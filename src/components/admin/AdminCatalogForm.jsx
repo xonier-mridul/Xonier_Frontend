@@ -6,10 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 // media
 import { FaDownload, FaStarOfLife, FaUser, FaUserAlt } from "react-icons/fa";
 
-import { FaPlus, FaMinus } from "react-icons/fa";
-import { MdOutlinePercent, MdOutlineCurrencyRupee } from "react-icons/md";
-import { AiOutlineUserAdd } from "react-icons/ai";
-import { IoMdSearch } from "react-icons/io";
+import { FaXmark } from "react-icons/fa6";
 
 const AdminCatalogForm = ({ supplierData }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,81 +14,47 @@ const AdminCatalogForm = ({ supplierData }) => {
   const [categoryData, setCategoryData] = useState([]);
   const [assignSupplierShow, setAssignSupplierShow] = useState(false);
   const [subCategoryData, setSubCategoryData] = useState([]);
-  const [specData, setSpecData] = useState([]);
-  const [filterSpec, setFilterSpec] = useState([]);
+  const [filterTech, setFilterTech] = useState([]);
   const [userData, setUserData] = useState([]);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [additionalSpecs, setAdditionalSpecs] = useState([
-    {
-      field: "",
-      value: "",
-    },
-  ]);
+  const [technologyData, setTechnologyData] = useState([]);
+  const [filterTechnologies, setFilterTechnologies] = useState([]);
   const [formData, setFormData] = useState({
     productName: "",
     category: "",
     subCategory: "",
-    seller: "",
-    iso: "",
-    specifications: {},
+    hourlyRate: "",
+    experience: "",
+    technologies: [],
     createdBy: "",
-    coCreator: "",
+    resume: "",
+    language: [],
+    skillDescription: "",
   });
-
-  const [paymentSchedule, setPaymentSchedule] = useState({
-    advance: "",
-    afterDispatch: "",
-    onDelivery: "",
-    afterTesting: "",
-  });
-
-  const [commercialCondition, setCommercialCondition] = useState({
-    productPrice: "",
-    priceValidity: "",
-    productDiscount: "",
-    discountValidity: "",
-    productUnit: "",
-    condition: "",
-  });
-
-  const supplierFilterData = supplierData.filter((item) =>
-    `${item.name} ${item._id}}`.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const handleSupplierSelection = (id) => {
-    setSelectedSupplier(id);
-    setAssignSupplierShow(false);
-  };
-
-  const addAdditionalSpec = () => {
-    setAdditionalSpecs([...additionalSpecs, { field: "", value: "" }]);
-  };
-
-  const removeAdditionalSpec = (index) => {
-    if (additionalSpecs.length === 1) return;
-    setAdditionalSpecs(additionalSpecs.filter((item, i) => i !== index));
-  };
-
-  const handleAdditionalSpecChange = (index, field, value) => {
-    const updatedSpecs = [...additionalSpecs];
-    updatedSpecs[index][field] = value;
-    setAdditionalSpecs(updatedSpecs);
-  };
 
   const handleFileChange = (e) => {
-    setCommercialCondition({
-      ...commercialCondition,
-      condition: e.target.files[0],
+    const { name } = e.target;
+    setFormData({
+      ...formData,
+      [name]: e.target.files[0],
     });
-    console.log(commercialCondition);
+    console.log(formData);
   };
 
-  // Handle payment schedule change
+  // Handle Language Change
 
-  const handlePaymentScheduleChange = (e) => {
+  const handleLanguageChange = (e) => {
     const { name, value } = e.target;
-    setPaymentSchedule({ ...paymentSchedule, [name]: value });
+
+    setFormData({ ...formData, language: [...formData.language, value] });
+    
+  };
+
+  const handleRemoveLanguage = (i) => {
+    setFormData({
+      ...formData,
+      language: formData.language.filter((_, index) => index !== i),
+    });
   };
 
   // Handle input changes
@@ -113,55 +76,29 @@ const AdminCatalogForm = ({ supplierData }) => {
     getSubCategories(value);
   };
 
-  // Handle Commercial Condition Change
-
-  const handleCommercialConditionChange = (e) => {
-    const { name, value } = e.target;
-    setCommercialCondition({ ...commercialCondition, [name]: value });
-  };
-
-  // Handle specification input changes
-  const handleSpecChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      specifications: {
-        ...prev.specifications,
-        [name]: value,
-      },
-    }));
-  };
+  useEffect(() => {
+    setFormData((prev) => ({ ...prev, technologies: "" }));
+  }, [formData.category]);
 
   const verifyUser = async () => {
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}auth/verify-auth`,
-        { withCredentials: true }
-      );
-      if (response.status === 200) {
-        setFormData({
-          ...formData,
-          coCreator: response.data?.user?._id,
-        });
-      }
-    } catch (error) {
-      console.error(error);
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_SERVER_URL}auth/verify-auth`,
+      { withCredentials: true }
+    );
+    if (response.status === 200) {
+      const userId = response?.data?.user?._id;
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        createdBy: userId,
+      }));
+      console.log("User ID:", userId);
     }
-  };
+  } catch (error) {
+    console.error(error);
+  }
+};
 
-  const getUsers = async () => {
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}user/supplier`,
-        { withCredentials: true }
-      );
-      if (response.status === 200) {
-        setUserData(response.data.user);
-      }
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
 
   const getCategories = async () => {
     try {
@@ -200,7 +137,7 @@ const AdminCatalogForm = ({ supplierData }) => {
       );
 
       if (response.status === 200) {
-        setSpecData(response.data);
+        setTechnologyData(response.data);
       }
     } catch (error) {
       console.error(error.message);
@@ -210,56 +147,34 @@ const AdminCatalogForm = ({ supplierData }) => {
   // Fetch User Data, Categories, Sub-Categories,  Specification
 
   useEffect(() => {
-    verifyUser();
-    getUsers();
     getCategories();
-
     getSpecification();
+    verifyUser();
   }, []);
+
+
 
   // Handle Form Submit
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+
     const formDataToSend = new FormData();
     formDataToSend.append("productName", formData.productName);
     formDataToSend.append("category", formData.category);
     formDataToSend.append("subCategory", formData.subCategory);
-    formDataToSend.append("seller", selectedSupplier);
-    formDataToSend.append("iso", formData.iso);
-    formDataToSend.append("createdBy", selectedSupplier);
-    formDataToSend.append("coCreator", formData.coCreator);
+    formDataToSend.append("hourlyRate", formData.hourlyRate);
+    formDataToSend.append("experience", formData.experience);
+    formDataToSend.append("resume", formData.resume);
+    formDataToSend.append("createdBy", formData.createdBy);
+    formDataToSend.append("skillDescription", formData.skillDescription);
+    formDataToSend.append("language", JSON.stringify(formData.language));
+    
+    formDataToSend.append("technologies", JSON.stringify(formData.technologies));
 
-    formDataToSend.append(
-      "specifications",
-      JSON.stringify(
-        Object.entries(formData.specifications).map(([key, value]) => ({
-          key,
-          value,
-        }))
-      )
-    );
-
-    formDataToSend.append("addSpecifications", JSON.stringify(additionalSpecs));
-    formDataToSend.append("paymentSchedule", JSON.stringify(paymentSchedule));
-
-    formDataToSend.append(
-      "commercialCondition",
-      JSON.stringify({
-        productPrice: commercialCondition.productPrice,
-        priceValidity: commercialCondition.priceValidity,
-        productDiscount: commercialCondition.productDiscount,
-        discountValidity: commercialCondition.discountValidity,
-        productUnit: commercialCondition.productUnit,
-      })
-    );
-
-    formDataToSend.append("condition", commercialCondition.condition);
 
     try {
-      if (!selectedSupplier)
-        return setErrorMessage("Please select supplier first");
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}catalog`,
         formDataToSend,
@@ -272,45 +187,21 @@ const AdminCatalogForm = ({ supplierData }) => {
       );
 
       if (response.status === 201) {
-        toast.success("Catalog Created successfully", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-          style: { backgroundColor: "#009689", color: "#fff" },
-        });
+        toast.success("Catalog Created successfully");
 
         setFormData({
           productName: "",
           category: "",
           subCategory: "",
-          seller: "",
-          iso: "",
-          specifications: {},
+          hourlyRate: "",
+          experience: "",
+          technologies: [],
           createdBy: "",
+          resume: "",
+          language: [],
+          skillDescription: "",
         });
 
-        setAdditionalSpecs([{ field: "", value: "" }]);
-        setPaymentSchedule({
-          advance: "",
-          afterDispatch: "",
-          onDelivery: "",
-          afterTesting: "",
-        });
-
-        setCommercialCondition({
-          productPrice: "",
-          priceValidity: "",
-          productDiscount: "",
-          discountValidity: "",
-          condition: null,
-        });
-
-        setSelectedSupplier(null);
         setErrorMessage(null);
       }
     } catch (error) {
@@ -326,17 +217,41 @@ const AdminCatalogForm = ({ supplierData }) => {
   };
 
   useEffect(() => {
-    if (specData?.length > 0) {
-      const data = specData.filter(
+    if (technologyData?.length > 0) {
+      const data = technologyData.filter(
         (item) => item.category?._id === formData.category
       );
-      setFilterSpec(data);
+      setFilterTech(data);
     }
-  }, [formData, specData]);
+  }, [formData, technologyData]);
 
-  const supplierName = userData.filter(
-    (item) => item?._id === selectedSupplier
-  );
+  // Handle Technology Change
+  const handleTechChange = (e) => {
+    const { value } = e.target;
+
+    if (!formData.technologies.includes(value)) {
+      setFormData((prev) => ({
+        ...prev,
+        technologies: [...prev.technologies, value],
+      }));
+    }
+  };
+
+  // Handle Remove Technology
+  const handleRemoveTech = (techId) => {
+    setFormData((prev) => ({
+      ...prev,
+      technologies: prev.technologies.filter((id) => id !== techId),
+    }));
+  };
+
+  useEffect(() => {
+    setFilterTechnologies(
+      technologyData.filter((item) =>
+        formData?.technologies?.includes(item._id)
+      )
+    );
+  }, [formData]);
 
   return (
     <>
@@ -352,76 +267,12 @@ const AdminCatalogForm = ({ supplierData }) => {
           Fill the form
         </h3>
         <form className="p-9 py-6 flex flex-col gap-5" onSubmit={handleSubmit}>
-          
-
-          <div className="w-full flex justify-between ">
-            <div>
-              {selectedSupplier ? (
-                <div
-                  className="bg-teal-600 px-5 py-2 flex items-center gap-2  text-white rounded-lg text-lg capitalize tracking-wide cursor-pointer hover:bg-teal-700 transition-all duration-300"
-                  onClick={() => navigate(`/admin/user-profile/`)}
-                >
-                  {" "}
-                  <FaUser className="text-lg" />
-                  {supplierName[0]?.company || "N/A"}
-                </div>
-              ) : (
-                <p>
-                  <span className="text-red-500 text-lg">*</span>Please Select
-                  the Supplier
-                </p>
-              )}
-            </div>
-            <div className="relative w-1/2 flex justify-end items-center">
-              <button
-                type="button"
-                className="rounded-lg px-5 py-2 border-teal-600 text-teal-600 border-2 flex items-center gap-1 tracking-wide cursor-pointer hover:bg-teal-600 hover:text-white transition-all duration-300"
-                onClick={() => setAssignSupplierShow(true)}
-              >
-                Assign Supplier <AiOutlineUserAdd className="text-xl" />
-              </button>
-              {assignSupplierShow && (
-                <div className="absolute top-12 bg-white w-full py-5 px-6 rounded-xl z-100 flex flex-col gap-3">
-                  <h3 className="text-lg font-semibold tracking-wide">
-                    <span className="text-red-500 text-xl">*</span>Assign
-                    Supplier
-                  </h3>
-                  <div className="w-full border-1 bg-white border-[#E4E6EF] rounded-lg flex justify-center gap-2 items-center px-2 py-2 text-sm">
-                    <IoMdSearch className="text-2xl text-green-500 " />
-                    <input
-                      type="text"
-                      className="w-full  outline-none "
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      placeholder="Search buyers..."
-                    />
-                  </div>
-                  <ul className="flex flex-col  bg-blue-50  rounded-xl overflow-hidden">
-                    {supplierFilterData.map((item, index) => (
-                      <li
-                        className="capitalize hover:bg-blue-100 px-4 py-2 transition-all duration-200 rounded-lg cursor-pointer flex items-center gap-2"
-                        onClick={() => handleSupplierSelection(item._id)}
-                      >
-                        {" "}
-                        <span className="text-green-500">
-                          <FaUserAlt />{" "}
-                        </span>{" "}
-                        {item.company}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          </div>
-
-         
-
           {/* Main Form */}
           <div className="flex flex-col gap-5">
             <div className="flex flex-col gap-3">
-              <label className="text-lg" htmlFor="productName">
+              <label className="text-lg " htmlFor="productName">
                 {" "}
-                Product Name
+                <span className="text-red-500 text-lg">*</span> Product Name
               </label>
               <input
                 type="text"
@@ -436,7 +287,8 @@ const AdminCatalogForm = ({ supplierData }) => {
             <div className="flex items-center gap-5">
               <div className="flex w-1/2 flex-col gap-3">
                 <label className="text-lg" htmlFor="category">
-                  Select Category
+                  <span className="text-red-500 text-lg">*</span> Select
+                  Category
                 </label>
                 <select
                   className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg"
@@ -453,13 +305,13 @@ const AdminCatalogForm = ({ supplierData }) => {
                       {category.category}
                     </option>
                   ))}
-                  <option value="other">Other</option>
                 </select>
               </div>
 
               <div className="flex w-1/2 flex-col gap-3">
                 <label className="text-lg" htmlFor="subCategory">
-                  Select Sub Category
+                  <span className="text-red-500 text-lg">*</span> Select
+                  Developer Type
                 </label>
                 <select
                   className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg"
@@ -469,7 +321,7 @@ const AdminCatalogForm = ({ supplierData }) => {
                   required
                 >
                   <option value="" hidden>
-                    Select Sub Category
+                    Select Technology
                   </option>
                   {subCategoryData.length > 0 ? (
                     subCategoryData?.map((item) => (
@@ -488,322 +340,170 @@ const AdminCatalogForm = ({ supplierData }) => {
             </div>
 
             <div className="flex items-center gap-5">
-              <div className="flex w-full flex-col gap-3 ">
-                <label className="text-lg" htmlFor="iso">
-                  ISO Certified
+              <div className="flex w-1/2 flex-col gap-3 ">
+                <label className="text-lg" htmlFor="experience">
+                  <span className="text-red-500 text-lg">*</span> Experience
+                  Level
                 </label>
                 <select
                   className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg"
-                  name="iso"
-                  value={formData.iso}
+                  name="experience"
+                  value={formData.experience}
                   onChange={handleChange}
                   required
                 >
                   <option value="" hidden>
                     Please Select
                   </option>
-                  <option value="yes">Yes</option>
-                  <option value="no">No</option>
+                  <option value="junior">Junior</option>
+                  <option value="mid-level">Mid-Level</option>
+                  <option value="senior">Senior</option>
+                  <option value="expert">Expert</option>
                 </select>
+              </div>
+              <div className="flex w-1/2 flex-col gap-3 ">
+                <label className="text-lg" htmlFor="hourlyRate">
+                  <span className="text-red-500 text-lg">*</span> Hourly Rate
+                  ($)
+                </label>
+                <select
+                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg"
+                  name="hourlyRate"
+                  value={formData.hourlyRate}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="" hidden>
+                    Please Select
+                  </option>
+                  <option value="25">25 ($)</option>
+                  <option value="30">30 ($)</option>
+                  <option value="35">35 ($)</option>
+                  <option value="40">40 ($)</option>
+                  <option value="45">45 ($)</option>
+                  <option value="50">50 ($)</option>
+                  <option value="55">55 ($)</option>
+                </select>
+              </div>
+            </div>
+            <div className="flex items-start gap-5">
+              <div className="flex w-1/2 flex-col gap-3 ">
+                <label className="text-lg" htmlFor="resume">
+                  <span className="text-red-500 text-lg">*</span> Developer
+                  Resume
+                </label>
+                <input
+                  type="file"
+                  name="resume"
+                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg"
+                  onChange={handleFileChange}
+                  required
+                />
+              </div>
+              <div className="flex w-1/2 flex-col gap-3 ">
+                <label className="text-lg" htmlFor="language">
+                  <span className="text-red-500 text-lg">*</span> Language
+                  Spoken
+                </label>
+                <select
+                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg"
+                  name="language"
+                  onChange={handleLanguageChange}
+                  required
+                >
+                  <option value="" hidden>
+                    Please Select
+                  </option>
+                  <option value="english">English</option>
+                  <option value="hindi">Hindi</option>
+                </select>
+                <div className="flex items-center gap-3">
+                  {formData.language?.map((item, index) => (
+                    <button
+                      type="button"
+                      key={index}
+                      className="bg-sky-500 px-4 py-1.5 rounded-full text-white capitalize flex items-center gap-2"
+                    >
+                      {item}{" "}
+                      <span
+                        className="cursor-pointer hover:rotate-90 transition-all duration-300"
+                        onClick={() => handleRemoveLanguage(index)}
+                      >
+                        {" "}
+                        <FaXmark />
+                      </span>
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Product General Specification */}
-
-          {formData.category && (
-            <div className="flex flex-col gap-3">
-              <h3 className="text-lg font-semibold p-5 py-3 bg-zinc-100">
-                Product General Specification
-              </h3>
-              <div className="w-full border-1 grid grid-cols-2 gap-6 border-green-300 p-5 bg-green-50">
-                {filterSpec.map((item) => (
-                  <div className="flex flex-col gap-3" key={item._id}>
-                    <label
-                      className="text-lg line-clamp-1 overflow-hidden"
-                      htmlFor={item._id}
-                    >
-                      {item.name}
-                    </label>
-                    <input
-                      className="w-full border-1 border-zinc-200 bg-white outline-none p-3 rounded-lg"
-                      type="text"
-                      name={item._id}
-                      value={formData.specifications[item._id] || ""}
-                      onChange={handleSpecChange}
-                      required
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Additional Specifications */}
+          {/* Select Technology */}
 
           <div className="flex flex-col gap-3">
-            <h3 className="text-lg font-semibold p-5 py-3 bg-zinc-100">
-              Additional Specification
+            <h3 className="text-lg font-semibold p-5 py-3 bg-zinc-100 rounded-xl">
+              <span className="text-red-500 text-lg">*</span> Product General
+              Specification
             </h3>
-            <div className="w-full border-1 flex flex-col items-center gap-6 border-green-300 p-5 bg-green-50">
-              {additionalSpecs.map((item, index) => (
-                <div className="w-full  flex items-center gap-6 " key={index}>
-                  <div className="w-1/2 flex flex-col gap-3">
-                    <label className="text-lg" htmlFor="">
-                      {" "}
-                      Specification Name{" "}
-                    </label>
-                    <input
-                      type="text"
-                      className="bg-white w-full border-1 border-zinc-200 outline-none p-3 rounded-lg"
-                      onChange={(e) =>
-                        handleAdditionalSpecChange(
-                          index,
-                          "field",
-                          e.target.value
-                        )
-                      }
-                      value={additionalSpecs[index].field}
-                    />
-                  </div>
-                  <div className="w-1/2 flex flex-col gap-3">
-                    <label className="text-lg" htmlFor="">
-                      {" "}
-                      Specification value{" "}
-                    </label>
-                    <input
-                      type="text"
-                      className="bg-white w-full border-1 border-zinc-200 outline-none p-3 rounded-lg"
-                      onChange={(e) =>
-                        handleAdditionalSpecChange(
-                          index,
-                          "value",
-                          e.target.value
-                        )
-                      }
-                      value={additionalSpecs[index].value}
-                    />
-                  </div>
-                  <div className="flex items-center justify-center gap-4">
-                    <span
-                      className="bg-teal-600 p-2 rounded-lg text-white cursor-pointer"
-                      onClick={addAdditionalSpec}
+            <div className="w-full border-1 grid grid-cols-1 gap-6 border-green-300 p-5 bg-green-50 rounded-xl">
+              <div className="flex w-full flex-col gap-3">
+                <label className="text-lg" htmlFor="technology">
+                  <span className="text-red-500 text-lg">*</span> Select
+                  Technologies
+                </label>
+                <select
+                  className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg bg-white"
+                  name="technologies"
+                  onChange={handleTechChange}
+                >
+                  <option value="" hidden>
+                    Select
+                  </option>
+                  {filterTech.map((tech) => (
+                    <option key={tech._id} value={tech._id}>
+                      {tech.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {filterTechnologies.map((tech) => (
+                  <span
+                    key={tech._id}
+                    className="bg-emerald-500 text-white px-3 py-1 rounded-full flex items-center gap-2"
+                  >
+                    {tech.name}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveTech(tech._id)}
+                      className="text-white hover:text-red-300"
                     >
-                      {" "}
-                      <FaPlus />{" "}
-                    </span>
-                    <span
-                      className="bg-rose-500 p-2 rounded-lg text-white cursor-pointer"
-                      onClick={() => removeAdditionalSpec(index)}
-                    >
-                      {" "}
-                      <FaMinus />{" "}
-                    </span>
-                  </div>
-                </div>
-              ))}
+                      <FaXmark />
+                    </button>
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Payment Schedule */}
 
           <div className="flex flex-col gap-3">
-            <h3 className="text-lg font-semibold p-5 py-3 bg-zinc-100">
-              Payment Schedule
-            </h3>
-            <div className="w-full border-1 grid grid-cols-4 items-center gap-6 border-green-300 p-5 bg-green-50">
-              <div className="flex flex-col gap-3">
-                <label htmlFor="advance">Advance</label>
-                <div className="flex items-center gap-3 border-1 border-zinc-200 bg-white w-full p-3 rounded-lg ">
-                  <input
-                    type="number"
-                    name="advance"
-                    className=" w-full  outline-none  "
-                    value={paymentSchedule.advance}
-                    onChange={handlePaymentScheduleChange}
-                    placeholder="In Percentage"
-                    required
-                  />{" "}
-                  <span className="text-xl">
-                    {" "}
-                    <MdOutlinePercent />{" "}
-                  </span>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3">
-                <label htmlFor="afterDispatch">After Dispatch</label>
-                <div className="flex items-center gap-3 border-1 border-zinc-200 bg-white w-full p-3 rounded-lg">
-                  {" "}
-                  <input
-                    type="number"
-                    name="afterDispatch"
-                    className="w-full outline-none"
-                    value={paymentSchedule.afterDispatch}
-                    onChange={handlePaymentScheduleChange}
-                    placeholder="In Percentage"
-                    required
-                  />{" "}
-                  <span className="text-xl">
-                    {" "}
-                    <MdOutlinePercent />{" "}
-                  </span>{" "}
-                </div>
-              </div>
-              <div className="flex flex-col gap-3">
-                <label htmlFor="onDelivery">On Delivery</label>
-                <div className="flex items-center gap-3 border-1 border-zinc-200 bg-white w-full p-3 rounded-lg">
-                  <input
-                    type="number"
-                    name="onDelivery"
-                    className="w-full outline-none"
-                    value={paymentSchedule.onDelivery}
-                    onChange={handlePaymentScheduleChange}
-                    placeholder="In Percentage"
-                    required
-                  />{" "}
-                  <span className="text-xl">
-                    {" "}
-                    <MdOutlinePercent />{" "}
-                  </span>{" "}
-                </div>
-              </div>
-              <div className="flex flex-col gap-3">
-                <label htmlFor="afterTesting">After Testing</label>
-                <div className="flex items-center gap-3 border-1 border-zinc-200 bg-white w-full p-3 rounded-lg">
-                  {" "}
-                  <input
-                    type="number"
-                    name="afterTesting"
-                    className="w-full outline-none"
-                    value={paymentSchedule.afterTesting}
-                    onChange={handlePaymentScheduleChange}
-                    placeholder="In Percentage"
-                    required
-                  />{" "}
-                  <span className="text-xl">
-                    {" "}
-                    <MdOutlinePercent />{" "}
-                  </span>{" "}
-                </div>
-              </div>
-            </div>
+            <label className="text-lg font-semibold p-5 py-3 bg-zinc-100 rounded-xl">
+              <span className="text-red-500 text-lg">*</span> Skill Description
+            </label>
+            <textarea
+              type="text"
+              name="skillDescription"
+              className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg"
+              rows={6}
+              placeholder="Enter skill description"
+              value={formData.skillDescription}
+              onChange={handleChange}
+            />
           </div>
 
-          {/* Commercial Condition */}
-
-          <div className="flex flex-col gap-3">
-            <h3 className="text-lg font-semibold p-5 py-3 bg-zinc-100">
-              Commercial Condition
-            </h3>
-
-            <div className="w-full border-1 grid grid-cols-4 items-center gap-6 border-green-300 p-5 bg-green-50">
-              <div className="flex flex-col gap-3">
-                <label htmlFor="productPrice">Product Price (Per unit)</label>
-                <div className="flex items-center gap-3 border-1 border-zinc-200 bg-white w-full p-3 rounded-lg">
-                  {" "}
-                  <input
-                    type="number"
-                    name="productPrice"
-                    className="w-full outline-none"
-                    value={commercialCondition.productPrice}
-                    onChange={handleCommercialConditionChange}
-                    placeholder="Price"
-                    required
-                  />{" "}
-                  <span className="text-xl">
-                    {" "}
-                    <MdOutlineCurrencyRupee />{" "}
-                  </span>{" "}
-                </div>
-              </div>
-              <div className="flex w-full flex-col gap-3">
-                <label htmlFor="priceValidity">Price Validity</label>
-                <input
-                  type="date"
-                  name="priceValidity"
-                  className="  border-1 border-zinc-200 bg-white w-full p-3 rounded-lg outline-none"
-                  value={commercialCondition.priceValidity}
-                  onChange={handleCommercialConditionChange}
-                  placeholder="Validity"
-                  required
-                />
-              </div>
-              <div className="flex flex-col gap-3">
-                <label htmlFor="productDiscount">Product Discount</label>
-                <div className="flex items-center gap-3 border-1 border-zinc-200 bg-white w-full p-3 rounded-lg">
-                  {" "}
-                  <input
-                    type="number"
-                    name="productDiscount"
-                    className="w-full outline-none"
-                    value={commercialCondition.productDiscount}
-                    onChange={handleCommercialConditionChange}
-                    placeholder="Discount"
-                    required
-                  />{" "}
-                  <span className="text-xl">
-                    {" "}
-                    <MdOutlinePercent />{" "}
-                  </span>{" "}
-                </div>
-              </div>
-              <div className="flex w-full flex-col gap-3">
-                <label htmlFor="discountValidity">Discount Validity</label>
-                <input
-                  type="date"
-                  name="discountValidity"
-                  className="  border-1 border-zinc-200 bg-white w-full p-3 rounded-lg outline-none"
-                  value={commercialCondition.discountValidity}
-                  onChange={handleCommercialConditionChange}
-                  placeholder="Offer Validity"
-                  required
-                />
-              </div>
-
-              <div className="flex w-full flex-col gap-3 col-span-2">
-                <label htmlFor="productUnit">Product Unit</label>
-                <select
-                  name="productUnit"
-                  id="productUnit"
-                  className="border-1 border-zinc-200 bg-white w-full p-3 rounded-lg outline-none"
-                  value={commercialCondition.productUnit}
-                  onChange={handleCommercialConditionChange}
-                >
-                  <option value="" hidden>
-                    Select product unit
-                  </option>
-                  <option value="mm">mm</option>
-                  <option value="cm">cm</option>
-                  <option value="m">meter</option>
-                  <option value="inch">inch</option>
-                  <option value="feet">feet</option>
-                  <option value="m²">m²</option>
-                  <option value="ft²">ft²</option>
-                  <option value="m³">m³</option>
-                  <option value="ft³">ft³</option>
-                  <option value="kg">kg</option>
-                  <option value="ton">ton</option>
-                  <option value="per piece">per piece</option>
-                  <option value="per bag">per bag</option>
-                  <option value="per bundle">per bundle</option>
-                  <option value="per roll">per roll</option>
-                  <option value="per sheet">per sheet</option>
-                </select>
-              </div>
-
-              <div className="flex w-full flex-col gap-3 col-span-2">
-                <label htmlFor="conditions">Terms and Conditions</label>
-                <input
-                  type="file"
-                  name="conditions"
-                  className=" border-1 border-zinc-200 bg-white w-full p-3 rounded-lg outline-none"
-                  placeholder="Offer Validity"
-                  onChange={handleFileChange}
-                  required
-                />
-              </div>
-            </div>
-          </div>
           {errMessage && (
             <div className="flex justify-end items-center">
               <p className="text-red-500">{errMessage}</p>

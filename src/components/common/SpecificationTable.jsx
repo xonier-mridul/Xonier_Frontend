@@ -5,12 +5,13 @@ import "react-toastify/dist/ReactToastify.css";
 
 // Media Start
 import { MdEdit, MdDelete } from "react-icons/md";
-import { FaXmark } from "react-icons/fa6";
+import { FaXmark, FaPlus } from "react-icons/fa6";
 import { FaEye, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 // Media End
 
 const SpecificationTable = () => {
   const [specificationData, setSpecificationData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false)
   const [categoryData, setCategoryData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showEditModel, setShowEditModel] = useState(true);
@@ -89,6 +90,7 @@ const length = filteredData.length;
   // Handle Submit
 
   const handleSubmit = async (e) => {
+    setIsLoading(true)
     e.preventDefault();
     try {
       const response = await axios.post(
@@ -117,6 +119,7 @@ const length = filteredData.length;
       }
     } catch (error) {
       console.error(error.message);
+      setIsLoading(false)
     }
   };
 
@@ -260,7 +263,7 @@ const length = filteredData.length;
       {updatedId && (
         <div className="fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-2xl w-[890px]">
           <h2 className="font-bold text-2xl pb-4 text-black ">
-            Add Specification
+            Add Technologies
           </h2>
           <span
             className="fixed top-4 right-4 cursor-pointer"
@@ -294,7 +297,7 @@ const length = filteredData.length;
               <div className="flex w-1/2 flex-col gap-3">
                 <label className="text-lg" htmlFor="name">
                   {" "}
-                  Add Specification{" "}
+                  Add Technology{" "}
                 </label>
                 <input
                   className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg"
@@ -312,8 +315,8 @@ const length = filteredData.length;
                 className="capitalize font-bold flex items-center gap-3 rounded-lg bg-teal-600 px-7 py-3 text-white w-fit cursor-pointer"
                 type="submit"
               >
-                {" "}
-                Submit{" "}
+                
+                {isLoading ? "Submitting" :  "Submit"}
               </button>
             </div>
           </form>
@@ -332,7 +335,7 @@ const length = filteredData.length;
       {showModal && (
         <div className="fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-2xl w-[890px]">
           <h2 className="font-bold text-2xl pb-4 text-black ">
-            Add Specification
+            Add Technologies
           </h2>
           <span
             className="fixed top-4 right-4 cursor-pointer"
@@ -365,7 +368,7 @@ const length = filteredData.length;
               <div className="flex w-1/2 flex-col gap-3">
                 <label className="text-lg" htmlFor="name">
                   {" "}
-                  Add Specification{" "}
+                  Add Technologies{" "}
                 </label>
                 <input
                   className="w-full border-1 border-zinc-200 outline-none p-3 rounded-lg"
@@ -414,11 +417,11 @@ const length = filteredData.length;
           </div>
           <button
             type="button"
-            className=" rounded-lg bg-emerald-600 px-6 py-3 text-white  justify-center disabled:bg-green-400 cursor-pointer"
+            className=" rounded-lg bg-emerald-600 px-6 py-3 text-white flex items-center gap-2 justify-center disabled:bg-green-400 cursor-pointer tracking-wide"
             onClick={() => setShowModal(true)}
           >
             {" "}
-            Add{" "}
+            Add Technologies <FaPlus className=""/>{" "}
           </button>
         </div>
         <table className="w-full border-[1px] border-zinc-200 ">
@@ -426,7 +429,7 @@ const length = filteredData.length;
             <tr className="bg-slate-100 border-b-1 border-zinc-200">
               <th className="p-4 text-start">Category</th>
               <th className="p-4 text-start border-l-1 border-zinc-200">
-                Specifications
+                Technology
               </th>
               <th className="p-4 text-start border-l-1 border-zinc-200">
                 Actions

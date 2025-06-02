@@ -79,7 +79,7 @@ const BuyerTable = () => {
             {length > 0 ? (
               filteredData.map((item, index) => (
                 <tr key={item._id}>
-                  <td className="p-4 border-b-[1px] border-[#f1f1f1] hover:text-green-500 transition-all duration-300">
+                  <td className="p-4 border-b-[1px] border-[#f1f1f1] hover:text-blue-600 transition-all duration-300">
                     {" "}
                     <Link
                       to={`/admin/user-profile/${item._id}`}
@@ -93,7 +93,7 @@ const BuyerTable = () => {
                           alt=""
                         />{" "}
                         {item.isActive === true && (
-                          <span className="absolute h-2.5 w-2.5 rounded-full bg-green-500 z-50 bottom-0 right-0"></span>
+                          <span className="absolute h-2.5 w-2.5 rounded-full bg-green-600 z-50 bottom-0 right-0"></span>
                         )}{" "}
                       </div>{" "}
                       {item.name}

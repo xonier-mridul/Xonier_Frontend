@@ -33,7 +33,7 @@ const MainMonitor = ({userQuantityData, orderCount}) => {
           <div className="flex gap-2 flex-col justify-center items-end w-full">
             <h3 className="para text-lg">Today's Order</h3>
             <h2 className="flex text-3xl font-bold">
-              <sup className="text-lg text-green-400">
+              <sup className="text-lg text-red-500">
                 <FaArrowUpLong />
               </sup>
               <Counter start={0} end={inView ? orderCount : 0} duration={2} />
@@ -58,7 +58,7 @@ const MainMonitor = ({userQuantityData, orderCount}) => {
           <div className="flex gap-2 flex-col justify-center items-end w-full">
             <h3 className="para text-lg capitalize">Buyers</h3>
             <h2 className="flex text-3xl font-bold">
-              <sup className="text-lg text-green-400">
+              <sup className="text-lg text-red-500">
                 <FaArrowUpLong />
               </sup>
               
@@ -84,7 +84,7 @@ const MainMonitor = ({userQuantityData, orderCount}) => {
           <div className="flex gap-2 flex-col justify-center items-end w-full">
             <h3 className="para text-lg">Vendors</h3>
             <h2 className="flex text-3xl font-bold">
-              <sup className="text-lg text-green-400">
+              <sup className="text-lg text-red-500">
                 <FaArrowUpLong />
               </sup>
               <Counter start={0} end={inView ? userQuantityData?.supplierCount : 0} duration={2} />
@@ -109,7 +109,7 @@ const MainMonitor = ({userQuantityData, orderCount}) => {
           <div className="flex gap-2 flex-col justify-center items-end w-full">
             <h3 className="para text-lg capitalize">Yearly Income</h3>
             <h2 className="flex text-3xl font-bold">
-              <sup className="text-lg text-green-400">
+              <sup className="text-lg text-red-500">
                 <FaArrowUpLong />
               </sup>
               <Counter start={0} end={inView ? 12000 : 0} duration={2} />

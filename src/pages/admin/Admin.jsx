@@ -1,6 +1,6 @@
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Logo from "../../assets/bildkart-admin-logo.png";
+import Logo from "../../assets/xonier-logo.png";
 import fav from "../../assets/b-fav.png";
 import DashboardHeader from "../../components/admin/DashboardHeader";
 import { useState, useEffect } from "react";
@@ -411,12 +411,12 @@ const Admin = () => {
                 </li>
                 <li>
                   <Link to={"specification"} className="capitalize text-xl ">
-                    Specification
+                    Technologies
                   </Link>
                 </li>
                 <li>
                   <Link to={"catalog"} className="capitalize text-xl ">
-                    create catalog
+                    create Developer
                   </Link>
                 </li>
                 <li>

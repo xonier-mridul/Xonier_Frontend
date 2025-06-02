@@ -103,7 +103,7 @@ const SupplierTable = () => {
             {length > 0 ? (
               filteredData.map((item, index) => (
                 <tr key={item._id}>
-                  <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1] hover:text-green-500">
+                  <td className="p-4 border-b-[1px] border-l-1 border-[#f1f1f1] hover:text-blue-600">
                     
                       <Link to={`/admin/user-profile/${item._id}`} className="profile capitalize flex items-center flex-nowrap gap-3">
                         {" "}
@@ -114,7 +114,7 @@ const SupplierTable = () => {
                             alt=""
                           />{" "}
                           {item.isActive === true && (
-                            <span className="absolute h-2.5 w-2.5 rounded-full bg-green-500 z-50 bottom-0 right-0"></span>
+                            <span className="absolute h-2.5 w-2.5 rounded-full bg-green-600 z-50 bottom-0 right-0"></span>
                           )}{" "}
                         </div>{" "}
                         {item?.name || "N/A"}
