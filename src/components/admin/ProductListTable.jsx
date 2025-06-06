@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 // Media Start
 
 import { MdEdit, MdDelete } from "react-icons/md";
-import { FaEye, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaEye, FaChevronLeft, FaChevronRight, FaUser } from "react-icons/fa";
 import { FaCartPlus } from "react-icons/fa6";
 
 // Media End
@@ -192,29 +192,13 @@ const ProductListTable = () => {
               ))}
             </select>
 
-            <select
-              name="supplier"
-              className="border-1 border-[#B5B5C3] outline-none rounded-lg px-3 py-2.5 text-lg text-gray-600"
-              id="supplier"
-              onChange={(e) => handleSupplierFilter(e.target.value)}
-            >
-              <option value="" hidden>
-                Filter By Supplier
-              </option>
-              <option value="all"> View All</option>
-              {sellerData.map((item) => (
-                <option key={item._id} value={item?._id}>
-                  {item?.company}
-                </option>
-              ))}
-            </select>
           </div>
 
           <Link
             to={"/admin/catalog"}
             className="bg-emerald-600 p-2 px-8 rounded-lg text-white text-lg flex items-center gap-3 hover:scale-103 transition-all duration-300 hover:bg-emerald-700"
           >
-            Add Product <FaCartPlus />
+            Add Developer <FaUser />
           </Link>
         </div>
 

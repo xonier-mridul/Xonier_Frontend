@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import Navbar from './components/Navbar'
 import { Outlet } from 'react-router-dom'
 import Footer from './components/Footer'
@@ -7,9 +7,18 @@ import ChatBot from './components/ChatBot'
 import AnimatedCursor from "react-animated-cursor";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Aos from 'aos'
 
 
 function App() {
+
+  useEffect(() => {
+    Aos.init({
+      duration: 1000,
+      once: true
+    })
+  }, [])
+  
   
   return (
     <>

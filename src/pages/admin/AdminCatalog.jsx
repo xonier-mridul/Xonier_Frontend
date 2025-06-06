@@ -3,14 +3,14 @@ import AdminCatalogForm from '../../components/admin/AdminCatalogForm'
 import api from '../../components/common/api'
 
 const AdminCatalog = () => {
-  const [supplierData, setSupplierData] = useState([])
+  const [serviceData, setServiceData] = useState([])
 
 
-  const getSupplierData = async()=>{
+  const getServiceData = async()=>{
     try {
-      const response = await api.get(`/user/supplier`, {withCredentials: true})
+      const response = await api.get(`/service/getall`, {withCredentials: true})
       if(response.status ===200){
-        setSupplierData(response.data?.user)
+        setServiceData(response.data?.data)
       }
     } catch (error) {
       console.error(error)
@@ -18,12 +18,12 @@ const AdminCatalog = () => {
   }
 
   useEffect(() => {
-    getSupplierData();
+    getServiceData();
   }, [])
   
   return (
     <div className='p-5 flex flex-col gap-5'>
-      <AdminCatalogForm supplierData={supplierData}/>
+      <AdminCatalogForm serviceData={serviceData}/>
     </div>
   )
 }

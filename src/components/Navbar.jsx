@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { NavLink, Link, useNavigate } from 'react-router-dom'
-import Logo from '../assets/bildkart-white-logo.png'
+import Logo from '../assets/logo-light.png'
 import { FaArrowRight, FaXmark } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -90,17 +90,17 @@ const Navbar = () => {
                     </li>
                     <li>
                         <NavLink to={"/buyer"} className={({ isActive }) =>`${ isActive ? "text-[#73ED7C]" : "text-white"}  text-lg font-semibold`}>
-                              Buyer
+                              Client
                         </NavLink>
                     </li>
                     <li>
                         <NavLink to={"/supplier"} className={({ isActive }) =>`${ isActive ? "text-[#73ED7C]" : "text-white"}  text-lg font-semibold`}>
-                              Supplier
+                              Vendor
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to={"/about"} className={({ isActive }) =>`${ isActive ? "text-[#73ED7C]" : "text-white"}  text-lg font-semibold`}>
-                              About Us
+                        <NavLink to={"/services"} className={({ isActive }) =>`${ isActive ? "text-[#73ED7C]" : "text-white"}  text-lg font-semibold`}>
+                             Services
                         </NavLink>
                     </li>
                     <li>

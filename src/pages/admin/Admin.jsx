@@ -169,12 +169,12 @@ const Admin = () => {
               >
                 <li>
                   <Link to={"buyer"} className="capitalize text-xl ">
-                    Manage Buyer
+                    Manage Client
                   </Link>
                 </li>
                 <li>
                   <Link to={"suppliers"} className="capitalize text-xl ">
-                    Manage Supplier
+                    Manage Vendor
                   </Link>
                 </li>
               </ul>
@@ -415,13 +415,23 @@ const Admin = () => {
                   </Link>
                 </li>
                 <li>
+                  <Link to={"service"} className="capitalize text-xl ">
+                    Create Services
+                  </Link>
+                </li>
+                <li>
                   <Link to={"catalog"} className="capitalize text-xl ">
                     create Developer
                   </Link>
                 </li>
                 <li>
                   <Link to={"product-list"} className="capitalize text-xl ">
-                    product list
+                    Developer list
+                  </Link>
+                </li>
+                <li>
+                  <Link to={"service-list"} className="capitalize text-xl ">
+                    Service list
                   </Link>
                 </li>
               </ul>

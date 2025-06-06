@@ -310,6 +310,32 @@ left: 0;
     
     transition: all 0.4s ease-in-out;
 }
+
+.animea-bg{
+  
+    font-weight: 400;
+    text-transform: capitalize;
+    color: var(--white-color);
+    background-image: linear-gradient(to right, var(--dark-color) 0%, var(--accent-color) 50%, var(--dark-color) 100%);
+    border-radius: 100px;
+    background-size: 200% auto;
+    
+    transition: all 0.4s ease-in-out;
+}
+
+.text-green{
+  color: #30e03e;
+}
+
+.anime-box-img{
+  transition: all;
+  transition-duration: 0.3s;
+}
+
+.anime-box:hover .anime-box-img{
+  transform: scale(1.02)
+}
+
 .anime-bg:hover{
   background-position: right center;
 }

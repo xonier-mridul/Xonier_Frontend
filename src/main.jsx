@@ -105,6 +105,12 @@ import AddSupplier from "./pages/admin/AddSupplier.jsx";
 import CreateRFQbyAdmin from "./pages/admin/CreateRFQbyAdmin.jsx";
 import AdminCatalog from "./pages/admin/AdminCatalog.jsx";
 import SupplierProductList from "./pages/admin/SupplierProductList.jsx";
+import CreateServices from "./pages/admin/CreateServices.jsx";
+import ServicesTable from "./pages/admin/ServicesTable.jsx";
+import Services from "./pages/Services.jsx";
+import ServicesDetails from "./pages/ServicesDetails.jsx";
+import Developers from "./pages/Developers.jsx";
+import DevProfile from "./pages/DevProfile.jsx";
 
 
 
@@ -120,7 +126,19 @@ const router = createBrowserRouter(
         <Route path="/supplier" element={<Supplier />} />
         <Route path="/buyer-register" element={<BuyerRegister />} />
         <Route path="/supplier-register" element={<SupplierRegister />} />
+        <Route path='/developers' element={<CommonOutlet/>}>
+          <Route index element={<Developers/>}/>
+          <Route path="profile/:id" element={<DevProfile/>} />
+        </Route>
         <Route path="/about" element={<About/>} />
+        <Route path="/services" element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+          <CommonOutlet/>
+          </ProtectedRoute>
+          } >
+          <Route index element={<Services/>} />
+          <Route path="detail/:id" element={<ServicesDetails/>} />
+        </Route>
         <Route path="/contact" element={<Contact />} />
         <Route path="/quote" element={<GetAQuote />} />
         <Route path="/signup" element={<SignUp />} />
@@ -172,6 +190,12 @@ const router = createBrowserRouter(
         </Route>
         <Route path="category" element={<Category />} />
         <Route path="sub-category" element={<SubCategory />} />
+        <Route path='service' element={<CommonOutlet/>}>
+            <Route index element={<CreateServices/>}/>
+        </Route>
+        <Route path="service-list" element={<CommonOutlet/>}>
+           <Route index element={<ServicesTable/>} />
+        </Route>
         <Route path="catalog" element={<AdminCatalog />} />
         <Route path="inquiries" element={<Inquiry />} />
         <Route path="specification" element={<Specification />} />
