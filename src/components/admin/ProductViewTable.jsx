@@ -13,6 +13,24 @@ import { FaUserEdit, FaListUl } from "react-icons/fa";
 const ProductViewTable = () => {
       // States Start
       const [catalogData, setCatalogData] = useState([])
+      const [userData, setUserData] = useState({})
+
+
+      useEffect(() => {
+        const verifyAuth = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}auth/verify-auth`,
+        { withCredentials: true }
+      );
+      setUserData(response.data.user);
+    } catch (error) {
+      console.error("Authentication verification failed:", error);
+    }
+  };
+
+  verifyAuth();
+    }, []);
 
       // States End
   
@@ -45,8 +63,8 @@ const ProductViewTable = () => {
 
              <h2 className='font-semibold text-2xl capitalize'>{catalogData?.productName || "N/A"}</h2>
               <div className='flex items-center gap-5'>
-             <Link to={"/admin/product-list"} className='text-lg text-white bg-emerald-600 py-2.5 px-6 rounded-lg cursor-pointer flex items-center gap-2'> <FaListUl className='text-lg'/> Product list </Link>
-             <Link to={`/admin/product-list/product-edit/${catalogData?._id}`} className='text-lg text-white bg-emerald-600 py-2.5 px-6 rounded-lg cursor-pointer flex items-center gap-2'> <FaUserEdit className='text-xl'/> Edit Product
+             <Link to={`/${userData?.role === 'admin' ? 'admin' : 'supplier-admin'}/product-list`} className='text-lg text-white bg-emerald-600 py-2.5 px-6 rounded-lg cursor-pointer flex items-center gap-2'> <FaListUl className='text-lg'/> Product list </Link>
+             <Link to={`/${userData?.role === 'admin' ? 'admin' : 'supplier-admin'}/product-list/product-edit/${catalogData?._id}`} className='text-lg text-white bg-emerald-600 py-2.5 px-6 rounded-lg cursor-pointer flex items-center gap-2'> <FaUserEdit className='text-xl'/> Edit Product
              </Link>
               </div>
             </div>

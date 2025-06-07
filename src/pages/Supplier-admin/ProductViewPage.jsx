@@ -11,8 +11,7 @@ const ProductViewPage = () => {
       // States End
   
      const {id} = useParams();
-  
-  
+
      // Get Catalog 
   
      const getCatalogById = async () => {

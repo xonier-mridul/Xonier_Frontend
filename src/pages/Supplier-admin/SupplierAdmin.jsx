@@ -122,8 +122,8 @@ const SupplierAdmin = () => {
             {submenuShow === "product" && <ul className={`pl-14 list-disc flex flex-col gap-5`}>
               <li><Link to={"category"} className="text-xl cursor-pointer"> Category</Link></li>
               <li><Link to={"sub-category"} className="text-xl cursor-pointer">Sub Category</Link></li>
-              <li><Link to={"specification"} className="text-xl cursor-pointer">Specification</Link></li>
-              <li><Link to={"catalog"} className="text-xl cursor-pointer">Create Catalog </Link></li>
+              <li><Link to={"specification"} className="text-xl cursor-pointer">Technologies</Link></li>
+              <li><Link to={"catalog"} className="text-xl cursor-pointer">Create Developers </Link></li>
               <li><Link to={"product-list"} className="text-xl cursor-pointer">Product List </Link></li>
             </ul>}
             

@@ -285,7 +285,7 @@ const router = createBrowserRouter(
         <Route path="category" element={<Category/>}/>
         <Route path="sub-category" element={<SubCategory/>} />
         <Route path="specification" element={<Specification/>} />
-        <Route path="catalog" element={<Catalog/>} />
+        <Route path="catalog" element={<AdminCatalog/>} />
         <Route path="product-list" element={<ProductListsForSupplierOutlet/>}>
           <Route index element={<ProductListForSupplier/>} />
           <Route path="product-view/:id" element={<ProductViewPage/>} />

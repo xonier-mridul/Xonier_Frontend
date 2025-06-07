@@ -130,14 +130,29 @@ const ProductListTable = () => {
   // Handle Product Filter
 
   const handleProductFilter = (id) => {
+    
     if (id === "all") {
       return setFilteredData(catalogData);
     }
     const filtered = catalogData.filter(
       (item) => item?.subCategory?._id === id
     );
+
+  
     setFilteredData(filtered);
+
+    
   };
+
+  useEffect(() => {
+     const filtered = catalogData.filter(item=>`${item?.productName}  ${item?.category?.category} ${item?.subCategory?.name} ${item?.designation} ${item?.education} ${item?.createdBy?.company}`.toLowerCase().includes(searchTerm.toLowerCase()))
+
+     setFilteredData(filtered)
+  }, [searchTerm])
+  
+   
+
+
 
   // Handle Supplier Filter
 
@@ -211,7 +226,7 @@ const ProductListTable = () => {
                   Category
                 </th>
                 <th className="p-4 text-start border-l-1 border-zinc-200">
-                  Developer Type
+                  Company
                 </th>
                 <th className="p-4 text-start border-l-1 border-zinc-200">
                   Experience Level
@@ -230,8 +245,10 @@ const ProductListTable = () => {
                     className="border-b-[1px] border-l-1 border-zinc-200"
                   >
                     <td className="p-4 border-zinc-200 border-l-1">
-                      
+                      <Link to={`product-edit/${item._id}`} className="flex items-center gap-3 hover:text-green-600 transition-all duration-300 profile">
+                        <img className="w-10 h-10 object-cover rounded-lg profile-img" src={item?.profileImage} alt="" />
                      <span className="capitalize"> {item?.productName} </span>
+                     </Link>
                     </td>
                     <td className="p-4 border-zinc-200 border-l-1">
                       {" "}
@@ -239,7 +256,7 @@ const ProductListTable = () => {
                     </td>
                     <td className="p-4 border-zinc-200 border-l-1">
                       {" "}
-                      {item.subCategory.name }{" "}
+                      <span className="bg-green-100 text-green-600 px-4 py-1 rounded-lg text-sm tracking-wide">{item?.createdBy?.company || 'N/A' } </span>{" "}
                     </td>
                     <td className="p-4 border-zinc-200 border-l-1">
                       

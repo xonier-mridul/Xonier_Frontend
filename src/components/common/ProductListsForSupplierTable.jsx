@@ -18,6 +18,9 @@ const ProductListsForSupplierTable = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
+  const [showDeletePopup, setShowDeletePopup] = useState(false)
+   const [deleteCatalogId, setDeleteCatalogId] = useState(null)
+  const filterDataLength = filteredData.length;
 
   // Handle Product Filter
   const handleProductFilter = (id) => {
@@ -80,43 +83,55 @@ const ProductListsForSupplierTable = () => {
     getSubCategory();
   }, [currentPage]);
 
+  const handleDeletePopIp = (id)=>{
+   
+      setShowDeletePopup(true)
+      setDeleteCatalogId(id)
+   
+  }
+
+   const handleCancelDelete=()=>{
+    setShowDeletePopup(false)
+      setDeleteCatalogId(null)
+  }
+
   // Handle Delete
-  const handleDelete = async (id) => {
-    const confirm = window.confirm("Are you want to delete your product?");
-    if (!confirm) return;
-    try {
-      const response = await axios.delete(
-        `${import.meta.env.VITE_SERVER_URL}catalog/${id}`
-      );
-      if (response.status === 200) {
-        toast.success("Product deleted successfully", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-          style: { backgroundColor: "#009689", color: "#fff" },
-        });
-        setCatalogData((prev) => prev.filter((item) => item._id !== id));
-      }
-    } catch (error) {
-      console.error(error.message);
-      toast.error("Product not deleted successfully", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        style: { backgroundColor: "#009689", color: "#fff" },
-      });
-    }
-  };
+  // const handleDelete = async (id) => {
+  //   const confirm = window.confirm("Are you want to delete your product?");
+  //   if (!confirm) return;
+  //   try {
+  //     const response = await axios.delete(
+  //       `${import.meta.env.VITE_SERVER_URL}catalog/${id}`
+  //     );
+  //     if (response.status === 200) {
+  //       toast.success("Product deleted successfully", {
+  //         position: "top-right",
+  //         autoClose: 3000,
+  //         hideProgressBar: false,
+  //         closeOnClick: true,
+  //         pauseOnHover: true,
+  //         draggable: true,
+  //         progress: undefined,
+  //         theme: "colored",
+  //         style: { backgroundColor: "#009689", color: "#fff" },
+  //       });
+  //       setCatalogData((prev) => prev.filter((item) => item._id !== id));
+  //     }
+  //   } catch (error) {
+  //     console.error(error.message);
+  //     toast.error("Product not deleted successfully", {
+  //       position: "top-right",
+  //       autoClose: 3000,
+  //       hideProgressBar: false,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //       theme: "colored",
+  //       style: { backgroundColor: "#009689", color: "#fff" },
+  //     });
+  //   }
+  // };
 
   // Handle Page Change
   const handlePageChange = (page) => {
@@ -128,6 +143,15 @@ const ProductListsForSupplierTable = () => {
   return (
     <>
       <ToastContainer />
+       {showDeletePopup && <><div className='fixed top-0 left-0 right-0 bottom-0 backdrop-blur-sm z-99 bg-black/10'></div>
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-100 p-6 bg-white rounded-xl w-[550px] flex flex-col gap-4 shad"  >
+        <h2 className=' text-2xl font-semibold'>Are you sure to delete this</h2>
+        <div className="flex items-center justify-end gap-3">
+
+          <button className="text-green-500 bg-green-100 px-5 py-2 rounded-lg hover:bg-green-500 hover:text-white transition-all duration-300 cursor-pointer" onClick={()=>handleDelete(deleteCatalogId)}>Yes</button>
+          <button className="text-red-500 bg-red-100 px-5 py-2 rounded-lg hover:bg-red-500 hover:text-white transition-all duration-300 cursor-pointer" onClick={handleCancelDelete}>No</button>
+        </div>
+      </div></>}
       <div className="bg-white shadow-lg rounded-2xl m-5 border-2 border-emerald-500">
         <div className="mb-5 flex justify-between items-center px-8 py-6 border-b-1 border-gray-300">
           <div className="flex gap-3 items-center">
@@ -167,15 +191,15 @@ const ProductListsForSupplierTable = () => {
           <table className="w-full border-[1px] border-zinc-200">
             <thead>
               <tr className="bg-slate-100 border-b-1 border-zinc-200">
-                <th className="p-4 text-start">Manufacturer</th>
+                <th className="p-4 text-start">Product Name</th>
                 <th className="p-4 text-start border-l-1 border-zinc-200">
                   Category
                 </th>
                 <th className="p-4 text-start border-l-1 border-zinc-200">
-                  Product
+                  Developer Type
                 </th>
                 <th className="p-4 text-start border-l-1 border-zinc-200">
-                  ISO Certification
+                  Experience Level
                 </th>
                 <th className="p-4 text-start border-l-1 border-zinc-200">
                   Actions
@@ -184,76 +208,71 @@ const ProductListsForSupplierTable = () => {
             </thead>
 
             <tbody>
-              {filteredData.length > 0 ? (
-                filteredData.map((item) => (
-                  <tr
-                    key={item._id}
-                    className="border-b-[1px] border-l-1 border-zinc-200"
-                  >
-                    <td className="p-4 border-zinc-200 border-l-1">
-                      <span className="capitalize">
-                        {item.seller?.company}
-                      </span>
-                    </td>
-                    <td className="p-4 border-zinc-200 border-l-1">
-                      {item.category?.category}
-                    </td>
-                    <td className="p-4 border-zinc-200 border-l-1">
-                      {item.subCategory?.name}
-                    </td>
-                    <td className="p-4 border-zinc-200 border-l-1">
-                      <span
-                        className={`${
-                          item.iso === "yes"
-                            ? "text-lime-500 bg-emerald-50"
-                            : "text-red-500 bg-red-50"
-                        } capitalize py-2 px-4 rounded-lg font-semibold`}
-                      >
-                        {item.iso}
-                      </span>
-                    </td>
-                    <td className="p-4 border-zinc-200 border-l-1">
-                      <div className="flex items-center gap-4">
-                        <button
-                          type="button"
-                          className="rounded-lg bg-teal-600 px-2 py-2 text-white cursor-pointer"
-                          onClick={() =>
-                            navigate(
-                              `/supplier-admin/product-list/product-view/${item._id}`
-                            )
-                          }
-                        >
-                          <FaEye className="text-xl" />
-                        </button>
-                        <button
-                          type="button"
-                          className="rounded-lg bg-lime-500 px-2 py-2 text-white cursor-pointer"
-                          onClick={() =>
-                            navigate(
-                              `/supplier-admin/product-list/product-edit/${item._id}`
-                            )
-                          }
-                        >
-                          <MdEdit className="text-xl" />
-                        </button>
-                        <button
-                          type="button"
-                          className="rounded-lg bg-red-500 px-2 py-2 text-white cursor-pointer"
-                          onClick={() => handleDelete(item._id)}
-                        >
-                          <MdDelete className="text-xl" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="5" className="p-4 text-center">
-                    No data found
-                  </td>
-                </tr>
-              )}
+              {filterDataLength > 0 ? (
+                              filteredData.map((item) => (
+                                <tr
+                                  key={item._id}
+                                  className="border-b-[1px] border-l-1 border-zinc-200"
+                                >
+                                  <td className="p-4 border-zinc-200 border-l-1">
+                                    
+                                   <span className="capitalize"> {item?.productName} </span>
+                                  </td>
+                                  <td className="p-4 border-zinc-200 border-l-1">
+                                    {" "}
+                                    {item.category.category}{" "}
+                                  </td>
+                                  <td className="p-4 border-zinc-200 border-l-1">
+                                    {" "}
+                                    {item.subCategory.name }{" "}
+                                  </td>
+                                  <td className="p-4 border-zinc-200 border-l-1">
+                                    
+                                      <span className="bg-green-600 px-4 py-1.5 rounded-lg text-white text-sm tracking-wide">{item?.experience || "N/A"}</span>
+                                    
+                                  </td>
+                                  <td className="p-4 border-zinc-200 border-l-1">
+                                    <div className="flex items-center gap-4">
+                                      <button
+                                        type="button"
+                                        className="rounded-lg bg-teal-600 px-2 py-2 text-white cursor-pointer hover:scale-104 transition-all duration-300 hover:bg-teal-700"
+                                        onClick={() =>
+                                          navigate(
+                                            `product-view/${item._id}`
+                                          )
+                                        }
+                                      >
+                                        <FaEye className="text-xl" />
+                                      </button>
+                                      <button
+                                        type="button"
+                                        className="rounded-lg bg-lime-500 px-2 py-2 text-white cursor-pointer hover:scale-104 transition-all duration-300 hover:bg-lime-600"
+                                        onClick={() =>
+                                          navigate(
+                                            `product-edit/${item._id}`
+                                          )
+                                        }
+                                      >
+                                        <MdEdit className="text-xl" />
+                                      </button>
+                                      <button
+                                        type="button"
+                                        className="rounded-lg bg-red-500 px-2 py-2 text-white cursor-pointer hover:scale-104 transition-all duration-300 hover:bg-red-600"
+                                        onClick={() => handleDeletePopIp(item._id)}
+                                      >
+                                        <MdDelete className="text-xl" />
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              ))
+                            ) : (
+                              <tr>
+                                <td colSpan="5" className="p-4 text-center">
+                                  No data found
+                                </td>
+                              </tr>
+                            )}
             </tbody>
           </table>
         </div>
