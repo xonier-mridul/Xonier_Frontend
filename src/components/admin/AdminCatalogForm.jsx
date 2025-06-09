@@ -315,7 +315,7 @@ const AdminCatalogForm = ({ serviceData }) => {
           <div className="flex flex-col gap-5">
             <div className="flex items-center gap-5">
               <div className="flex w-1/2 flex-col gap-3">
-                <label className="text-lg " htmlFor="productName">
+                <label className="text-sm " htmlFor="productName">
                   {" "}
                   <span className="text-red-500 text-lg">*</span> Developer Name
                 </label>
@@ -330,7 +330,7 @@ const AdminCatalogForm = ({ serviceData }) => {
                 />
               </div>
               <div className="flex w-1/2 flex-col gap-3">
-                <label className="text-lg" htmlFor="category">
+                <label className="text-sm" htmlFor="category">
                   <span className="text-red-500 text-lg">*</span> Select
                   Category
                 </label>
@@ -354,7 +354,7 @@ const AdminCatalogForm = ({ serviceData }) => {
             </div>
             <div className="flex items-center gap-5">
               <div className="flex w-1/2 flex-col gap-3">
-                <label className="text-lg" htmlFor="designation">
+                <label className="text-sm" htmlFor="designation">
                   <span className="text-red-500 text-lg">*</span> Select
                   Designation
                 </label>
@@ -383,7 +383,7 @@ const AdminCatalogForm = ({ serviceData }) => {
               </div>
 
               <div className="flex w-1/2 flex-col gap-3">
-                <label className="text-lg" htmlFor="subCategory">
+                <label className="text-sm" htmlFor="subCategory">
                   <span className="text-red-500 text-lg">*</span> Select
                   Developer Type
                 </label>
@@ -413,7 +413,7 @@ const AdminCatalogForm = ({ serviceData }) => {
               </div>
             </div>
             <div className="flex flex-col gap-3">
-              <label className="text-lg" htmlFor="education">
+              <label className="text-sm" htmlFor="education">
                 <span className="text-red-500 text-lg">*</span> Highest
                 Education
               </label>
@@ -439,7 +439,7 @@ const AdminCatalogForm = ({ serviceData }) => {
 
             <div className="flex items-center gap-5">
               <div className="flex w-1/2 flex-col gap-3 ">
-                <label className="text-lg" htmlFor="experience">
+                <label className="text-sm" htmlFor="experience">
                   <span className="text-red-500 text-lg">*</span> Experience
                   Level
                 </label>
@@ -460,8 +460,8 @@ const AdminCatalogForm = ({ serviceData }) => {
                 </select>
               </div>
               <div className="flex w-1/2 flex-col gap-3 ">
-                <label className="text-lg" htmlFor="hourlyRate">
-                  <span className="text-red-500 text-lg">*</span> Hourly Rate
+                <label className="text-sm" htmlFor="hourlyRate">
+                  <span className="text-red-500 text-lg">*</span> Monthly Rate
                   ($)
                 </label>
                 <select
@@ -474,18 +474,18 @@ const AdminCatalogForm = ({ serviceData }) => {
                   <option value="" hidden>
                     Please Select
                   </option>
-                  <option value="25">25 ($)</option>
-                  <option value="30">30 ($)</option>
-                  <option value="35">35 ($)</option>
-                  <option value="40">40 ($)</option>
-                  <option value="45">45 ($)</option>
-                  <option value="50">50 ($)</option>
-                  <option value="55">55 ($)</option>
+                  <option value="2,000">2k ($)</option>
+                  <option value="3,000">3k ($)</option>
+                  <option value="5,000">5k ($)</option>
+                  <option value="8,000">8k ($)</option>
+                  <option value="10,000">10k ($)</option>
+                  <option value="15,000">15k ($)</option>
+                
                 </select>
               </div>
             </div>
-            <div className="flex flex-col gap-5">
-              <label className="text-lg" htmlFor="yearOfExperience">
+            <div className="flex flex-col gap-3">
+              <label className="text-sm" htmlFor="yearOfExperience">
                 <span className="text-red-500 text-lg">*</span> Years of
                 Experience
               </label>
@@ -500,7 +500,7 @@ const AdminCatalogForm = ({ serviceData }) => {
             </div>
             <div className="flex items-start gap-5">
               <div className="flex w-1/2 flex-col gap-3 ">
-                <label className="text-lg" htmlFor="services">
+                <label className="text-sm" htmlFor="services">
                   <span className="text-red-500 text-lg">*</span>
                   Assign Services
                 </label>
@@ -531,7 +531,7 @@ const AdminCatalogForm = ({ serviceData }) => {
                 </div>
               </div>
               <div className="flex w-1/2 flex-col gap-3 ">
-                <label className="text-lg" htmlFor="language">
+                <label className="text-sm" htmlFor="language">
                   <span className="text-red-500 text-lg">*</span> Language
                   Spoken
                 </label>
@@ -569,7 +569,7 @@ const AdminCatalogForm = ({ serviceData }) => {
             </div>
             <div className="flex items-start gap-5 ">
               <div className="flex w-1/2 flex-col gap-3 ">
-                <label className="text-lg" htmlFor="resume">
+                <label className="text-sm" htmlFor="resume">
                   <span className="text-red-500 text-lg">*</span> Developer
                   Resume
                 </label>
@@ -600,7 +600,7 @@ const AdminCatalogForm = ({ serviceData }) => {
                 )}
               </div>
               <div className="flex w-1/2 flex-col gap-3 ">
-                <label className="text-lg" htmlFor="profileImage">
+                <label className="text-sm" htmlFor="profileImage">
                   <span className="text-red-500 text-lg">*</span> Developer
                   Profile Image
                 </label>
@@ -636,7 +636,7 @@ const AdminCatalogForm = ({ serviceData }) => {
             </h3>
             <div className="w-full border-1 grid grid-cols-1 gap-6 border-green-300 p-5 bg-green-50 rounded-xl">
               <div className="flex w-full flex-col gap-3">
-                <label className="text-lg" htmlFor="technology">
+                <label className="text-sm" htmlFor="technology">
                   <span className="text-red-500 text-lg">*</span> Select
                   Technologies
                 </label>

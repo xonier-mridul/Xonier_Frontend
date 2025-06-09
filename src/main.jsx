@@ -111,6 +111,8 @@ import Services from "./pages/Services.jsx";
 import ServicesDetails from "./pages/ServicesDetails.jsx";
 import Developers from "./pages/Developers.jsx";
 import DevProfile from "./pages/DevProfile.jsx";
+import ServicesView from "./pages/Common/ServicesView.jsx";
+import ServicesEdit from "./pages/Common/ServicesEdit.jsx";
 
 
 
@@ -192,9 +194,12 @@ const router = createBrowserRouter(
         <Route path="sub-category" element={<SubCategory />} />
         <Route path='service' element={<CommonOutlet/>}>
             <Route index element={<CreateServices/>}/>
+            
         </Route>
         <Route path="service-list" element={<CommonOutlet/>}>
            <Route index element={<ServicesTable/>} />
+           <Route path="view/:id" element={<ServicesView/> }/>
+           <Route path="edit/:id" element={<ServicesEdit/> }/>
         </Route>
         <Route path="catalog" element={<AdminCatalog />} />
         <Route path="inquiries" element={<Inquiry />} />

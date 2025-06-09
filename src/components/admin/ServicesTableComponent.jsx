@@ -1,10 +1,12 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { FaCartPlus } from "react-icons/fa6";
 import { MdEdit, MdDelete } from "react-icons/md";
 import { FaEye, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const ServicesTableComponent = ({searchTerm, setSearchTerm, handleProductFilter, filterDataLength, totalPages, currentPage, setCurrentPage, errMessage, filteredData, handleDelete}) => {
+
+  const navigate = useNavigate()
   return (
     <>
       <div className="bg-white shadow-lg rounded-2xl m-5 border-2 border-emerald-500">
@@ -92,7 +94,7 @@ const ServicesTableComponent = ({searchTerm, setSearchTerm, handleProductFilter,
                                   className="rounded-lg bg-teal-600 px-2 py-2 text-white cursor-pointer hover:scale-104 transition-all duration-300 hover:bg-teal-700"
                                   onClick={() =>
                                     navigate(
-                                      `/admin/product-list/product-view/${item._id}`
+                                      `view/${item._id}`
                                     )
                                   }
                                 >

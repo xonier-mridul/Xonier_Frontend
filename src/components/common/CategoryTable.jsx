@@ -23,8 +23,7 @@ const CategoryTable = ({
   });
   const [updatedId, setupdatedId] = useState("");
 
-  // Handle Change
-
+  
   // Delete Category
   const handleDelete = async (e) => {
     try {
@@ -204,7 +203,7 @@ const CategoryTable = ({
                         className="rounded-lg bg-red-500 px-2 py-2 text-white p-2 cursor-pointer"
                         onClick={() => handleDelete(e._id)}
                       >
-                        <MdDelete className="text-xl " />
+                        <MdDelete className="text-xl" />
                       </span>
                     </div>
                   </td>

@@ -245,7 +245,7 @@ const ProductListTable = () => {
                     className="border-b-[1px] border-l-1 border-zinc-200"
                   >
                     <td className="p-4 border-zinc-200 border-l-1">
-                      <Link to={`product-edit/${item._id}`} className="flex items-center gap-3 hover:text-green-600 transition-all duration-300 profile">
+                      <Link to={`product-view/${item._id}`} className="flex items-center gap-3 hover:text-green-600 transition-all duration-300 profile">
                         <img className="w-10 h-10 object-cover rounded-lg profile-img" src={item?.profileImage} alt="" />
                      <span className="capitalize"> {item?.productName} </span>
                      </Link>

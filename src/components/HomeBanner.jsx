@@ -8,7 +8,7 @@ import { FaRegUser } from "react-icons/fa6";
 import { BiSupport } from "react-icons/bi";
 import { TbSlashes } from "react-icons/tb";
 
-import Video from "../assets/banner-vid.mp4";
+import Video from "../assets/tech.mp4";
 import axios from "axios";
 
 const HomeBanner = () => {
@@ -65,15 +65,14 @@ const HomeBanner = () => {
         </video>
 
        
-        <div className="max-w-7xl mx-auto py-20 relative z-10 flex items-center">
+        <div className="max-w-7xl mx-auto py-28 relative z-10 flex items-center">
           <div className="w-[57%] flex flex-col gap-3">
             <span className="uppercase text-white font-bold tracking-wider text-sm flex items-center gap-2">
-             <TbSlashes className="text-xl text-green-400"/> Welcome to Bildkart
+             <TbSlashes className="text-xl text-green-400"/> Welcome to Xonier Technology
             </span>
-            <h1 className="text-[70px] text-white leading-none pb-5">
-              <span className="leading-tight font-bold trans-color">Bildkart</span> the
-              future of Services Marketplace &{" "}
-              <span className="font-bold trans-color">Construction Materials</span>
+            <h1 className="text-[70px] text-white leading-none pb-5 capitalize">
+             With <span className="leading-tight font-bold trans-color">Xonier</span> Execute your next big 
+              <span className="font-bold trans-color"> Business Idea</span>
             </h1>
             <div className="flex items-center gap-8">
               <Link

@@ -351,6 +351,10 @@ left: 0;
   
 }
 
+.btn-bg:hover .plane{
+  transform: rotate(20deg);
+}
+
 .partner-img{
   width: 100%;
   height: 100%;

@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from "../../assets/bildkart-admin-logo.png";
+import Logo from "../../assets/xonier-logo.png";
 import fav from "../../assets/b-fav.png";
 import { useState } from "react";
 import { Outlet, Link, useNavigate } from "react-router-dom";

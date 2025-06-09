@@ -138,14 +138,15 @@ const SupplierRegistrationFrom = () => {
             >
               <option value="" disabled>
                 {" "}
-                Supplier Category
+                Select Supplier Category
               </option>
-              <option value="material supplier"> Material Supplier</option>
-              <option value="service provider"> Service Provider</option>
-              <option value="transporter"> Transporter </option>
-              <option value="machine rentals"> Machine Rentals</option>
-              <option value="waste management">Waste Management</option>
-              <option value="interior">Interior</option>
+              <option value="Remote Developer Staffing"> Remote Developer Staffing</option>
+              <option value="On-Demand Developer Services"> On-Demand Developer Services</option>
+              <option value="Dedicated Development Teams"> Dedicated Development Teams </option>
+              <option value="IT Staff Augmentation"> IT Staff Augmentation</option>
+              <option value="Offshore Development Services">Offshore Development Services</option>
+              <option value="Team Extension Services">Team Extension Services</option>
+              <option value="Managed Remote Teams">Managed Remote Teams</option>
             </select>
 
             <div className="flex flex-col gap-2">
